@@ -1,20 +1,45 @@
-// Game.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+#include "Game.h"
 
-#include <iostream>
-
-int main()
+Game::Game()
+    : m_pStateMachine(nullptr)
 {
-    std::cout << "Hello World!\n";
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void Game::Initialize(GameStateMachine* pStateMachine)
+{
+    if (pStateMachine != nullptr)
+    {
+        pStateMachine->Init();
+        m_pStateMachine = pStateMachine;
+    }
+}
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+void Game::RunGameLoop()
+{
+    bool isGameOver = false;
+    while (!isGameOver)
+    {
+        Update(false);
+        Draw();
+        isGameOver = Update();
+    }
+    Draw();
+}
+
+void Game::Deinitialize()
+{
+    if (m_pStateMachine)
+    {
+        m_pStateMachine->CleanUp();
+    }
+}
+
+bool Game::Update(bool processInput)
+{
+    return m_pStateMachine->UpdateCurrentState(processInput);
+}
+
+void Game::Draw()
+{
+    m_pStateMachine->DrawCurrentState();
+}

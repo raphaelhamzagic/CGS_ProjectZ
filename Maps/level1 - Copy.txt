@@ -1,0 +1,95 @@
+100
+25
++-------------------------------W-----------------+--------------W---------------------------------+
+|              |                                  |                                                |
+|              |                                  |                                                |
+|              D                                  |                                                |
+|              |                                  |                                                |
+|              |                                  |                                                |
++----D---------+-------+-------------+            |-----------------+-----D-----+--------D---------+
+|                      |             |            |                 |           |                  |
+|                      |             |            |                 |           |                  |
+|                      |             |            |                 D           |                  |
+D                      D             |            |                 |           |                  |
+|                      |             |            |                 |           |                  |
+|                      |             |            +-------------+---+-----------+------D-+----D----|
+|                      |             |            |             |                        |         |
++----D-----------------+------D------+            |             |                        |         |
+|                      |             |            D             D                        |         |
+W                      |             |            |             |                        |         W
+|                      |             |            |             |                        |         |
++----------------------+------D------+------------+-------------+                        |         |
+|                                                               |                        |         |
+|                                                               |                        |         |
+|                                                               D                        |         |
+|                                                               |                        |         |
+|                                                               |                        |         |
++-----------------------W------------------------W--------------+---------W--------------+---------+
++-------------------------------W-----------------+--------------W---------------------------------+
+|cccccccccccccc|dddddddddddddddddddddddddddddddddd|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh|
+|cccccccccccccc|dddddddddddddddddddddddddddddddddd|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh|
+|ccccccccccccccDdddddddddddddddddddddddddddddddddd|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh|
+|cccccccccccccc|dddddddddddddddddddddddddddddddddd|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh|
+|cccccccccccccc|dddddddddddddddddddddddddddddddddd|hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh|
++----D---------+-------+-------------+dddddddddddd|-----------------+-----D-----+--------D---------+
+|aaaaaaaaaaaaaaaaaaaaaa|bbbbbbbbbbbbb|dddddddddddd|jjjjjjjjjjjjjjjjj|iiiiiiiiiii|gggggggggggggggggg|
+|aaaaaaaaaaaaaaaaaaaaaa|bbbbbbbbbbbbb|dddddddddddd|jjjjjjjjjjjjjjjjj|iiiiiiiiiii|gggggggggggggggggg|
+|aaaaaaaaaaaaaaaaaaaaaa|bbbbbbbbbbbbb|dddddddddddd|jjjjjjjjjjjjjjjjjDiiiiiiiiiii|gggggggggggggggggg|
+DaaaaaaaaaaaaaaaaaaaaaaDbbbbbbbbbbbbb|dddddddddddd|jjjjjjjjjjjjjjjjj|iiiiiiiiiii|gggggggggggggggggg|
+|aaaaaaaaaaaaaaaaaaaaaa|bbbbbbbbbbbbb|dddddddddddd|jjjjjjjjjjjjjjjjj|iiiiiiiiiii|gggggggggggggggggg|
+|aaaaaaaaaaaaaaaaaaaaaa|bbbbbbbbbbbbb|dddddddddddd+-------------+---+-----------+------D-+----D----|
+|aaaaaaaaaaaaaaaaaaaaaa|bbbbbbbbbbbbb|dddddddddddd|eeeeeeeeeeeee|ffffffffffffffffffffffff|kkkkkkkkk|
++----D-----------------+------D------+dddddddddddd|eeeeeeeeeeeee|ffffffffffffffffffffffff|kkkkkkkkk|
+|nnnnnnnnnnnnnnnnnnnnnn|mmmmmmmmmmmmm|ddddddddddddDeeeeeeeeeeeeeDffffffffffffffffffffffff|kkkkkkkkk|
+Wnnnnnnnnnnnnnnnnnnnnnn|mmmmmmmmmmmmm|dddddddddddd|eeeeeeeeeeeee|ffffffffffffffffffffffff|kkkkkkkkkW
+|nnnnnnnnnnnnnnnnnnnnnn|mmmmmmmmmmmmm|dddddddddddd|eeeeeeeeeeeee|ffffffffffffffffffffffff|kkkkkkkkk|
++----------------------+------D------+------------+-------------+ffffffffffffffffffffffff|kkkkkkkkk|
+|lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll|ffffffffffffffffffffffff|kkkkkkkkk|
+|lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll|ffffffffffffffffffffffff|kkkkkkkkk|
+|lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllDffffffffffffffffffffffff|kkkkkkkkk|
+|lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll|ffffffffffffffffffffffff|kkkkkkkkk|
+|lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll|ffffffffffffffffffffffff|kkkkkkkkk|
++-----------------------W------------------------W--------------+---------W--------------+---------+
++-------------------------------W-----------------+--------------W---------------------------------+
+|l            k|                         k       Z|                       Z                       k|
+|              |                                  |                                                |
+|              D                                  |     R                                        L |
+|              |                                  |                                                |
+|             g|         Z                        |                                                |
++----D---------+-------+-------------+      Z     |-----------------+-----D-----+--------D---------+
+|                     C|            G|            |k                |           |g                h|
+|                      |             |            |                 |           |                  |
+|                      |             |            |                 D           |                  |
+D @                    D             |Z           |                 |           |                  |
+|                      |             |            |                 |     Z     |C                k|
+|                      |             |            +-------------+---+-----------+------D-+----D----|
+|k                    g|            k|      Z     |g           k|                        |l        |
++----D-----------------+------D------+            |             |                        |         |
+|                      |k           l|            D             D                        |         |
+W                      |             |            |             |                        |         W
+|                     X|             |l          s|C           S|                        |       Z |
++----------------------+------D------+------------+-------------+                      L |         |
+|k                   Z                                          |                        |Z        |
+|                                                               |                        |         |
+|  R                                                            D                        |         |
+|                                                               |                        |         |
+|    Z                                                          |                        |s       k|
++-----------------------W------------------------W--------------+---------W--------------+---------+
+D: door (some need a key to open)
+W: window (zombie entrance)
+----------------------------------------------------------------------------------------------------
+a-z: rooms
+----------------------------------------------------------------------------------------------------
+w: wood (to close the windows)
+G: gun
+g: gun ammo
+S: shotgun
+s: shotgun ammo
+l: life
+k: key
+C: cabinet (inventory and save game)
+X: Serum
+@: player
+Z: Zombies (slow go after player)
+L: Left shooting creatures
+R: Right shooting creatures
