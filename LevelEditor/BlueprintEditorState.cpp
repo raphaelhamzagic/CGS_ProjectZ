@@ -40,7 +40,7 @@ bool BlueprintEditorState::Update()
         }
         else
         {
-            m_pStateMachine->m_pLevel->SetBlueprintCharacter(m_pCursor, static_cast<char>(input));
+            m_pStateMachine->m_pLevel->SetLevelBlueprintCharacter(m_pCursor, static_cast<char>(input));
         }
     }
 
@@ -50,50 +50,50 @@ bool BlueprintEditorState::Update()
 
 void BlueprintEditorState::UpdateCursor()
 {
-    Point* pNewCursor = new Point();
+    Point newCursor{ m_pCursor->x, m_pCursor->y };
     int arrowInput = _getch();
     switch (arrowInput)
     {
         case kLeftArrow:
-            pNewCursor->x--;
+            newCursor.x--;
             break;
         case kRightArrow:
-            pNewCursor->x++;
+            newCursor.x++;
             break;
         case kUpArrow:
-            pNewCursor->y--;
+            newCursor.y--;
             break;
         case kDownArrow:
-            pNewCursor->y++;
+            newCursor.y++;
             break;
     }
 
-    if (pNewCursor->x < 0)
+    if (newCursor.x < 0)
     {
-        pNewCursor->x = 0;
+        newCursor.x = 0;
     }
-    else if (pNewCursor->x == m_pStateMachine->m_pLevel->GetWidth())
+    else if (newCursor .x == m_pStateMachine->m_pLevel->GetLevelWidth())
     {
-        pNewCursor->x = m_pStateMachine->m_pLevel->GetWidth() - 1;
-    }
-
-    if (pNewCursor->y < 0)
-    {
-        pNewCursor->y = 0;
-    }
-    else if (pNewCursor->y == m_pStateMachine->m_pLevel->GetHeight())
-    {
-        pNewCursor->y = m_pStateMachine->m_pLevel->GetHeight() - 1;
+        newCursor.x = m_pStateMachine->m_pLevel->GetLevelWidth() - 1;
     }
 
-    delete m_pCursor;
-    m_pCursor = pNewCursor;
+    if (newCursor.y < 0)
+    {
+        newCursor.y = 0;
+    }
+    else if (newCursor.y == m_pStateMachine->m_pLevel->GetLevelHeight())
+    {
+        newCursor.y = m_pStateMachine->m_pLevel->GetLevelHeight() - 1;
+    }
+
+    m_pCursor->x = newCursor.x;
+    m_pCursor->y = newCursor.y;
 }
 
 void BlueprintEditorState::Draw()
 {
     system("cls");
-    m_pStateMachine->m_pLevel->DrawBlueprint(m_pCursor);
+    m_pStateMachine->m_pLevel->DrawLevelBlueprint(m_pCursor);
     DrawLegend();
 }
 
@@ -114,7 +114,7 @@ void BlueprintEditorState::DrawLegend()
 
 void BlueprintEditorState::Save()
 {
-    m_pStateMachine->m_pLevel->Save();
+    m_pStateMachine->m_pLevel->SaveLevel();
 }
 
 void BlueprintEditorState::Exit()

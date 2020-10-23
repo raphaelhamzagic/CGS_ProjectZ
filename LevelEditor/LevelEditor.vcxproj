@@ -139,7 +139,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EditorState.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelEditor.cpp" />
+    <ClCompile Include="LevelEditorStateMachine.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="BlueprintEditorState.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EditorState.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="LevelEditor.h" />
+    <ClInclude Include="LevelEditorStateMachine.h" />
+    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="BlueprintEditorState.h" />
+    <ClInclude Include="Point.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -25,6 +25,7 @@ void MainMenuState::Draw()
 
 bool MainMenuState::Update()
 {
+    Draw();
     bool updateResult{ true };
 
     int input;
@@ -59,7 +60,7 @@ void MainMenuState::Exit()
 void MainMenuState::LoadLevel()
 {
     Level* pLevel = new Level();
-    if (pLevel->Load())
+    if (pLevel->LoadLevel())
     {
         m_pStateMachine->m_pLevel = pLevel;
         m_pStateMachine->ChangeState(LevelEditorStateMachine::StateName::BlueprintEditor);
@@ -69,7 +70,7 @@ void MainMenuState::LoadLevel()
 void MainMenuState::NewLevel()
 {
     Level* pLevel = new Level();
-    pLevel->New();
+    pLevel->NewLevel();
     m_pStateMachine->m_pLevel = pLevel;
     m_pStateMachine->ChangeState(LevelEditorStateMachine::StateName::BlueprintEditor);
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-class Point;
+struct Point;
 
 class Level
 {
@@ -14,13 +14,16 @@ class Level
     char* m_pElements = nullptr;
 
 public:
-    bool Load();
-    void New();
-    bool Save();
-    void DrawBlueprint(Point* pCursor);
-    int GetHeight();
-    int GetWidth();
-    void SetBlueprintCharacter(Point* pPosition, char character);
+    ~Level();
+    int GetLevelHeight();
+    int GetLevelWidth();
+    
+    bool LoadLevel();
+    void NewLevel();
+    bool SaveLevel();
+
+    void SetLevelBlueprintCharacter(Point* pPosition, char character);
+    void DrawLevelBlueprint(Point* pCursor);
 
 private:
     void SetLevelDimensions();

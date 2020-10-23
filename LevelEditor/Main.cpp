@@ -1,6 +1,5 @@
 // #include "vld.h"
-#include <iostream>
-#include "LevelEditor.h";
+#include "LevelEditor.h"
 
 int main()
 {
@@ -8,4 +7,6 @@ int main()
     levelEditor.Initialize();
     levelEditor.RunGameLoop();
     levelEditor.Deinitialize();
+
+    return 0;
 }

@@ -5,13 +5,26 @@
 
 using namespace std;
 
+Level::~Level()
+{
+    if (m_pBlueprint)
+    {
+        delete[] m_pBlueprint;
+        m_pBlueprint = nullptr;
+    }
+    if (m_pElements)
+    {
+        delete[] m_pElements;
+        m_pElements = nullptr;
+    }
+}
 
-int Level::GetHeight()
+int Level::GetLevelHeight()
 {
     return m_height;
 }
 
-int Level::GetWidth()
+int Level::GetLevelWidth()
 {
     return m_width;
 }
@@ -25,7 +38,7 @@ void Level::SetLevelDimensions()
     cin >> m_height;
 }
 
-void Level::New()
+void Level::NewLevel()
 {
     SetLevelDimensions();
     m_pBlueprint = new char[m_width * m_height];
@@ -37,7 +50,7 @@ void Level::New()
     }
 }
 
-bool Level::Load()
+bool Level::LoadLevel()
 {
     cout << "Enter Level name: ";
     cin >> m_fileName;
@@ -65,8 +78,9 @@ bool Level::Load()
         m_pBlueprint = new char[m_width * m_height];
         m_pElements = new char[m_width * m_height];
 
-        levelFile.read(m_pBlueprint, m_width * m_height);
-        //levelFile.read(m_pElements, m_width * m_height);
+        std::streamsize levelSize = static_cast<std::streamsize>(m_width) * static_cast<std::streamsize>(m_height);
+        levelFile.read(m_pBlueprint, levelSize);
+        levelFile.read(m_pElements, levelSize);
 
         levelFile.close();
     }
@@ -74,7 +88,7 @@ bool Level::Load()
     return true;
 }
 
-bool Level::Save()
+bool Level::SaveLevel()
 {
     if (m_fileName.empty())
     {
@@ -110,7 +124,7 @@ int Level::GetIndexFromXY(int x, int y)
     return x + y * m_width;
 }
 
-void Level::DrawBlueprint(Point* pCursor)
+void Level::DrawLevelBlueprint(Point* pCursor)
 {
     //DisplayTopBorder(width);
 
@@ -130,12 +144,13 @@ void Level::DrawBlueprint(Point* pCursor)
             }
         }
         //DisplayRightBorder();
+        cout << endl;
     }
 
     //DisplayBottomBorder(width);
 }
 
-void Level::SetBlueprintCharacter(Point* pPosition, char character)
+void Level::SetLevelBlueprintCharacter(Point* pPosition, char character)
 {
     int index = GetIndexFromXY(pPosition->x, pPosition->y);
     m_pBlueprint[index] = character;

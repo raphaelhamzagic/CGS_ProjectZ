@@ -10,8 +10,9 @@ LevelEditorStateMachine::LevelEditorStateMachine()
 {
 }
 
-void LevelEditorStateMachine::Initialize()
+void LevelEditorStateMachine::Initialize(StateName initialState)
 {
+    ChangeState(initialState);
 }
 
 bool LevelEditorStateMachine::UpdateCurrentState()
@@ -38,7 +39,7 @@ void LevelEditorStateMachine::ChangeState(StateName newState)
         m_pCurrentState->Exit();
         delete m_pCurrentState;
     }
-    m_pCurrentState = LoadState(newState);
+    LoadState(newState);
     m_pCurrentState->Enter();
 }
 
@@ -50,21 +51,22 @@ void LevelEditorStateMachine::Deinitialize()
         delete m_pCurrentState;
         m_pCurrentState = nullptr;
     }
-
+    if (m_pLevel)
+    {
+        delete m_pLevel;
+        m_pLevel = nullptr;
+    }
 }
  
-EditorState* LevelEditorStateMachine::LoadState(StateName stateName)
+void LevelEditorStateMachine::LoadState(StateName stateName)
 {
-    EditorState* state;
     switch (stateName)
     {
         case StateName::MainMenu:
-            state = new MainMenuState(this);
+            m_pCurrentState = new MainMenuState(this);
             break;
         case StateName::BlueprintEditor:
-            state = new BlueprintEditorState(this);
+            m_pCurrentState = new BlueprintEditorState(this);
             break;
-
-
     }
 }

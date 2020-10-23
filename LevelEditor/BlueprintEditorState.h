@@ -1,7 +1,7 @@
 #pragma once
 #include "EditorState.h"
 
-class Point;
+struct Point;
 
 class BlueprintEditorState : public EditorState
 {

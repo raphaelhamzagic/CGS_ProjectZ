@@ -1,5 +1,6 @@
 #pragma once
 #include "EditorState.h"
+
 class MainMenuState : public EditorState
 {
     static constexpr int kOptionLoadLevel = 1;

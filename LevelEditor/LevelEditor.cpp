@@ -10,7 +10,7 @@ LevelEditor::LevelEditor()
 void LevelEditor::Initialize()
 {
     m_pStateMachine = new LevelEditorStateMachine();
-    m_pStateMachine->Initialize();
+    m_pStateMachine->Initialize(LevelEditorStateMachine::StateName::MainMenu);
 }
 
 void LevelEditor::RunGameLoop()
@@ -23,7 +23,7 @@ void LevelEditor::RunGameLoop()
             isEditing = m_pStateMachine->UpdateCurrentState();
             m_pStateMachine->DrawCurrentState();
         }
-        m_pStateMachine->m_pLevel->Save();
+        // m_pStateMachine->m_pLevel->Save();
     }
 }
 

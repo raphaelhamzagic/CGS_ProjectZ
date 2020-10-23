@@ -11,7 +11,7 @@ public:
         None,
         MainMenu,
         BlueprintEditor,
-        LevelEditor
+        ElementsEditor
     };
     Level* m_pLevel;
 
@@ -21,13 +21,13 @@ private:
 public:
     LevelEditorStateMachine();
 
-    void Initialize();
+    void Initialize(StateName initialState);
     bool UpdateCurrentState();
     void DrawCurrentState();
     void ChangeState(StateName newState);
     void Deinitialize();
 
 private:
-    EditorState* LoadState(StateName stateName);
+    void LoadState(StateName stateName);
 };
 
