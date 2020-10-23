@@ -5,6 +5,10 @@
 
 using namespace std;
 
+Level::Level()
+{
+}
+
 Level::~Level()
 {
     if (m_pBlueprint)
@@ -19,6 +23,11 @@ Level::~Level()
     }
 }
 
+string Level::GetLevelFilename()
+{
+    return m_fileName;
+}
+
 int Level::GetLevelHeight()
 {
     return m_height;
@@ -29,13 +38,28 @@ int Level::GetLevelWidth()
     return m_width;
 }
 
+char* Level::GetLevelBlueprint()
+{
+    return m_pBlueprint;
+}
+
+char* Level::GetLevelElements()
+{
+    return m_pElements;
+}
+
 void Level::SetLevelDimensions()
 {
+    /*
     cout << "Enter the width of your level: ";
     cin >> m_width;
 
     cout << "Enter the height of your level: ";
     cin >> m_height;
+    */
+
+    m_width = kLevelWidth;
+    m_height = klevelHeight;
 }
 
 void Level::NewLevel()
@@ -108,8 +132,9 @@ bool Level::SaveLevel()
     {
         levelFile << m_width << endl;
         levelFile << m_height << endl;
-        levelFile.write(m_pBlueprint, (long long)m_width * (long long)m_height);
-        // TODO
+        std::streamsize levelSize = static_cast<std::streamsize>(m_width) * static_cast<std::streamsize>(m_height);
+        levelFile.write(m_pBlueprint, levelSize);
+        levelFile.write(m_pElements, levelSize);        
         if (!levelFile)
         {
             cout << "Write failed!" << endl;
@@ -123,77 +148,3 @@ int Level::GetIndexFromXY(int x, int y)
 {
     return x + y * m_width;
 }
-
-void Level::DrawLevelBlueprint(Point* pCursor)
-{
-    //DisplayTopBorder(width);
-
-    for (int y = 0; y < m_height; y++)
-    {
-       // DisplayLeftBorder();
-        for (int x = 0; x < m_width; x++)
-        {
-            if (pCursor->x == x && pCursor->y == y)
-            {
-                cout << kCursor;
-            }
-            else
-            {
-                int index = GetIndexFromXY(x, y);
-                cout << m_pBlueprint[index];
-            }
-        }
-        //DisplayRightBorder();
-        cout << endl;
-    }
-
-    //DisplayBottomBorder(width);
-}
-
-void Level::SetLevelBlueprintCharacter(Point* pPosition, char character)
-{
-    int index = GetIndexFromXY(pPosition->x, pPosition->y);
-    m_pBlueprint[index] = character;
-}
-
-
-
-/*
-* 
-* // Borders: ASCII code for the borders (https://theasciicode.com.ar/)
-constexpr char kTopRightBorder = 187;
-constexpr char kTopLeftBorder = 201;
-constexpr char kBottomRightBorder = 188;
-constexpr char kBottomLeftBorder = 200;
-constexpr char kHorizontalBorder = 205;
-constexpr char kVerticalBorder = 186;
-
-
-void DisplayTopBorder(int width)
-{
-    cout << kTopLeftBorder;
-    for (int i = 0; i < width; i++)
-    {
-        cout << kHorizontalBorder;
-    }
-    cout << kTopRightBorder << endl;
-}
-void DisplayBottomBorder(int width)
-{
-    cout << kBottomLeftBorder;
-    for (int i = 0; i < width; i++)
-    {
-        cout << kHorizontalBorder;
-    }
-    cout << kBottomRightBorder << endl;
-}
-void DisplayLeftBorder()
-{
-    cout << kVerticalBorder;
-}
-void DisplayRightBorder()
-{
-    cout << kVerticalBorder << endl;
-}
-
-*/

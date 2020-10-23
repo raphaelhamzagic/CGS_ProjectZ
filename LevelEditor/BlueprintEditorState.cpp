@@ -40,7 +40,19 @@ bool BlueprintEditorState::Update()
         }
         else
         {
-            m_pStateMachine->m_pLevel->SetLevelBlueprintCharacter(m_pCursor, static_cast<char>(input));
+            char inputChar = static_cast<char>(input);
+            char* pLevelBlueprint = m_pStateMachine->m_pLevel->GetLevelBlueprint();
+            char* pLevelElements = m_pStateMachine->m_pLevel->GetLevelElements();
+            int index = m_pStateMachine->m_pLevel->GetIndexFromXY(m_pCursor->x, m_pCursor->y);
+            if (IsWall(inputChar) || IsDoor(inputChar) || IsWindow(inputChar))
+            {
+                pLevelBlueprint[index] = inputChar;
+                pLevelElements[index] = inputChar;
+            }
+            else if (IsRoom(inputChar))
+            {
+                pLevelBlueprint[index] = inputChar;
+            }
         }
     }
 
@@ -90,31 +102,187 @@ void BlueprintEditorState::UpdateCursor()
     m_pCursor->y = newCursor.y;
 }
 
+void BlueprintEditorState::DrawCanvasTopBorder()
+{
+    cout << kTopLeftBorder;
+    for (int i = 0; i < kCanvasWidth; i++)
+    {
+        cout << kHorizontalBorder;
+    }
+    cout << kTopRightBorder << endl;
+}
+
+void BlueprintEditorState::DrawCanvasMiddleBorder()
+{
+    cout << kMiddleLeftBorder;
+    for (int i = 0; i < kCanvasWidth; i++)
+    {
+        cout << kHorizontalBorder;
+    }
+    cout << kMiddleRightBorder << endl;
+}
+
+void BlueprintEditorState::DrawCanvasLeftBorder()
+{
+    cout << kVerticalBorder;
+    DrawCanvasHorizontalMargin();
+}
+
+void BlueprintEditorState::DrawCanvasRightBorder()
+{
+    DrawCanvasHorizontalMargin();
+    cout << kVerticalBorder << endl;
+}
+
+void BlueprintEditorState::DrawCanvasHorizontalMargin()
+{
+    int marginH = (kCanvasWidth - kLevelWidth) / 2;
+    for (int i = 0; i < marginH; i++)
+    {
+        cout << " ";
+    }
+}
+
+void BlueprintEditorState::DrawCanvasVerticalMargin()
+{
+    DrawCanvasEmptyLine();
+    DrawCanvasEmptyLine();
+}
+
+void BlueprintEditorState::DrawCanvasEmptyLine()
+{
+    cout << kVerticalBorder;
+    for (int i = 0; i < kCanvasWidth; i++)
+    {
+        cout << " ";
+    }
+    cout << kVerticalBorder << endl;
+}
+
+void BlueprintEditorState::DrawCanvasBottomBorder()
+{
+    cout << kBottomLeftBorder;
+    for (int i = 0; i < kCanvasWidth; i++)
+    {
+        cout << kHorizontalBorder;
+    }
+    cout << kBottomRightBorder << endl;
+}
+
 void BlueprintEditorState::Draw()
 {
     system("cls");
-    m_pStateMachine->m_pLevel->DrawLevelBlueprint(m_pCursor);
+
+    DrawCanvasTopBorder();
+    DrawEditorTitle();
+    DrawCanvasVerticalMargin();
+
+    char* pBlueprint = m_pStateMachine->m_pLevel->GetLevelBlueprint();
+    for (int y = 0; y < m_pStateMachine->m_pLevel->GetLevelHeight(); y++)
+    {
+        DrawCanvasLeftBorder();
+        for (int x = 0; x < m_pStateMachine->m_pLevel->GetLevelWidth(); x++)
+        {
+            if (m_pCursor->x == x && m_pCursor->y == y)
+            {
+                cout << kCursor;
+            }
+            else
+            {
+                int index = m_pStateMachine->m_pLevel->GetIndexFromXY(x, y);
+                cout << pBlueprint[index];
+            }
+        }
+        DrawCanvasRightBorder();
+    }
+
+    DrawCanvasVerticalMargin();
+    DrawCanvasMiddleBorder();
+    DrawCanvasVerticalMargin();
+
     DrawLegend();
+    DrawCanvasVerticalMargin();
+    DrawCanvasBottomBorder();   
+}
+
+void BlueprintEditorState::DrawEditorTitle()
+{
+    cout << kVerticalBorder;
+    string title = "Editing level blueprint (" + m_pStateMachine->m_pLevel->GetLevelFilename() + ")";
+    cout << title;
+    int margin = kCanvasWidth - title.size();
+    for (int i = 0; i < margin; i++)
+    {
+        cout << " ";
+    }
+    cout << kVerticalBorder << endl;
 }
 
 void BlueprintEditorState::DrawLegend()
 {
-    cout << "Arrows to move cursor" << endl;
-    cout << "ESC to finish editing" << endl;
-    cout << "+ | - for walls" << endl;
-    cout << "@ for player start" << endl;
-    cout << "r g b for key" << endl;
-    cout << "R G B for door" << endl;
-    cout << "$ for money" << endl;
-    cout << "v for vertical moving enemy" << endl;
-    cout << "h for horizontal moving enemy" << endl;
-    cout << "e for non-moving enemy" << endl;
-    cout << "X for end" << endl;
+    cout << kVerticalBorder;
+    DrawCanvasHorizontalMargin();
+    cout << "Arrow keys: to move the cursor            ";
+    cout << "ESC key: to save and finish editing                            ";
+    cout << kVerticalBorder << endl;
+
+    cout << kVerticalBorder;
+    DrawCanvasHorizontalMargin();
+    cout << "Chars " << kWall1 << kWall2 << kWall3 << ": walls                          ";
+    cout << "Char " << kDoor << ": doors                                                  ";
+    cout << kVerticalBorder << endl;
+
+    cout << kVerticalBorder;
+    DrawCanvasHorizontalMargin();
+    cout << "Char " << kWindow << ": windows                           ";
+    cout << "Chars " << kRoomA << kRoomB << kRoomC << kRoomD << kRoomE << kRoomF << kRoomG << kRoomH << kRoomI << kRoomJ << kRoomK << kRoomL << kRoomM << kRoomN << ": rooms                                    ";
+    cout << kVerticalBorder << endl;
 }
 
 void BlueprintEditorState::Save()
 {
     m_pStateMachine->m_pLevel->SaveLevel();
+}
+
+bool BlueprintEditorState::IsWall(char input)
+{
+    switch (input)
+    {
+        case kWall1:
+        case kWall2:
+        case kWall3:
+            return true;
+    }
+    return false;
+}
+
+bool BlueprintEditorState::IsDoor(char input)
+{
+    return input == kDoor;
+}
+
+bool BlueprintEditorState::IsWindow(char input)
+{
+    return input == kWindow;
+}
+
+bool BlueprintEditorState::IsRoom(char input)
+{
+    switch (input)
+    {
+        case kRoomA:
+        case kRoomB:
+        case kRoomC:
+        case kRoomD:
+        case kRoomE:
+        case kRoomF:
+        case kRoomG:
+        case kRoomH:
+        case kRoomI:
+        case kRoomJ:
+            return true;
+    }
+    return false;
 }
 
 void BlueprintEditorState::Exit()

@@ -5,27 +5,30 @@ struct Point;
 
 class Level
 {
-    static constexpr char kCursor = '_';
+    static constexpr int kLevelWidth = 100;
+    static constexpr int klevelHeight = 25;
 
-    std::string m_fileName;
+    std::string m_fileName = "UntitledLevel";
     int m_height;
     int m_width;
     char* m_pBlueprint = nullptr;
     char* m_pElements = nullptr;
 
 public:
+    Level();
     ~Level();
     int GetLevelHeight();
     int GetLevelWidth();
-    
+    char* GetLevelBlueprint();
+    char* GetLevelElements();
+    std::string GetLevelFilename();
+
     bool LoadLevel();
     void NewLevel();
     bool SaveLevel();
 
-    void SetLevelBlueprintCharacter(Point* pPosition, char character);
-    void DrawLevelBlueprint(Point* pCursor);
+    int GetIndexFromXY(int x, int y);
 
 private:
     void SetLevelDimensions();
-    int GetIndexFromXY(int x, int y);
 };
