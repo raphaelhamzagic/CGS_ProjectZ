@@ -5,10 +5,6 @@
 
 using namespace std;
 
-Level::Level()
-{
-}
-
 Level::~Level()
 {
     if (m_pBlueprint)
@@ -48,23 +44,20 @@ char* Level::GetLevelElements()
     return m_pElements;
 }
 
-void Level::SetLevelDimensions()
+int Level::GetIndexFromXY(int x, int y)
 {
-    /*
-    cout << "Enter the width of your level: ";
-    cin >> m_width;
-
-    cout << "Enter the height of your level: ";
-    cin >> m_height;
-    */
-
-    m_width = kLevelWidth;
-    m_height = klevelHeight;
+    return x + y * m_width;
 }
 
 void Level::NewLevel()
 {
-    SetLevelDimensions();
+    cout << "Pick a name for your level file (eg: Level1.txt): ";
+    cin >> m_fileName;
+    m_fileName.insert(0, "../Maps/");
+
+    m_width = kLevelWidth;
+    m_height = klevelHeight;
+
     m_pBlueprint = new char[m_width * m_height];
     m_pElements = new char[m_width * m_height];
     for (int i = 0; i < m_width * m_height; i++)
@@ -114,14 +107,7 @@ bool Level::LoadLevel()
 
 bool Level::SaveLevel()
 {
-    if (m_fileName.empty())
-    {
-        cout << "Pick a name for your level file (eg: Level1.txt): ";
-        cin >> m_fileName;
-        m_fileName.insert(0, "../Maps/");
-    }   
-
-    ofstream levelFile;
+   ofstream levelFile;
     levelFile.open(m_fileName);
     if (!levelFile)
     {
@@ -142,9 +128,4 @@ bool Level::SaveLevel()
         levelFile.close();
     }
     return true;
-}
-
-int Level::GetIndexFromXY(int x, int y)
-{
-    return x + y * m_width;
 }

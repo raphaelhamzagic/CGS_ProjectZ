@@ -23,7 +23,7 @@ void LevelEditor::RunGameLoop()
             isEditing = m_pStateMachine->UpdateCurrentState();
             m_pStateMachine->DrawCurrentState();
         }
-        // m_pStateMachine->m_pLevel->Save();
+        // m_pStateMachine->m_pLevel->SaveLevel();
     }
 }
 

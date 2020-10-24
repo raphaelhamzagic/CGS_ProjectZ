@@ -8,14 +8,13 @@ class Level
     static constexpr int kLevelWidth = 100;
     static constexpr int klevelHeight = 25;
 
-    std::string m_fileName = "UntitledLevel";
+    std::string m_fileName;
     int m_height;
     int m_width;
     char* m_pBlueprint = nullptr;
     char* m_pElements = nullptr;
 
 public:
-    Level();
     ~Level();
     int GetLevelHeight();
     int GetLevelWidth();
@@ -28,7 +27,4 @@ public:
     bool SaveLevel();
 
     int GetIndexFromXY(int x, int y);
-
-private:
-    void SetLevelDimensions();
 };
