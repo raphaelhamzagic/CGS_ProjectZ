@@ -11,15 +11,15 @@ class Level
     std::string m_fileName;
     int m_height;
     int m_width;
-    char* m_pBlueprint = nullptr;
-    char* m_pElements = nullptr;
+    char* m_pLevelBlueprint = nullptr;
+    char* m_pLevelGameplay = nullptr;
 
 public:
     ~Level();
     int GetLevelHeight();
     int GetLevelWidth();
     char* GetLevelBlueprint();
-    char* GetLevelElements();
+    char* GetLevelGameplay();
     std::string GetLevelFilename();
 
     bool LoadLevel();

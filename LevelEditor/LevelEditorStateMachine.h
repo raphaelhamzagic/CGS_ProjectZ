@@ -11,7 +11,7 @@ public:
         None,
         MainMenu,
         BlueprintEditor,
-        ElementsEditor
+        GameplayEditor
     };
     Level* m_pLevel;
 

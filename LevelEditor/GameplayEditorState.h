@@ -3,7 +3,7 @@
 
 struct Point;
 
-class BlueprintEditorState : public EditorState
+class GameplayEditorState : public EditorState
 {
     static constexpr int kCanvasWidth = 110;
     // static constexpr int kCanvasHeight = 29;
@@ -21,28 +21,48 @@ class BlueprintEditorState : public EditorState
     static constexpr int kEscape = 27;
     static constexpr int kBackspace = 8;
 
+    // chars for gameplay editing  
+
     // chars for blueprint editing
     static constexpr char kWall1 = '-';
     static constexpr char kWall2 = '|';
     static constexpr char kWall3 = '+';
-   
+
+    // weapons
+    static constexpr char kGun = '1';
+    static constexpr char kGunAmmo = '.';
+    static constexpr char kShotgun = '2';
+    static constexpr char kShotgunAmmo = '*';
+
+    // items
+    static constexpr char kLife = 'l';
+    static constexpr char kWood = 'w';
+    static constexpr char kSerum = 'x';
+
+    // keys and doors
     static constexpr char kDoor = 'D';
-    static constexpr char kWindow = 'W';
-   
-    static constexpr char kRoomA = 'a';
-    static constexpr char kRoomB = 'b';
-    static constexpr char kRoomC = 'c';
-    static constexpr char kRoomD = 'd';
-    static constexpr char kRoomE = 'e';
-    static constexpr char kRoomF = 'f';
-    static constexpr char kRoomG = 'g';
-    static constexpr char kRoomH = 'h';
-    static constexpr char kRoomI = 'i';
-    static constexpr char kRoomJ = 'j';
-    static constexpr char kRoomK = 'k';
-    static constexpr char kRoomL = 'l';
-    static constexpr char kRoomM = 'm';
-    static constexpr char kRoomN = 'n';
+    static constexpr char kBlueKey = 'b';
+    static constexpr char kBlueDoor = 'B';
+    static constexpr char kGreenKey = 'g';
+    static constexpr char kGreenDoor = 'G';
+    static constexpr char kCyanKey = 'c';
+    static constexpr char kCyanDoor = 'C';
+    static constexpr char kRedKey = 'r';
+    static constexpr char kRedDoor = 'R';
+    static constexpr char kMagentaKey = 'm';
+    static constexpr char kMagentaDoor = 'M';
+    static constexpr char kBrownKey = 'a';
+    static constexpr char kBrownDoor = 'A';
+    static constexpr char kYellowKey = 'y';
+    static constexpr char kYellowDoor = 'Y';
+
+    // enemies
+    static constexpr char kZombie = 'z';
+    static constexpr char kLeftShootingCreature = '<';
+    static constexpr char kRightShootingCreature = '>';
+
+    // cabinet
+    static constexpr char kCabinet = '^';
 
     // border canvas chars
     static constexpr char kTopRightBorder = 187;
@@ -59,8 +79,8 @@ class BlueprintEditorState : public EditorState
 
     Point* m_pCursor;
 public:
-    BlueprintEditorState(LevelEditorStateMachine* stateMachine);
-    virtual ~BlueprintEditorState() = default;
+    GameplayEditorState(LevelEditorStateMachine* stateMachine);
+    virtual ~GameplayEditorState() = default;
 
     virtual void Enter() override;
     virtual bool Update() override;
@@ -76,16 +96,13 @@ private:
     void DrawCanvasLeftBorder();
     void DrawCanvasRightBorder();
     void DrawCanvasBottomBorder();
-    
+
     void DrawCanvasHorizontalMargin();
-    void DrawCanvasVerticalMargin();
     void DrawCanvasEmptyLine();
 
     void DrawLegend();
     void Save();
+    bool IsValidChar(char input);
     bool IsWall(char input);
     bool IsDoor(char input);
-    bool IsWindow(char input);
-    bool IsRoom(char input);
-    bool IsEmpty(char input);
 };

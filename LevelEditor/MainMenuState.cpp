@@ -14,6 +14,59 @@ void MainMenuState::Enter()
 {
 }
 
+
+bool MainMenuState::Update()
+{
+    Draw();
+    bool updateResult{ true };
+
+    int input;
+    cin >> input;
+
+    switch (input)
+    {
+        case kOptionLoadLevel:
+            LoadLevel();
+            break;
+
+        case kOptionNewLevel:
+            NewLevel();
+            break;
+
+        case kOptionQuit:
+            updateResult = false;
+            break;
+
+        default:
+            // invalid option
+            break;
+    }
+
+    return updateResult;
+}
+
+void MainMenuState::Exit()
+{
+}
+
+void MainMenuState::LoadLevel()
+{
+    Level* pLevel = new Level();
+    if (pLevel->LoadLevel())
+    {
+        m_pStateMachine->m_pLevel = pLevel;
+        m_pStateMachine->ChangeState(LevelEditorStateMachine::StateName::BlueprintEditor);
+    }
+}
+
+void MainMenuState::NewLevel()
+{
+    Level* pLevel = new Level();
+    pLevel->NewLevel();
+    m_pStateMachine->m_pLevel = pLevel;
+    m_pStateMachine->ChangeState(LevelEditorStateMachine::StateName::BlueprintEditor);
+}
+
 void MainMenuState::Draw()
 {
     system("cls");
@@ -73,58 +126,6 @@ void MainMenuState::Draw()
     DrawCanvasEmptyLine();
     
     DrawCanvasBottomBorder();
-}
-
-bool MainMenuState::Update()
-{
-    Draw();
-    bool updateResult{ true };
-
-    int input;
-    cin >> input;
-
-    switch (input)
-    {
-        case kOptionLoadLevel:
-            LoadLevel();
-            break;
-
-        case kOptionNewLevel:
-            NewLevel();
-            break;
-
-        case kOptionQuit:
-            updateResult = false;
-            break;
-
-        default:
-            // invalid option
-            break;
-    }
-
-    return updateResult;
-}
-
-void MainMenuState::Exit()
-{
-}
-
-void MainMenuState::LoadLevel()
-{
-    Level* pLevel = new Level();
-    if (pLevel->LoadLevel())
-    {
-        m_pStateMachine->m_pLevel = pLevel;
-        m_pStateMachine->ChangeState(LevelEditorStateMachine::StateName::BlueprintEditor);
-    }
-}
-
-void MainMenuState::NewLevel()
-{
-    Level* pLevel = new Level();
-    pLevel->NewLevel();
-    m_pStateMachine->m_pLevel = pLevel;
-    m_pStateMachine->ChangeState(LevelEditorStateMachine::StateName::BlueprintEditor);
 }
 
 void MainMenuState::DrawCanvasTopBorder()

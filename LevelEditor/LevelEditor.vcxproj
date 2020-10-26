@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EditorState.cpp" />
+    <ClCompile Include="GameplayEditorState.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelEditor.cpp" />
     <ClCompile Include="LevelEditorStateMachine.cpp" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorState.h" />
+    <ClInclude Include="GameplayEditorState.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelEditor.h" />
     <ClInclude Include="LevelEditorStateMachine.h" />

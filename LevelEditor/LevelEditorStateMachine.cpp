@@ -2,6 +2,7 @@
 #include "EditorState.h"
 #include "MainMenuState.h"
 #include "BlueprintEditorState.h"
+#include "GameplayEditorState.h"
 #include "LevelEditorStateMachine.h"
 
 LevelEditorStateMachine::LevelEditorStateMachine()
@@ -67,6 +68,9 @@ void LevelEditorStateMachine::LoadState(StateName stateName)
             break;
         case StateName::BlueprintEditor:
             m_pCurrentState = new BlueprintEditorState(this);
+            break;
+        case StateName::GameplayEditor:
+            m_pCurrentState = new GameplayEditorState(this);
             break;
     }
 }

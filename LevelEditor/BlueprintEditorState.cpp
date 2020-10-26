@@ -19,6 +19,15 @@ void BlueprintEditorState::Enter()
     m_pCursor = new Point();
 }
 
+void BlueprintEditorState::Exit()
+{
+    if (m_pCursor)
+    {
+        delete m_pCursor;
+        m_pCursor = nullptr;
+    }
+}
+
 bool BlueprintEditorState::Update()
 {  
     // check if any arrow key was pressed
@@ -31,8 +40,9 @@ bool BlueprintEditorState::Update()
     {
         if (input == kEscape)
         {
-            // done editing the level
-            return false;
+            // done editing the level blueprint, switch to level gameplay editing
+            m_pStateMachine->m_pLevel->SaveLevel();
+            m_pStateMachine->ChangeState(LevelEditorStateMachine::StateName::GameplayEditor);
         }
         else if (input == kBackspace)
         {
@@ -42,12 +52,12 @@ bool BlueprintEditorState::Update()
         {
             char inputChar = static_cast<char>(input);
             char* pLevelBlueprint = m_pStateMachine->m_pLevel->GetLevelBlueprint();
-            char* pLevelElements = m_pStateMachine->m_pLevel->GetLevelElements();
+            char* pLevelGameplay = m_pStateMachine->m_pLevel->GetLevelGameplay();
             int index = m_pStateMachine->m_pLevel->GetIndexFromXY(m_pCursor->x, m_pCursor->y);
-            if (IsWall(inputChar) || IsDoor(inputChar) || IsWindow(inputChar))
+            if (IsWall(inputChar) || IsDoor(inputChar) || IsWindow(inputChar) || IsEmpty(inputChar))
             {
                 pLevelBlueprint[index] = inputChar;
-                pLevelElements[index] = inputChar;
+                pLevelGameplay[index] = inputChar;
             }
             else if (IsRoom(inputChar))
             {
@@ -266,6 +276,11 @@ bool BlueprintEditorState::IsWindow(char input)
     return input == kWindow;
 }
 
+bool BlueprintEditorState::IsEmpty(char input)
+{
+    return input == kEmpty;
+}
+
 bool BlueprintEditorState::IsRoom(char input)
 {
     switch (input)
@@ -283,13 +298,4 @@ bool BlueprintEditorState::IsRoom(char input)
             return true;
     }
     return false;
-}
-
-void BlueprintEditorState::Exit()
-{
-    if (m_pCursor)
-    {
-        delete m_pCursor;
-        m_pCursor = nullptr;
-    }
 }
