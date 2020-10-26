@@ -122,16 +122,6 @@ void BlueprintEditorState::DrawCanvasTopBorder()
     cout << kTopRightBorder << endl;
 }
 
-void BlueprintEditorState::DrawCanvasMiddleBorder()
-{
-    cout << kMiddleLeftBorder;
-    for (int i = 0; i < kCanvasWidth; i++)
-    {
-        cout << kHorizontalBorder;
-    }
-    cout << kMiddleRightBorder << endl;
-}
-
 void BlueprintEditorState::DrawCanvasLeftBorder()
 {
     cout << kVerticalBorder;
@@ -185,7 +175,8 @@ void BlueprintEditorState::Draw()
 
     DrawCanvasTopBorder();
     DrawEditorTitle();
-    DrawCanvasVerticalMargin();
+    DrawCanvasEmptyLine();
+    DrawCanvasEmptyLine();
 
     char* pBlueprint = m_pStateMachine->m_pLevel->GetLevelBlueprint();
     for (int y = 0; y < m_pStateMachine->m_pLevel->GetLevelHeight(); y++)
@@ -206,13 +197,11 @@ void BlueprintEditorState::Draw()
         DrawCanvasRightBorder();
     }
 
-    DrawCanvasVerticalMargin();
-    DrawCanvasMiddleBorder();
-    DrawCanvasVerticalMargin();
+    DrawCanvasEmptyLine();
+    DrawCanvasEmptyLine();    
+    DrawCanvasBottomBorder();
 
     DrawLegend();
-    DrawCanvasVerticalMargin();
-    DrawCanvasBottomBorder();   
 }
 
 void BlueprintEditorState::DrawEditorTitle()
@@ -230,23 +219,15 @@ void BlueprintEditorState::DrawEditorTitle()
 
 void BlueprintEditorState::DrawLegend()
 {
-    cout << kVerticalBorder;
-    DrawCanvasHorizontalMargin();
-    cout << "Arrow keys: to move the cursor            ";
-    cout << "ESC key: to save and finish editing                            ";
-    cout << kVerticalBorder << endl;
+    cout << "Navigation" << endl;
+    cout << "----------" << endl;
+    cout << "Arrow keys: Move cursor" << endl;
+    cout << "ESC key: Save and finish editing" << endl << endl;
 
-    cout << kVerticalBorder;
-    DrawCanvasHorizontalMargin();
-    cout << "Chars " << kWall1 << kWall2 << kWall3 << ": walls                          ";
-    cout << "Char " << kDoor << ": doors                                                  ";
-    cout << kVerticalBorder << endl;
-
-    cout << kVerticalBorder;
-    DrawCanvasHorizontalMargin();
-    cout << "Char " << kWindow << ": windows                           ";
-    cout << "Chars " << kRoomA << kRoomB << kRoomC << kRoomD << kRoomE << kRoomF << kRoomG << kRoomH << kRoomI << kRoomJ << kRoomK << kRoomL << kRoomM << kRoomN << ": rooms                                    ";
-    cout << kVerticalBorder << endl;
+    cout << kWall1 << kWall2 << kWall3 << ": walls" << endl;
+    cout << kDoor << ": doors" << endl;
+    cout << kWindow << ": windows" << endl;
+    cout << kRoomA << kRoomB << kRoomC << kRoomD << kRoomE << kRoomF << kRoomG << kRoomH << kRoomI << kRoomJ << kRoomK << kRoomL << kRoomM << kRoomN << ": rooms" << endl;
 }
 
 void BlueprintEditorState::Save()

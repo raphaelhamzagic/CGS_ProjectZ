@@ -72,7 +72,6 @@ private:
 
     void DrawEditorTitle();
     void DrawCanvasTopBorder();
-    void DrawCanvasMiddleBorder();
     void DrawCanvasLeftBorder();
     void DrawCanvasRightBorder();
     void DrawCanvasBottomBorder();

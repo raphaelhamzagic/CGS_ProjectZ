@@ -71,99 +71,10 @@ void MainMenuState::Draw()
 {
     system("cls");
 
-    DrawCanvasTopBorder();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-
-    DrawCanvasLeftBorder();
-    cout << "                                 Please select one of the following options:                                  ";
-    DrawCanvasRightBorder();
-
-    DrawCanvasEmptyLine();
-
-    DrawCanvasLeftBorder();
-    cout << "                                 " << kOptionLoadLevel << ". Load Level                                                                ";
-    DrawCanvasRightBorder();
-
-    DrawCanvasLeftBorder();
-    cout << "                                 " << kOptionNewLevel << ". New Level                                                                 ";
-    DrawCanvasRightBorder();
-
-    DrawCanvasLeftBorder();
-    cout << "                                 " << kOptionQuit << ". Quit                                                                      ";
-    DrawCanvasRightBorder();
-
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
-    DrawCanvasEmptyLine();
+   
+    cout << "Please select one of the following options:" << endl;
     
-    DrawCanvasBottomBorder();
-}
-
-void MainMenuState::DrawCanvasTopBorder()
-{
-    cout << kTopLeftBorder;
-    for (int i = 0; i < kCanvasWidth; i++)
-    {
-        cout << kHorizontalBorder;
-    }
-    cout << kTopRightBorder << endl;
-}
-
-void MainMenuState::DrawCanvasLeftBorder()
-{
-    cout << kVerticalBorder;
-}
-
-void MainMenuState::DrawCanvasRightBorder()
-{
-    cout << kVerticalBorder << endl;
-}
-
-void MainMenuState::DrawCanvasEmptyLine()
-{
-    cout << kVerticalBorder;
-    for (int i = 0; i < kCanvasWidth; i++)
-    {
-        cout << " ";
-    }
-    cout << kVerticalBorder << endl;
-}
-
-void MainMenuState::DrawCanvasBottomBorder()
-{
-    cout << kBottomLeftBorder;
-    for (int i = 0; i < kCanvasWidth; i++)
-    {
-        cout << kHorizontalBorder;
-    }
-    cout << kBottomRightBorder << endl;
+    cout << kOptionLoadLevel << ". Load Level" << endl;
+    cout << kOptionNewLevel << ". New Level" << endl;
+    cout << kOptionQuit << ". Quit" << endl;
 }
