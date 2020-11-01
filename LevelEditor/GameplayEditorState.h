@@ -61,8 +61,10 @@ class GameplayEditorState : public EditorState
     static constexpr char kLeftShootingCreature = '<';
     static constexpr char kRightShootingCreature = '>';
 
+    static constexpr char kPlayerStart = '@';
+
     // cabinet
-    static constexpr char kCabinet = '^';
+    static constexpr char kCabinet = 'P';
 
     // border canvas chars
     static constexpr char kTopRightBorder = 187;

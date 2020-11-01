@@ -94,10 +94,15 @@ bool Level::LoadLevel()
 
         m_pLevelBlueprint = new char[m_width * m_height];
         m_pLevelGameplay = new char[m_width * m_height];
+        const int levelSize = m_width * m_height;
 
-        std::streamsize levelSize = static_cast<std::streamsize>(m_width) * static_cast<std::streamsize>(m_height) + 1;
-        levelFile.read(m_pLevelBlueprint, levelSize);
+        /*
+        std::streamsize levelSize = static_cast<std::streamsize>(m_width) * static_cast<std::streamsize>(m_height);
+        levelFile.read(m_pLevelBlueprint, levelSize+1);
         levelFile.read(m_pLevelGameplay, levelSize);
+        */
+        levelFile.getline(m_pLevelBlueprint, levelSize, '\n');
+        levelFile.getline(m_pLevelGameplay, levelSize, '\n');
 
         levelFile.close();
     }
@@ -107,7 +112,7 @@ bool Level::LoadLevel()
 
 bool Level::SaveLevel()
 {
-   ofstream levelFile;
+    ofstream levelFile;
     levelFile.open(m_fileName);
     if (!levelFile)
     {
@@ -120,7 +125,8 @@ bool Level::SaveLevel()
         levelFile << m_height << endl;
         std::streamsize levelSize = static_cast<std::streamsize>(m_width) * static_cast<std::streamsize>(m_height);
         levelFile.write(m_pLevelBlueprint, levelSize);
-        levelFile.write(m_pLevelGameplay, levelSize);        
+        levelFile << endl;
+        levelFile.write(m_pLevelGameplay, levelSize);
         if (!levelFile)
         {
             cout << "Write failed!" << endl;

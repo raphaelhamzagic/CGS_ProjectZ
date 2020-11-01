@@ -6,7 +6,8 @@ class PlaceableActor;
 
 class Level
 {
-    char* m_pLevelData;
+    char* m_pLevelBlueprint;
+    char* m_pLevelGameplay;
     int m_height;
     int m_width;
 

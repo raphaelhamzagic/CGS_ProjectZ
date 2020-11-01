@@ -55,22 +55,14 @@ bool GameplayEditorState::Update()
             int index = m_pStateMachine->m_pLevel->GetIndexFromXY(m_pCursor->x, m_pCursor->y);
 
 
-            if (IsWall(pLevelGameplay[index]))
+            if (!IsWall(pLevelGameplay[index]))
             {
-                // don't change the walls
-            }
-            else
-            {
-                // make sure we update doors with doors types
+               // make sure we update doors with doors types
                 if (IsDoor(inputChar))
                 {
                     if (IsDoor(pLevelGameplay[index]))
                     {
                         pLevelGameplay[index] = inputChar;
-                    }
-                    else
-                    {
-                        // trying to add a door where it is not allowed
                     }
                 }
                 else if (IsValidChar(inputChar))
@@ -265,7 +257,14 @@ void GameplayEditorState::DrawLegend()
     cout << "red: " << kRedKey << "/" << kRedDoor << endl;
     cout << "magenta: " << kMagentaKey << "/" << kMagentaDoor << endl;
     cout << "brown: " << kBrownKey << "/" << kBrownDoor << endl;
-    cout << "yellow: " << kYellowKey << "/" << kYellowDoor << endl;
+    cout << "yellow: " << kYellowKey << "/" << kYellowDoor << endl << endl;
+
+    cout << "-------" << endl;
+    cout << kPlayerStart << ": player start" << endl;
+    cout << kZombie << ": zombies" << endl;
+    cout << kLeftShootingCreature << kRightShootingCreature << ": left and right shooting creatures" << endl;
+    cout << kDoor << ": unlocked door" << endl;
+    cout << kCabinet << ": cabinet" << endl;
 }
 
 void GameplayEditorState::Save()
@@ -314,23 +313,26 @@ bool GameplayEditorState::IsValidChar(char input)
         case kWood:
         case kSerum:
         case kBlueKey:
-        case kBlueDoor:
         case kGreenKey:
-        case kGreenDoor:
         case kCyanKey:
-        case kCyanDoor:
         case kRedKey:
-        case kRedDoor:
         case kMagentaKey:
-        case kMagentaDoor:
         case kBrownKey:
-        case kBrownDoor:
         case kYellowKey:
+        /*
+        case kBlueDoor:
+        case kGreenDoor:
+        case kCyanDoor:
+        case kRedDoor:
+        case kMagentaDoor:
+        case kBrownDoor:
         case kYellowDoor:
+        */
         case kZombie:
         case kLeftShootingCreature:
         case kRightShootingCreature:
         case kCabinet:
+        case kPlayerStart:
         case kEmpty:
             return true;
     }

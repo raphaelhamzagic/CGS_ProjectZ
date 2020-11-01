@@ -13,7 +13,8 @@
 using namespace std;
 
 Level::Level()
-    : m_pLevelData(nullptr)
+    : m_pLevelBlueprint(nullptr)
+    , m_pLevelGameplay(nullptr)
     , m_height(0)
     , m_width(0)
 {
@@ -21,10 +22,16 @@ Level::Level()
 
 Level::~Level()
 {
-    if (m_pLevelData != nullptr)
+    if (m_pLevelBlueprint != nullptr)
     {
-        delete[] m_pLevelData;
-        m_pLevelData = nullptr;
+        delete[] m_pLevelBlueprint;
+        m_pLevelBlueprint = nullptr;
+    }
+
+    if (m_pLevelGameplay != nullptr)
+    {
+        delete[] m_pLevelGameplay;
+        m_pLevelGameplay = nullptr;
     }
 
     while (!m_pActors.empty())
@@ -55,8 +62,12 @@ bool Level::Load(std::string levelName, int* playerX, int* playerY)
         levelFile.getline(temp, tempSize, '\n');
         m_height = atoi(temp);
 
-        m_pLevelData = new char[m_width * m_height];
-        levelFile.read(m_pLevelData, (long long)m_width * (long long)m_height);
+        std::streamsize levelSize = static_cast<std::streamsize>(m_width) * static_cast<std::streamsize>(m_height);
+        m_pLevelBlueprint = new char[m_width * m_height];
+        levelFile.read(m_pLevelBlueprint, levelSize+1);
+        
+        m_pLevelGameplay = new char[m_width * m_height];
+        levelFile.read(m_pLevelGameplay, levelSize);
         
         bool anyWarnings = Convert(playerX, playerY);
         if (anyWarnings)
@@ -79,7 +90,7 @@ void Level::Draw()
         for (int x = 0; x < GetWidth(); x++)
         {
             int indexToPrint = GetIndexFromCoordinates(x, y);
-            cout << m_pLevelData[indexToPrint];
+            cout << m_pLevelBlueprint[indexToPrint];
         }
         cout << endl;
     }
@@ -101,12 +112,12 @@ void Level::Draw()
 
 bool Level::IsSpace(int x, int y)
 {
-    return m_pLevelData[GetIndexFromCoordinates(x, y)] == ' ';
+    return m_pLevelBlueprint[GetIndexFromCoordinates(x, y)] == ' ';
 }
 
 bool Level::IsWall(int x, int y)
 {
-    return m_pLevelData[GetIndexFromCoordinates(x, y)] == WAL;
+    return m_pLevelBlueprint[GetIndexFromCoordinates(x, y)] == WAL;
 }
 
 bool Level::Convert(int* playerX, int* playerY)
@@ -118,47 +129,47 @@ bool Level::Convert(int* playerX, int* playerY)
         for (int x = 0; x < m_width; x++)
         {
             int index = GetIndexFromCoordinates(x, y);
-            switch (m_pLevelData[index])
+            switch (m_pLevelBlueprint[index])
             {
             case '+':
             case '-':
             case '|':
-                m_pLevelData[index] = WAL;
+                m_pLevelBlueprint[index] = WAL;
                 break;
             case 'r':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 m_pActors.push_back(new Key(x, y, ActorColor::Red));
                 break;
             case 'g':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 m_pActors.push_back(new Key(x, y, ActorColor::Green));
                 break;
             case 'b':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 m_pActors.push_back(new Key(x, y, ActorColor::Blue));
                 break;
             case 'R':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 m_pActors.push_back(new Door(x, y, ActorColor::Red, ActorColor::SolidRed));
                 break;
             case 'G':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 m_pActors.push_back(new Door(x, y, ActorColor::Green, ActorColor::SolidGreen));
                 break;
             case 'B':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 m_pActors.push_back(new Door(x, y, ActorColor::Blue, ActorColor::SolidBlue));
                 break;
             case 'X':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 m_pActors.push_back(new Goal(x, y));
                 break;
             case '$':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 m_pActors.push_back(new Money(x, y, 1 + rand() % 5));
                 break;
             case '@':
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 if (playerX != nullptr && playerY != nullptr)
                 {
                     *playerX = x;
@@ -167,20 +178,20 @@ bool Level::Convert(int* playerX, int* playerY)
                 break;
             case 'e':
                 m_pActors.push_back(new Enemy(x, y));
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 break;
             case 'h':
                 m_pActors.push_back(new Enemy(x, y, 1, 0));
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 break;
             case 'v':
                 m_pActors.push_back(new Enemy(x, y, 0, 2));
-                m_pLevelData[index] = ' ';
+                m_pLevelBlueprint[index] = ' ';
                 break;
             case ' ':
                 break;
             default:
-                cout << "Invalid character in level file: " << m_pLevelData[index] << endl;
+                cout << "Invalid character in level file: " << m_pLevelBlueprint[index] << endl;
                 anyWarnings = true;
                 break;
             }
