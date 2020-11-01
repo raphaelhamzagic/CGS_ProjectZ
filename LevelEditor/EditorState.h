@@ -1,17 +1,22 @@
 #pragma once
-class LevelEditorStateMachine;
 
-class EditorState
-{
-protected:
-    LevelEditorStateMachine* m_pStateMachine;
+namespace projectz {
+    namespace editor {
+        class LevelEditorStateMachine;
 
-public:
-    EditorState(LevelEditorStateMachine* stateMachine);
-    virtual ~EditorState() = default;
+        class EditorState
+        {
+        protected:
+            LevelEditorStateMachine* m_pStateMachine;
 
-    virtual void Enter() {}
-    virtual bool Update();
-    virtual void Draw() = 0;
-    virtual void Exit() {}
-};
+        public:
+            EditorState(LevelEditorStateMachine* stateMachine);
+            virtual ~EditorState() = default;
+
+            virtual void Enter() {}
+            virtual bool Update();
+            virtual void Draw() = 0;
+            virtual void Exit() {}
+        };
+    }
+}

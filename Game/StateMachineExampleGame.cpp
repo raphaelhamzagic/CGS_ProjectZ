@@ -7,87 +7,93 @@
 #include "WinState.h"
 #include "Game.h"
 
-StateMachineExampleGame::StateMachineExampleGame(Game* pOwner)
-    : m_pOwner(pOwner)
-    , m_pCurrentState(nullptr)
-    , m_pNewState(nullptr)
-{
-}
+namespace projectz {
+    namespace game {
 
-bool StateMachineExampleGame::Init()
-{
-    LoadScene(SceneName::MainMenu);
-    return true;
-}
+        StateMachineExampleGame::StateMachineExampleGame(Game* pOwner)
+            : m_pOwner(pOwner)
+            , m_pCurrentState(nullptr)
+            , m_pNewState(nullptr)
+        {
+        }
 
-bool StateMachineExampleGame::UpdateCurrentState(bool processInput)
-{
-    bool done = false;
-    if (m_pNewState != nullptr)
-    {
-        ChangeState(m_pNewState);
-        m_pNewState = nullptr;
-    }
-    
-    if (m_pCurrentState != nullptr)
-    {
-        done = m_pCurrentState->Update(processInput);
-    }
-    return done;
-}
+        bool StateMachineExampleGame::Init()
+        {
+            LoadScene(SceneName::MainMenu);
+            return true;
+        }
 
-void StateMachineExampleGame::DrawCurrentState()
-{
-    if (m_pCurrentState)
-    {
-        m_pCurrentState->Draw();
-    }
-}
+        bool StateMachineExampleGame::UpdateCurrentState(bool processInput)
+        {
+            bool done = false;
+            if (m_pNewState != nullptr)
+            {
+                ChangeState(m_pNewState);
+                m_pNewState = nullptr;
+            }
 
-void StateMachineExampleGame::ChangeState(GameState* pNewState)
-{
-    if (m_pCurrentState)
-    {
-        m_pCurrentState->Exit();
-    }
-    delete m_pCurrentState;
-    m_pCurrentState = pNewState;
-    pNewState->Enter();
-}
+            if (m_pCurrentState != nullptr)
+            {
+                done = m_pCurrentState->Update(processInput);
+            }
+            return done;
+        }
 
-void StateMachineExampleGame::CleanUp()
-{
-    if (m_pCurrentState)
-    {
-        m_pCurrentState->Exit();
-        delete m_pCurrentState;
-        m_pCurrentState = nullptr;
-    }
-}
+        void StateMachineExampleGame::DrawCurrentState()
+        {
+            if (m_pCurrentState)
+            {
+                m_pCurrentState->Draw();
+            }
+        }
 
-void StateMachineExampleGame::LoadScene(SceneName scene)
-{
-    switch (scene)
-    {
-        case SceneName::MainMenu:
-            m_pNewState = new MainMenuState(this);
-            break;
-        case SceneName::Gameplay:
-            m_pNewState = new GameplayState(this);
-            break;
-        case SceneName::Highscore:
-            m_pNewState = new HighScoreState(this);
-            break;
-        case SceneName::Settings:
-            m_pNewState = new SettingsState(this);
-            break;
-        case SceneName::Lose:
-            m_pNewState = new LoseState(this);
-            break;
-        case SceneName::Win:
-            m_pNewState = new WinState(this);
-            break;
-        default:
-            break;
+        void StateMachineExampleGame::ChangeState(GameState* pNewState)
+        {
+            if (m_pCurrentState)
+            {
+                m_pCurrentState->Exit();
+            }
+            delete m_pCurrentState;
+            m_pCurrentState = pNewState;
+            pNewState->Enter();
+        }
+
+        void StateMachineExampleGame::CleanUp()
+        {
+            if (m_pCurrentState)
+            {
+                m_pCurrentState->Exit();
+                delete m_pCurrentState;
+                m_pCurrentState = nullptr;
+            }
+        }
+
+        void StateMachineExampleGame::LoadScene(SceneName scene)
+        {
+            switch (scene)
+            {
+            case SceneName::MainMenu:
+                m_pNewState = new MainMenuState(this);
+                break;
+            case SceneName::Gameplay:
+                m_pNewState = new GameplayState(this);
+                break;
+            case SceneName::Highscore:
+                m_pNewState = new HighScoreState(this);
+                break;
+            case SceneName::Settings:
+                m_pNewState = new SettingsState(this);
+                break;
+            case SceneName::Lose:
+                m_pNewState = new LoseState(this);
+                break;
+            case SceneName::Win:
+                m_pNewState = new WinState(this);
+                break;
+            default:
+                break;
+            }
+        }
+
     }
 }

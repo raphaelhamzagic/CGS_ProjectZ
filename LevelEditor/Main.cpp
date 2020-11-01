@@ -3,7 +3,7 @@
 
 int main()
 {
-    LevelEditor levelEditor;
+    projectz::editor::LevelEditor levelEditor;
     levelEditor.Initialize();
     levelEditor.RunGameLoop();
     levelEditor.Deinitialize();

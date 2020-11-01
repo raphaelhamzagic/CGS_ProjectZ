@@ -9,13 +9,13 @@ using namespace std;
 
 int main()
 {
-    Game myGame;
-    StateMachineExampleGame gameStateMachine(&myGame);
+    projectz::game::Game myGame;
+    projectz::game::StateMachineExampleGame gameStateMachine(&myGame);
 
     myGame.Initialize(&gameStateMachine);
     myGame.RunGameLoop();
     myGame.Deinitialize();
     
-    AudioManager::GetInstance()->DestroyInstance();    
+    projectz::game::AudioManager::GetInstance()->DestroyInstance();
     return 0;
 }

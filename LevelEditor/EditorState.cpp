@@ -1,11 +1,16 @@
 #include "EditorState.h"
 
-EditorState::EditorState(LevelEditorStateMachine* stateMachine)
-    : m_pStateMachine(stateMachine)
-{
-}
+namespace projectz {
+    namespace editor {
 
-bool EditorState::Update()
-{
-    return false;
+        EditorState::EditorState(LevelEditorStateMachine* stateMachine)
+            : m_pStateMachine(stateMachine)
+        {
+        }
+
+        bool EditorState::Update()
+        {
+            return false;
+        }
+    }
 }

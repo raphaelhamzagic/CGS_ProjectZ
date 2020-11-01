@@ -1,13 +1,19 @@
 #include "Money.h"
 #include <iostream>
 
-Money::Money(int x, int y, int worth)
-    : PlaceableActor(x, y)
-    , m_worth(worth)
-{
-}
+namespace projectz {
+    namespace game {
 
-void Money::Draw()
-{
-    std::cout << "$";
+        Money::Money(int x, int y, int worth)
+            : PlaceableActor(x, y)
+            , m_worth(worth)
+        {
+        }
+
+        void Money::Draw()
+        {
+            std::cout << "$";
+        }
+
+    }
 }

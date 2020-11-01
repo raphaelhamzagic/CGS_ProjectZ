@@ -6,8 +6,12 @@
 #include <set>
 #include <string>
 
-class Utility
-{
-public:
-    static std::set<int> WriteHighScore(int score);
-};
+namespace projectz {
+    namespace game {
+        class Utility
+        {
+        public:
+            static std::set<int> WriteHighScore(int score);
+        };
+    }
+}

@@ -2,18 +2,22 @@
 #include "GameState.h"
 #include <set>
 
-class StateMachineExampleGame;
+namespace projectz {
+    namespace game {
 
-class HighScoreState : public GameState
-{
-    StateMachineExampleGame* m_pOwner;
-    std::set<int> m_HighScores;
+        class StateMachineExampleGame;
 
-public:
-    HighScoreState(StateMachineExampleGame* pOwner);
-    ~HighScoreState() = default;
+        class HighScoreState : public GameState
+        {
+            StateMachineExampleGame* m_pOwner;
+            std::set<int> m_HighScores;
 
-    virtual bool Update(bool processInput = true) override;
-    virtual void Draw() override;
-};
+        public:
+            HighScoreState(StateMachineExampleGame* pOwner);
+            ~HighScoreState() = default;
 
+            virtual bool Update(bool processInput = true) override;
+            virtual void Draw() override;
+        };
+    }
+}

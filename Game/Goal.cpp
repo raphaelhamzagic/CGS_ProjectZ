@@ -1,12 +1,17 @@
 #include "Goal.h"
 #include <iostream>
 
-Goal::Goal(int x, int y)
-    : PlaceableActor(x, y)
-{
-}
+namespace projectz {
+    namespace game {
 
-void Goal::Draw()
-{
-    std::cout << "X";
+        Goal::Goal(int x, int y)
+            : PlaceableActor(x, y)
+        {
+        }
+
+        void Goal::Draw()
+        {
+            std::cout << "X";
+        }
+    }
 }
