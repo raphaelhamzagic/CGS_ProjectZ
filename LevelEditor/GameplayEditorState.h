@@ -24,12 +24,15 @@ namespace projectz {
             static constexpr int kEscape = 27;
             static constexpr int kBackspace = 8;
 
-            // chars for gameplay editing  
-
-            // chars for blueprint editing
+            // blueprint editor chars
+            static constexpr char kDoor = 'D';
+            static constexpr char kWindow = 'W';
             static constexpr char kWall1 = '-';
             static constexpr char kWall2 = '|';
             static constexpr char kWall3 = '+';
+            
+
+            // chars for gameplay editing  
 
             // weapons
             static constexpr char kGun = '1';
@@ -42,22 +45,34 @@ namespace projectz {
             static constexpr char kWood = 'w';
             static constexpr char kSerum = 'x';
 
-            // keys and doors
-            static constexpr char kDoor = 'D';
-            static constexpr char kBlueKey = 'b';
-            static constexpr char kBlueDoor = 'B';
-            static constexpr char kGreenKey = 'g';
-            static constexpr char kGreenDoor = 'G';
-            static constexpr char kCyanKey = 'c';
-            static constexpr char kCyanDoor = 'C';
-            static constexpr char kRedKey = 'r';
-            static constexpr char kRedDoor = 'R';
-            static constexpr char kMagentaKey = 'm';
-            static constexpr char kMagentaDoor = 'M';
+            // keys
             static constexpr char kBrownKey = 'a';
-            static constexpr char kBrownDoor = 'A';
-            static constexpr char kYellowKey = 'y';
-            static constexpr char kYellowDoor = 'Y';
+            static constexpr char kBlueKey = 'b';
+            static constexpr char kCyanKey = 'c';
+            static constexpr char kGreenKey = 'd';
+            static constexpr char kMagentaKey = 'e';
+            static constexpr char kRedKey = 'f';
+            static constexpr char kYellowKey = 'g';
+
+            // doors
+            static constexpr char kHorizontalBrownDoor = 'A';
+            static constexpr char kVerticalBrownDoor = 'Z';
+            static constexpr char kHorizontalBlueDoor = 'B';
+            static constexpr char kVerticalBlueDoor = 'Y';
+            static constexpr char kHorizontalCyanDoor = 'C';
+            static constexpr char kVerticalCyanDoor = 'X';
+            static constexpr char kHorizontalGreenDoor = 'D';
+            static constexpr char kVerticalGreenDoor = 'W';
+            static constexpr char kHorizontalMagentaDoor = 'E';
+            static constexpr char kVerticalMagentaDoor = 'V';
+            static constexpr char kHorizontalRedDoor = 'F';
+            static constexpr char kVerticalRedDoor = 'U';
+            static constexpr char kHorizontalYellowDoor = 'G';
+            static constexpr char kVerticalYellowDoor = 'T';
+
+            // windows
+            static constexpr char kVerticalWindow = 'M';
+            static constexpr char kHorizontalWindow = 'N';
 
             // enemies
             static constexpr char kZombie = 'z';
@@ -108,8 +123,9 @@ namespace projectz {
             void DrawLegend();
             void Save();
             bool IsValidChar(char input);
-            bool IsWall(char input);
             bool IsDoor(char input);
+            bool IsWindow(char input);
+            bool IsWall(char input);
         };
 
     }

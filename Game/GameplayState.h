@@ -18,12 +18,15 @@ namespace projectz {
             Player m_player;
             Level* m_pLevel;
 
+            bool m_levelLoaded;
             bool m_beatLevel;
             int m_skipFrameCount;
             static constexpr int kFramesToSkip = 2;
 
             int m_currentLevel;
             std::vector<std::string> m_LevelNames;
+
+            char m_currentRoom;
 
         public:
             GameplayState(StateMachineExampleGame* pOwner);
@@ -33,7 +36,7 @@ namespace projectz {
             virtual void Draw() override;
 
         private:
-            bool Load();
+            void Load();
             void HandleCollision(int newPlayerX, int newPlayerY);
             void DrawHUD(const HANDLE& console);
         };

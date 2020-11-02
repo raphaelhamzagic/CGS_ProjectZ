@@ -2,6 +2,7 @@
 #include <conio.h>
 
 #include "GameplayEditorState.h"
+#include "BlueprintEditorState.h"
 #include "LevelEditorStateMachine.h"
 #include "Level.h"
 #include "Point.h"
@@ -54,21 +55,20 @@ namespace projectz {
                 else
                 {
                     char inputChar = static_cast<char>(input);
+                    char* pLevelBlueprint = m_pStateMachine->m_pLevel->GetLevelBlueprint();
                     char* pLevelGameplay = m_pStateMachine->m_pLevel->GetLevelGameplay();
                     int index = m_pStateMachine->m_pLevel->GetIndexFromXY(m_pCursor->x, m_pCursor->y);
 
-
-                    if (!IsWall(pLevelGameplay[index]))
+                    if (!IsWall(pLevelBlueprint[index]))
                     {
-                        // make sure we update doors with doors types
-                        if (IsDoor(inputChar))
-                        {
-                            if (IsDoor(pLevelGameplay[index]))
-                            {
-                                pLevelGameplay[index] = inputChar;
-                            }
-                        }
-                        else if (IsValidChar(inputChar))
+                        if 
+                        (
+                            (IsDoor(pLevelBlueprint[index]) && IsDoor(inputChar))
+                            ||
+                            (IsWindow(pLevelBlueprint[index]) && IsWindow(inputChar))
+                            ||
+                            IsValidChar(inputChar)
+                        )
                         {
                             pLevelGameplay[index] = inputChar;
                         }
@@ -155,7 +155,7 @@ namespace projectz {
             DrawCanvasEmptyLine();
             DrawCanvasBottomBorder();
 
-            DrawLegend();
+            // DrawLegend();
         }
 
         void GameplayEditorState::DrawCanvasTopBorder()
@@ -239,12 +239,28 @@ namespace projectz {
             cout << "Arrow keys: Move cursor" << endl;
             cout << "ESC key: Save and finish editing" << endl << endl;
 
-            cout << "Weapons" << endl;
-            cout << "-------" << endl;
-            cout << kGun << ": gun" << endl;
-            cout << kGunAmmo << ": gun ammo" << endl;
-            cout << kShotgun << ": shotgun" << endl;
-            cout << kShotgunAmmo << ": shotgun ammo" << endl << endl;
+            cout << "Characters" << endl;
+            cout << "----------" << endl;
+            cout << kPlayerStart << ": player start" << endl;
+            cout << kZombie << ": zombies" << endl;
+            cout << kLeftShootingCreature << kRightShootingCreature << ": left and right shooting creatures" << endl << endl;
+            
+            cout << "Doors" << endl;
+            cout << "--------------" << endl;
+            cout << "horizontal brown: " << kHorizontalBrownDoor << endl;
+            cout << "vertical brown: " << kVerticalBrownDoor << endl;
+            cout << "blue (horizontal): " << kHorizontalBlueDoor << endl;
+            cout << "blue (vertical): " << kVerticalBlueDoor << endl;
+            cout << "cyan (horizontal): " << kHorizontalCyanDoor << endl;
+            cout << "cyan (vertical): " << kVerticalCyanDoor << endl;
+            cout << "green (horizontal): " << kHorizontalGreenDoor << endl;
+            cout << "green (vertical): " << kVerticalGreenDoor << endl;
+            cout << "magenta (horizontal): " << kHorizontalMagentaDoor << endl;
+            cout << "magenta (vertical): " << kVerticalMagentaDoor << endl;
+            cout << "red (horizontal): " << kHorizontalRedDoor << endl;
+            cout << "red (vertical): " << kVerticalRedDoor << endl;
+            cout << "yellow (horizontal): " << kHorizontalYellowDoor << endl;
+            cout << "yellow (vertical): " << kVerticalYellowDoor << endl << endl;
 
             cout << "Items" << endl;
             cout << "-----" << endl;
@@ -252,22 +268,22 @@ namespace projectz {
             cout << kWood << ": wood" << endl;
             cout << kSerum << ": serum" << endl << endl;
 
-            cout << "Keys/Doors" << endl;
+            cout << "Keys" << endl;
             cout << "--------------" << endl;
-            cout << "blue: " << kBlueKey << "/" << kBlueDoor << endl;
-            cout << "green: " << kGreenKey << "/" << kGreenDoor << endl;
-            cout << "cyan: " << kCyanKey << "/" << kCyanDoor << endl;
-            cout << "red: " << kRedKey << "/" << kRedDoor << endl;
-            cout << "magenta: " << kMagentaKey << "/" << kMagentaDoor << endl;
-            cout << "brown: " << kBrownKey << "/" << kBrownDoor << endl;
-            cout << "yellow: " << kYellowKey << "/" << kYellowDoor << endl << endl;
+            cout << "brown: " << kBrownKey << endl;
+            cout << "blue: " << kBlueKey << endl;
+            cout << "cyan: " << kCyanKey << endl;
+            cout << "green: " << kGreenKey << endl;
+            cout << "magenta: " << kMagentaKey << endl;            
+            cout << "red: " << kRedKey << endl;
+            cout << "yellow: " << kYellowKey << endl << endl;
 
+            cout << "Weapons" << endl;
             cout << "-------" << endl;
-            cout << kPlayerStart << ": player start" << endl;
-            cout << kZombie << ": zombies" << endl;
-            cout << kLeftShootingCreature << kRightShootingCreature << ": left and right shooting creatures" << endl;
-            cout << kDoor << ": unlocked door" << endl;
-            cout << kCabinet << ": cabinet" << endl;
+            cout << kGun << ": gun" << endl;
+            cout << kGunAmmo << ": gun ammo" << endl;
+            cout << kShotgun << ": shotgun" << endl;
+            cout << kShotgunAmmo << ": shotgun ammo" << endl << endl;
         }
 
         void GameplayEditorState::Save()
@@ -275,31 +291,51 @@ namespace projectz {
             m_pStateMachine->m_pLevel->SaveLevel();
         }
 
-        bool GameplayEditorState::IsWall(char input)
-        {
-            switch (input)
-            {
-            case kWall1:
-            case kWall2:
-            case kWall3:
-                return true;
-            }
-            return false;
-        }
-
         bool GameplayEditorState::IsDoor(char input)
         {
             switch (input)
             {
-            case kDoor:
-            case kBlueDoor:
-            case kGreenDoor:
-            case kCyanDoor:
-            case kRedDoor:
-            case kMagentaDoor:
-            case kBrownDoor:
-            case kYellowDoor:
-                return true;
+                case kDoor: //case kHorizontalGreenDoor:
+                case kHorizontalBrownDoor:
+                case kVerticalBrownDoor:
+                case kHorizontalBlueDoor:
+                case kVerticalBlueDoor:
+                case kHorizontalCyanDoor:
+                case kVerticalCyanDoor:                
+                case kVerticalGreenDoor:
+                case kHorizontalMagentaDoor:
+                case kVerticalMagentaDoor:
+                case kHorizontalRedDoor:
+                case kVerticalRedDoor:
+                case kHorizontalYellowDoor:
+                case kVerticalYellowDoor:
+                    return true;
+            }
+            return false;
+        }
+
+        
+
+        bool GameplayEditorState::IsWindow(char input)
+        {
+            switch (input)
+            {
+                kWindow:
+                kVerticalWindow:
+                kHorizontalWindow:
+                    return true;
+            }
+            return false;
+        }
+
+        bool GameplayEditorState::IsWall(char input)
+        {
+            switch (input)
+            {
+                kWall1:
+                kWall2:
+                kWall3:
+                    true;
             }
             return false;
         }
@@ -308,36 +344,33 @@ namespace projectz {
         {
             switch (input)
             {
-            case kGun:
-            case kGunAmmo:
-            case kShotgun:
-            case kShotgunAmmo:
-            case kLife:
-            case kWood:
-            case kSerum:
-            case kBlueKey:
-            case kGreenKey:
-            case kCyanKey:
-            case kRedKey:
-            case kMagentaKey:
-            case kBrownKey:
-            case kYellowKey:
-                /*
-                case kBlueDoor:
-                case kGreenDoor:
-                case kCyanDoor:
-                case kRedDoor:
-                case kMagentaDoor:
-                case kBrownDoor:
-                case kYellowDoor:
-                */
-            case kZombie:
-            case kLeftShootingCreature:
-            case kRightShootingCreature:
-            case kCabinet:
-            case kPlayerStart:
-            case kEmpty:
-                return true;
+                case kGun:
+                case kGunAmmo:
+                case kShotgun:
+                case kShotgunAmmo:
+
+                case kLife:
+                case kWood:
+                case kSerum:
+
+                case kBrownKey:
+                case kBlueKey:
+                case kCyanKey:
+                case kGreenKey:
+                case kMagentaKey:
+                case kRedKey:
+                case kYellowKey:
+
+                case kHorizontalWindow:
+                case kVerticalWindow:
+
+                case kZombie:
+                case kLeftShootingCreature:
+                case kRightShootingCreature:
+                case kPlayerStart:
+                case kCabinet:
+                case kEmpty:
+                    return true;
             }
             return false;
         }

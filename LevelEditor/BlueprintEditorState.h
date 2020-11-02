@@ -24,7 +24,6 @@ namespace projectz {
             static constexpr int kEscape = 27;
             static constexpr int kBackspace = 8;
 
-            // chars for blueprint editing
             static constexpr char kWall1 = '-';
             static constexpr char kWall2 = '|';
             static constexpr char kWall3 = '+';

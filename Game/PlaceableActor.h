@@ -5,10 +5,21 @@ namespace projectz {
     namespace game {
         enum class ActorColor
         {
-            Regular = 7,
-            Blue = 9,
-            Green = 10,
-            Red = 12,
+            Blue = 1,
+            Green = 2,
+            Cyan = 3,
+            Red = 4,
+            Magenta = 5,
+            Brown = 6,
+            LightGray = 7,
+            DarkGray = 8,
+            LightBlue = 9,
+            LightGreen = 10,
+            LightCyan = 11,
+            LightRed = 12,
+            LightMagenta = 13,
+            Yellow = 14,
+            White = 15,
             SolidGreen = 34,
             SolidRed = 68,
             SolidBlue = 153
@@ -24,10 +35,16 @@ namespace projectz {
             Player
         };
 
+        enum class ActorOrientation
+        {
+            Horizontal,
+            Vertical
+        };
+
         class PlaceableActor
         {
         public:
-            PlaceableActor(int x, int y, ActorColor color = ActorColor::Regular);
+            PlaceableActor(int x, int y, ActorColor color = ActorColor::LightGray);
             virtual ~PlaceableActor();
 
             int GetXPosition();

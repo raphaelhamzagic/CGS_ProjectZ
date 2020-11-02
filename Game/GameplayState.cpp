@@ -44,16 +44,17 @@ namespace projectz {
             m_pLevel = nullptr;
         }
 
-        bool GameplayState::Load()
+        void GameplayState::Load()
         {
             if (m_pLevel)
             {
                 delete m_pLevel;
                 m_pLevel = nullptr;
+                m_levelLoaded = false;
             }
 
             m_pLevel = new Level();
-            return m_pLevel->Load(
+            m_levelLoaded = m_pLevel->Load(
                 m_LevelNames.at(m_currentLevel),
                 m_player.GetXPositionPointer(),
                 m_player.GetYPositionPointer()
@@ -67,6 +68,11 @@ namespace projectz {
 
         bool GameplayState::Update(bool processInput)
         {
+            if (!m_levelLoaded)
+            {
+                return true;
+            }
+
             if (processInput && !m_beatLevel)
             {
                 int input = _getch();
@@ -139,30 +145,39 @@ namespace projectz {
                 }
             }
 
+            char currentRoom = m_pLevel->GetRoomFromCoordinates(m_player.GetXPosition(), m_player.GetYPosition());
+            if (currentRoom != 'D') // TODO replace literal
+            {
+                m_currentRoom = currentRoom;
+            }
+
             return false;
         }
 
         void GameplayState::Draw()
         {
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            system("cls");
+            if (m_levelLoaded)
+            {
+                HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+                system("cls");
 
-            m_pLevel->Draw();
+                m_pLevel->Draw(m_currentRoom);
 
-            // Set cursor position for player
-            COORD actorCursorPosition;
-            actorCursorPosition.X = m_player.GetXPosition();
-            actorCursorPosition.Y = m_player.GetYPosition();
-            SetConsoleCursorPosition(console, actorCursorPosition);
-            m_player.Draw();
+                // Set cursor position for player
+                COORD actorCursorPosition;
+                actorCursorPosition.X = m_player.GetXPosition();
+                actorCursorPosition.Y = m_player.GetYPosition();
+                SetConsoleCursorPosition(console, actorCursorPosition);
+                m_player.Draw();
 
-            // Set the cursor to the end of the level
-            COORD currentCursorPosition;
-            currentCursorPosition.X = 0;
-            currentCursorPosition.Y = m_pLevel->GetHeight();
-            SetConsoleCursorPosition(console, currentCursorPosition);
+                // Set the cursor to the end of the level
+                COORD currentCursorPosition;
+                currentCursorPosition.X = 0;
+                currentCursorPosition.Y = m_pLevel->GetHeight();
+                SetConsoleCursorPosition(console, currentCursorPosition);
 
-            DrawHUD(console);
+                DrawHUD(console);
+            }
         }
 
         void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
@@ -262,16 +277,16 @@ namespace projectz {
             // top border
             for (int i = 0; i < m_pLevel->GetWidth(); i++)
             {
-                cout << Level::WAL;
+                cout << Level::WALL;
             }
             cout << endl;
 
             // left border
-            cout << Level::WAL;
+            cout << Level::WALL;
 
-            cout << " wasd-move " << Level::WAL << " z-drop key " << Level::WAL;
-            cout << " $: " << m_player.GetMoney() << " " << Level::WAL;
-            cout << " lives: " << m_player.GetLives() << " " << Level::WAL;
+            cout << " wasd-move " << Level::WALL << " z-drop key " << Level::WALL;
+            cout << " $: " << m_player.GetMoney() << " " << Level::WALL;
+            cout << " lives: " << m_player.GetLives() << " " << Level::WALL;
             cout << " key: ";
             if (m_player.HasKey())
             {
@@ -291,13 +306,13 @@ namespace projectz {
             pos.Y = csbi.dwCursorPosition.Y;
             SetConsoleCursorPosition(console, pos);
 
-            cout << Level::WAL;
+            cout << Level::WALL;
             cout << endl;
 
             // bottom border
             for (int i = 0; i < m_pLevel->GetWidth(); i++)
             {
-                cout << Level::WAL;
+                cout << Level::WALL;
             }
         }
     }

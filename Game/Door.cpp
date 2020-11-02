@@ -5,8 +5,9 @@
 namespace projectz {
     namespace game {
 
-        Door::Door(int x, int y, ActorColor color, ActorColor closedColor)
+        Door::Door(int x, int y, ActorOrientation orientation, ActorColor color, ActorColor closedColor)
             : PlaceableActor(x, y, color)
+            , m_orientation(orientation)
             , m_isOpen(false)
             , m_closedColor(closedColor)
         {
@@ -23,8 +24,15 @@ namespace projectz {
             {
                 SetConsoleTextAttribute(console, (int)m_closedColor);
             }
-            std::cout << "|";
-            SetConsoleTextAttribute(console, (int)ActorColor::Regular);
+            if (m_orientation == ActorOrientation::Horizontal)
+            {
+                std::cout << (char)205;
+            }
+            else
+            {
+                std::cout << (char)186;
+            }
+            SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
     }
 }

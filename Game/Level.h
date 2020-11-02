@@ -10,6 +10,7 @@ namespace projectz {
         {
             char* m_pLevelBlueprint;
             char* m_pLevelGameplay;
+            char* m_pLevelData;
             int m_height;
             int m_width;
 
@@ -20,7 +21,7 @@ namespace projectz {
             ~Level();
 
             bool Load(std::string levelName, int* playerX, int* playerY);
-            void Draw();
+            void Draw(char currentRoom);
             PlaceableActor* UpdateActors(int x, int y);
 
             bool IsSpace(int x, int y);
@@ -29,7 +30,13 @@ namespace projectz {
             int GetHeight() { return m_height; }
             int GetWidth() { return m_width; }
 
-            static constexpr char WAL = (char)219;
+            char GetRoomFromCoordinates(int x, int y);
+
+            static constexpr char WALL = (char)219;
+
+            static constexpr char WINDOW_H = (char)196;
+            static constexpr char WINDOW_V = (char)179;
+
 
         private:
             bool Convert(int* playerX, int* playerY);
