@@ -26,8 +26,6 @@ namespace projectz {
             int m_currentLevel;
             std::vector<std::string> m_LevelNames;
 
-            char m_currentRoom;
-
         public:
             GameplayState(StateMachineExampleGame* pOwner);
             ~GameplayState();

@@ -34,8 +34,8 @@ namespace projectz {
             , m_pLevel(nullptr)
         {
             m_LevelNames.push_back("Level1.txt");
-            m_LevelNames.push_back("Level2.txt");
-            m_LevelNames.push_back("Level3.txt");
+            // m_LevelNames.push_back("Level2.txt");
+            // m_LevelNames.push_back("Level3.txt");
         }
 
         GameplayState::~GameplayState()
@@ -114,10 +114,7 @@ namespace projectz {
                     m_player.DropKey();
                 }
 
-                if (newPlayerX == m_player.GetXPosition() && newPlayerY == m_player.GetYPosition())
-                {
-                }
-                else
+                if (newPlayerX != m_player.GetXPosition() || newPlayerY != m_player.GetYPosition())
                 {
                     HandleCollision(newPlayerX, newPlayerY);
                 }
@@ -145,12 +142,6 @@ namespace projectz {
                 }
             }
 
-            char currentRoom = m_pLevel->GetRoomFromCoordinates(m_player.GetXPosition(), m_player.GetYPosition());
-            if (currentRoom != 'D') // TODO replace literal
-            {
-                m_currentRoom = currentRoom;
-            }
-
             return false;
         }
 
@@ -161,7 +152,7 @@ namespace projectz {
                 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
                 system("cls");
 
-                m_pLevel->Draw(m_currentRoom);
+                m_pLevel->Draw(m_player.GetXPosition(), m_player.GetYPosition());
 
                 // Set cursor position for player
                 COORD actorCursorPosition;
@@ -179,6 +170,7 @@ namespace projectz {
                 DrawHUD(console);
             }
         }
+   
 
         void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
         {

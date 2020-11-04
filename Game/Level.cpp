@@ -9,6 +9,7 @@
 #include "Level.h"
 #include "Money.h"
 #include "Player.h"
+#include "PlaceableActor.h"
 
 using namespace std;
 
@@ -90,30 +91,30 @@ namespace projectz {
             }
         }
 
-        void Level::Draw(char currentRoom)
+        void Level::Draw(int playerX, int playerY)
         {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
+            char playerRoom = GetRoom(playerX, playerY);
 
             // Draw the level
             for (int y = 0; y < GetHeight(); y++)
             {
                 for (int x = 0; x < GetWidth(); x++)
                 {
-                    int indexToPrint = GetIndexFromCoordinates(x, y);
+                    int index = GetIndexFromCoordinates(x, y);
                     if (
-                        m_pLevelBlueprint[indexToPrint] == currentRoom
+                        m_pLevelBlueprint[index] == playerRoom
                         || 
-                        m_pLevelData[indexToPrint] == WALL
+                        m_pLevelData[index] == WALL
                     )
                     {
-                        cout << m_pLevelData[indexToPrint];
+                        cout << m_pLevelData[index];
                     }
                     else
                     {
-                        cout << " ";
+                        cout << ' ';
                     }
-                    
                 }
                 cout << endl;
             }
@@ -125,22 +126,27 @@ namespace projectz {
             {
                 if ((*actor)->IsActive())
                 {
-                    actorCursorPosition.X = (short)(*actor)->GetXPosition();
-                    actorCursorPosition.Y = (short)(*actor)->GetYPosition();
-                    SetConsoleCursorPosition(console, actorCursorPosition);
-                    (*actor)->Draw();
+                    if ((*actor)->GetType() == ActorType::Door
+                        ||
+                        GetRoom((*actor)->GetXPosition(), (*actor)->GetYPosition()) == playerRoom)
+                    {
+                        actorCursorPosition.X = (short)(*actor)->GetXPosition();
+                        actorCursorPosition.Y = (short)(*actor)->GetYPosition();
+                        SetConsoleCursorPosition(console, actorCursorPosition);
+                        (*actor)->Draw();
+                    }                    
                 }
             }
         }
 
         bool Level::IsSpace(int x, int y)
         {
-            return m_pLevelBlueprint[GetIndexFromCoordinates(x, y)] == ' ';
+            return m_pLevelData[GetIndexFromCoordinates(x, y)] == ' ';
         }
 
         bool Level::IsWall(int x, int y)
         {
-            return m_pLevelBlueprint[GetIndexFromCoordinates(x, y)] == WALL;
+            return m_pLevelData[GetIndexFromCoordinates(x, y)] == WALL;
         }
 
         bool Level::Convert(int* playerX, int* playerY)
@@ -361,10 +367,28 @@ namespace projectz {
             return collidedActor;
         }
 
-        char Level::GetRoomFromCoordinates(int x, int y)
+        char Level::GetRoom(int x, int y)
         {
             int index = GetIndexFromCoordinates(x, y);
-            return m_pLevelBlueprint[index];
+            switch (m_pLevelBlueprint[index])
+            {
+                case 'a':
+                case 'b':
+                case 'c':
+                case 'd':
+                case 'e':
+                case 'f':
+                case 'g':
+                case 'h':
+                case 'i':
+                case 'j':
+                case 'k':
+                case 'l':
+                case 'm':
+                case 'n':
+                    return m_pLevelBlueprint[index];
+            }
+            return ' ';
         }
 
     }
