@@ -5,18 +5,18 @@ namespace projectz {
         class Door : public PlaceableActor
         {
         public:
-            Door(int x, int y, ActorOrientation orientation, ActorColor color, ActorColor closedColor);
+            Door(int x, int y, ActorOrientation orientation, bool isOpen, ActorColor unlockedColor, ActorColor lockedColor);
             virtual void Draw() override;
 
             virtual ActorType GetType() override { return ActorType::Door; }
             ActorOrientation GetOrientation() { return m_orientation; }
-            bool IsOpen() { return m_isOpen; }
-            void Open() { m_isOpen = true; }
+            bool IsLocked() { return m_isLocked; }
+            void Open() { m_isLocked = false; }
 
         private:
-            bool m_isOpen;
+            bool m_isLocked;
             ActorOrientation m_orientation;
-            ActorColor m_closedColor;
+            ActorColor m_unlockedColor;
         };
     }
 }

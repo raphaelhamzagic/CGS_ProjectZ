@@ -5,24 +5,24 @@
 namespace projectz {
     namespace game {
 
-        Door::Door(int x, int y, ActorOrientation orientation, ActorColor color, ActorColor closedColor)
-            : PlaceableActor(x, y, color)
+        Door::Door(int x, int y, ActorOrientation orientation, bool isLocked, ActorColor unlockedColor, ActorColor lockedColor)
+            : PlaceableActor(x, y, lockedColor)
             , m_orientation(orientation)
-            , m_isOpen(false)
-            , m_closedColor(closedColor)
+            , m_isLocked(isLocked)
+            , m_unlockedColor(unlockedColor)
         {
         }
 
         void Door::Draw()
         {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            if (m_isOpen)
+            if (m_isLocked)
             {
                 SetConsoleTextAttribute(console, (int)m_color);
             }
             else
             {
-                SetConsoleTextAttribute(console, (int)m_closedColor);
+                SetConsoleTextAttribute(console, (int)m_unlockedColor);
             }
             if (m_orientation == ActorOrientation::Horizontal)
             {

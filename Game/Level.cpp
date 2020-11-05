@@ -197,7 +197,7 @@ namespace projectz {
 
                     switch (m_pLevelGameplay[index])
                     {
-                        // walls and spaces (skip)
+                        // skip walls and spaces
                         case '+':
                         case '-':
                         case '|':
@@ -264,65 +264,65 @@ namespace projectz {
                         // Doors
                         case 'A':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, ActorColor::Brown, ActorColor::Brown));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, false, ActorColor::Brown, ActorColor::Brown));
                             break;
                         case 'Z':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, ActorColor::Brown, ActorColor::Brown));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, false, ActorColor::Brown, ActorColor::Brown));
                             break;
 
                         case 'B':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, ActorColor::Brown, ActorColor::LightBlue));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, true, ActorColor::Brown, ActorColor::LightBlue));
                             break;
                         case 'Y':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, ActorColor::Brown, ActorColor::LightBlue));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, true, ActorColor::Brown, ActorColor::LightBlue));
                             break;
 
                         case 'C':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, ActorColor::Brown, ActorColor::LightCyan));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, true, ActorColor::Brown, ActorColor::LightCyan));
                             break;
                         case 'X':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, ActorColor::Brown, ActorColor::LightCyan));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, true, ActorColor::Brown, ActorColor::LightCyan));
                             break;
 
                         case 'D':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, ActorColor::Brown, ActorColor::LightGreen));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, true, ActorColor::Brown, ActorColor::LightGreen));
                             break;
                         case 'W':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, ActorColor::Brown, ActorColor::LightGreen));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, true, ActorColor::Brown, ActorColor::LightGreen));
                             break;
 
                         case 'E':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, ActorColor::Brown, ActorColor::Magenta));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, true, ActorColor::Brown, ActorColor::Magenta));
                             break;
                         case 'V':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, ActorColor::Brown, ActorColor::Magenta));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, true, ActorColor::Brown, ActorColor::Magenta));
                             break;
 
                         case 'F':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, ActorColor::Brown, ActorColor::LightRed));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, true, ActorColor::Brown, ActorColor::LightRed));
                             break;
                         case 'U':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, ActorColor::Brown, ActorColor::LightRed));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, true, ActorColor::Brown, ActorColor::LightRed));
                             break;
 
                         case 'G':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, ActorColor::Brown, ActorColor::Yellow));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Horizontal, true, ActorColor::Brown, ActorColor::Yellow));
                             break;
                         case 'T':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, ActorColor::Brown, ActorColor::Yellow));
+                            m_pActors.push_back(new Door(x, y, ActorOrientation::Vertical, true, ActorColor::Brown, ActorColor::Yellow));
                             break;
 
                         case '@':

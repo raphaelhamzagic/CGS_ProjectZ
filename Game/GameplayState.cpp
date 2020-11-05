@@ -179,77 +179,77 @@ namespace projectz {
             {
                 switch (collidedActor->GetType())
                 {
-                case ActorType::Door:
-                {
-                    Door* collidedDoor = dynamic_cast<Door*>(collidedActor);
-                    if (!collidedDoor->IsOpen())
+                    case ActorType::Door:
                     {
-                        if (m_player.HasKey(collidedDoor->GetColor()))
+                        Door* collidedDoor = dynamic_cast<Door*>(collidedActor);
+                        if (collidedDoor->IsLocked())
                         {
-                            collidedDoor->Open();
-                            collidedDoor->Remove();
-                            m_player.UseKey();
-                            m_player.SetPosition(newPlayerX, newPlayerY);
-                            AudioManager::GetInstance()->PlayDoorOpenSound();
+                            if (m_player.HasKey(collidedDoor->GetColor()))
+                            {
+                                collidedDoor->Open();
+                                collidedDoor->Remove();
+                                m_player.UseKey();
+                                m_player.SetPosition(newPlayerX, newPlayerY);
+                                AudioManager::GetInstance()->PlayDoorOpenSound();
+                            }
+                            else
+                            {
+                                AudioManager::GetInstance()->PlayDoorClosedSound();
+                            }
                         }
                         else
                         {
-                            AudioManager::GetInstance()->PlayDoorClosedSound();
+                            m_player.SetPosition(newPlayerX, newPlayerY);
                         }
+                        break;
                     }
-                    else
+                    case ActorType::Enemy:
                     {
+                        Enemy* collidedEnemy = dynamic_cast<Enemy*>(collidedActor);
+                        assert(collidedEnemy);
+                        collidedEnemy->Remove();
                         m_player.SetPosition(newPlayerX, newPlayerY);
+                        m_player.DecrementLives();
+                        AudioManager::GetInstance()->PlayLoseLivesSound();
+                        if (m_player.GetLives() < 0)
+                        {
+                            AudioManager::GetInstance()->PlayLoseSound();
+                            m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
+                        }
+                        break;
                     }
-                    break;
-                }
-                case ActorType::Enemy:
-                {
-                    Enemy* collidedEnemy = dynamic_cast<Enemy*>(collidedActor);
-                    assert(collidedEnemy);
-                    collidedEnemy->Remove();
-                    m_player.SetPosition(newPlayerX, newPlayerY);
-                    m_player.DecrementLives();
-                    AudioManager::GetInstance()->PlayLoseLivesSound();
-                    if (m_player.GetLives() < 0)
+                    case ActorType::Goal:
                     {
-                        AudioManager::GetInstance()->PlayLoseSound();
-                        m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
-                    }
-                    break;
-                }
-                case ActorType::Goal:
-                {
-                    Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);
-                    assert(collidedGoal);
-                    collidedGoal->Remove();
-                    m_player.SetPosition(newPlayerX, newPlayerY);
-                    m_beatLevel = true;
-                    break;
-                }
-                case ActorType::Key:
-                {
-                    Key* collidedKey = dynamic_cast<Key*>(collidedActor);
-                    assert(collidedKey);
-                    if (!m_player.HasKey())
-                    {
-                        m_player.PickupKey(collidedKey);
-                        collidedKey->Remove();
+                        Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);
+                        assert(collidedGoal);
+                        collidedGoal->Remove();
                         m_player.SetPosition(newPlayerX, newPlayerY);
-                        AudioManager::GetInstance()->PlayKeyPickupSound();
+                        m_beatLevel = true;
+                        break;
                     }
-                    break;
-                }
-                case ActorType::Money:
-                {
-                    Money* collidedMoney = dynamic_cast<Money*>(collidedActor);
-                    assert(collidedMoney);
-                    collidedMoney->Remove();
-                    m_player.AddMoney(collidedMoney->GetWorth());
-                    AudioManager::GetInstance()->PlayMoneySound();
-                    m_player.SetPosition(newPlayerX, newPlayerY);
-                    break;
-                }
+                    case ActorType::Key:
+                    {
+                        Key* collidedKey = dynamic_cast<Key*>(collidedActor);
+                        assert(collidedKey);
+                        if (!m_player.HasKey())
+                        {
+                            m_player.PickupKey(collidedKey);
+                            collidedKey->Remove();
+                            m_player.SetPosition(newPlayerX, newPlayerY);
+                            AudioManager::GetInstance()->PlayKeyPickupSound();
+                        }
+                        break;
+                    }
+                    case ActorType::Money:
+                    {
+                        Money* collidedMoney = dynamic_cast<Money*>(collidedActor);
+                        assert(collidedMoney);
+                        collidedMoney->Remove();
+                        m_player.AddMoney(collidedMoney->GetWorth());
+                        AudioManager::GetInstance()->PlayMoneySound();
+                        m_player.SetPosition(newPlayerX, newPlayerY);
+                        break;
+                    }
                 }
             }
             else if (m_pLevel->IsSpace(newPlayerX, newPlayerY))

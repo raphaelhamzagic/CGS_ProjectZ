@@ -53,7 +53,7 @@ namespace projectz {
 
         void Player::Draw()
         {
-            cout << '@';
+            cout << kPlayerSymbol;
         }
     }
 }

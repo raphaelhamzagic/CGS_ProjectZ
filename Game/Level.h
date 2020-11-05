@@ -32,7 +32,6 @@ namespace projectz {
             int GetWidth() { return m_width; }
 
             static constexpr char WALL = (char)219;
-
             static constexpr char WINDOW_H = (char)196;
             static constexpr char WINDOW_V = (char)179;
 
