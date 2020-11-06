@@ -28,8 +28,7 @@ namespace projectz {
             bool done = false;
             if (m_pNewState != nullptr)
             {
-                ChangeState(m_pNewState);
-                m_pNewState = nullptr;
+                ChangeState(m_pNewState);                
             }
 
             if (m_pCurrentState != nullptr)
@@ -52,10 +51,11 @@ namespace projectz {
             if (m_pCurrentState)
             {
                 m_pCurrentState->Exit();
-            }
-            delete m_pCurrentState;
+                delete m_pCurrentState;
+            }            
             m_pCurrentState = pNewState;
             pNewState->Enter();
+            m_pNewState = nullptr;
         }
 
         void StateMachineExampleGame::CleanUp()
@@ -72,26 +72,26 @@ namespace projectz {
         {
             switch (scene)
             {
-            case SceneName::MainMenu:
-                m_pNewState = new MainMenuState(this);
-                break;
-            case SceneName::Gameplay:
-                m_pNewState = new GameplayState(this);
-                break;
-            case SceneName::Highscore:
-                m_pNewState = new HighScoreState(this);
-                break;
-            case SceneName::Settings:
-                m_pNewState = new SettingsState(this);
-                break;
-            case SceneName::Lose:
-                m_pNewState = new LoseState(this);
-                break;
-            case SceneName::Win:
-                m_pNewState = new WinState(this);
-                break;
-            default:
-                break;
+                case SceneName::MainMenu:
+                    m_pNewState = new MainMenuState(this);
+                    break;
+                case SceneName::Gameplay:
+                    m_pNewState = new GameplayState(this);
+                    break;
+                case SceneName::Highscore:
+                    m_pNewState = new HighScoreState(this);
+                    break;
+                case SceneName::Settings:
+                    m_pNewState = new SettingsState(this);
+                    break;
+                case SceneName::Lose:
+                    m_pNewState = new LoseState(this);
+                    break;
+                case SceneName::Win:
+                    m_pNewState = new WinState(this);
+                    break;
+                default:
+                    break;
             }
         }
 

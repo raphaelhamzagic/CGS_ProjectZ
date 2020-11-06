@@ -32,7 +32,8 @@ namespace projectz {
             Goal,
             Key,
             Money,
-            Player
+            Player,
+            Zombie
         };
 
         enum class ActorOrientation
@@ -62,6 +63,7 @@ namespace projectz {
             virtual ActorType GetType() = 0;
             virtual void Draw() = 0;
             virtual void Update() {};
+            virtual void Update(int* playerX, int* playerY) {};
 
         protected:
             Point* m_pPosition;

@@ -10,23 +10,28 @@
 #include "Money.h"
 #include "Player.h"
 #include "PlaceableActor.h"
+#include "Zombie.h"
 
 using namespace std;
 
 namespace projectz {
     namespace game {
 
-        Level::Level()
+        Level::Level(int* playerX, int* playerY)
             : m_pLevelBlueprint(nullptr)
             , m_pLevelGameplay(nullptr)
             , m_pLevelData(nullptr)
             , m_height(0)
             , m_width(0)
+            , m_playerX(playerX)
+            , m_playerY(playerY)
         {
         }
 
         Level::~Level()
         {
+            /*
+            * TODO, crashing when running this code
             if (m_pLevelBlueprint != nullptr)
             {
                 delete[] m_pLevelBlueprint;
@@ -44,6 +49,7 @@ namespace projectz {
                 delete[] m_pLevelData;
                 m_pLevelData = nullptr;
             }
+            */
 
             while (!m_pActors.empty())
             {
@@ -52,7 +58,7 @@ namespace projectz {
             }
         }
 
-        bool Level::Load(std::string levelName, int* playerX, int* playerY)
+        bool Level::Load(std::string levelName)
         {
             levelName.insert(0, "../Maps/");
             ifstream levelFile;
@@ -81,7 +87,7 @@ namespace projectz {
                 levelFile.getline(m_pLevelGameplay, levelSize+1, '\n');
 
                 m_pLevelData = new char[levelSize];
-                bool anyWarnings = Convert(playerX, playerY);
+                bool anyWarnings = Convert();
                 if (anyWarnings)
                 {
                     cout << "There were some warnings in the level data, see above." << endl;
@@ -91,11 +97,11 @@ namespace projectz {
             }
         }
 
-        void Level::Draw(int playerX, int playerY)
+        void Level::Draw()
         {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
-            char playerRoom = GetRoom(playerX, playerY);
+            char playerRoom = GetRoom(*m_playerX, *m_playerY);
 
             // Draw the level
             for (int y = 0; y < GetHeight(); y++)
@@ -149,7 +155,7 @@ namespace projectz {
             return m_pLevelData[GetIndexFromCoordinates(x, y)] == WALL;
         }
 
-        bool Level::Convert(int* playerX, int* playerY)
+        bool Level::Convert()
         {
             bool anyWarnings = false;
 
@@ -215,8 +221,14 @@ namespace projectz {
                         case 'l':
                         case 'w':
                         case 'x':
+                            break;
+
                         // enemies
                         case 'z':
+                            m_pLevelData[index] = ' ';
+                            m_pActors.push_back(new Zombie(x, y));
+                            break;
+
                         case '<':
                         case '>':
                         // cabinet
@@ -327,10 +339,10 @@ namespace projectz {
 
                         case '@':
                             m_pLevelData[index] = ' ';
-                            if (playerX != nullptr && playerY != nullptr)
+                            if (m_playerX != nullptr && m_playerY != nullptr)
                             {
-                                *playerX = x;
-                                *playerY = y;
+                                *m_playerX = x;
+                                *m_playerY = y;
                             }
                             break;
 
@@ -350,14 +362,27 @@ namespace projectz {
             return x + y * m_width;
         }
 
-        PlaceableActor* Level::UpdateActors(int x, int y)
+        PlaceableActor* Level::UpdateActors(int newPlayerX, int newPlayerY)
         {
+            char newPlayerRoom = GetRoom(newPlayerX, newPlayerY);
             PlaceableActor* collidedActor = nullptr;
-
+            
             for (auto actor = m_pActors.begin(); actor != m_pActors.end(); ++actor)
             {
-                (*actor)->Update();
-                if (x == (*actor)->GetXPosition() && y == (*actor)->GetYPosition())
+                char actorRoom = GetRoom((*actor)->GetXPosition(), (*actor)->GetYPosition());
+                if (actorRoom == newPlayerRoom)
+                {
+                    if ((*actor)->GetType() == ActorType::Zombie)
+                    {
+                        (*actor)->Update(m_playerX, m_playerY);
+                    }
+                    else
+                    {
+                        (*actor)->Update();
+                    }
+                    
+                }                
+                if (newPlayerX == (*actor)->GetXPosition() && newPlayerY == (*actor)->GetYPosition())
                 {
                     assert(collidedActor == nullptr);
                     collidedActor = (*actor);

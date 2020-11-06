@@ -53,12 +53,8 @@ namespace projectz {
                 m_levelLoaded = false;
             }
 
-            m_pLevel = new Level();
-            m_levelLoaded = m_pLevel->Load(
-                m_LevelNames.at(m_currentLevel),
-                m_player.GetXPositionPointer(),
-                m_player.GetYPositionPointer()
-            );
+            m_pLevel = new Level(m_player.GetXPositionPointer(), m_player.GetYPositionPointer());
+            m_levelLoaded = m_pLevel->Load(m_LevelNames.at(m_currentLevel));
         }
 
         void GameplayState::Enter()
@@ -152,7 +148,7 @@ namespace projectz {
                 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
                 system("cls");
 
-                m_pLevel->Draw(m_player.GetXPosition(), m_player.GetYPosition());
+                m_pLevel->Draw();
 
                 // Set cursor position for player
                 COORD actorCursorPosition;
@@ -187,7 +183,6 @@ namespace projectz {
                             if (m_player.HasKey(collidedDoor->GetColor()))
                             {
                                 collidedDoor->Open();
-                                collidedDoor->Remove();
                                 m_player.UseKey();
                                 m_player.SetPosition(newPlayerX, newPlayerY);
                                 AudioManager::GetInstance()->PlayDoorOpenSound();

@@ -15,15 +15,18 @@ namespace projectz {
             int m_height;
             int m_width;
 
+            int* m_playerX;
+            int* m_playerY;
+
             std::vector<PlaceableActor*> m_pActors;
 
         public:
-            Level();
+            Level(int* playerX, int* playerY);
             ~Level();
 
-            bool Load(std::string levelName, int* playerX, int* playerY);
-            void Draw(int playerX, int playerY);
-            PlaceableActor* UpdateActors(int x, int y);
+            bool Load(std::string levelName);
+            void Draw();
+            PlaceableActor* UpdateActors(int newPlayerX, int newPlayerY);
 
             bool IsSpace(int x, int y);
             bool IsWall(int x, int y);
@@ -37,7 +40,7 @@ namespace projectz {
 
 
         private:
-            bool Convert(int* playerX, int* playerY);
+            bool Convert();
             int GetIndexFromCoordinates(int x, int y);
             char GetRoom(int x, int y);
         };

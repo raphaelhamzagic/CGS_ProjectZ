@@ -158,6 +158,7 @@
     <ClCompile Include="StateMachineExampleGame.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="WinState.cpp" />
+    <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="StateMachineExampleGame.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="WinState.h" />
+    <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
