@@ -4,13 +4,13 @@
 #include <iostream>
 #include <Windows.h>
 
+#include "AudioManager.h"
 #include "Door.h"
 #include "Enemy.h"
 #include "Goal.h"
 #include "Key.h"
-#include "Money.h"
-#include "AudioManager.h"
 #include "Utility.h"
+#include "Zombie.h"
 
 #include "StateMachineExampleGame.h"
 
@@ -198,9 +198,9 @@ namespace projectz {
                         }
                         break;
                     }
-                    case ActorType::Enemy:
+                    case ActorType::Zombie:
                     {
-                        Enemy* collidedEnemy = dynamic_cast<Enemy*>(collidedActor);
+                        Zombie* collidedEnemy = dynamic_cast<Zombie*>(collidedActor);
                         assert(collidedEnemy);
                         collidedEnemy->Remove();
                         m_player.SetPosition(newPlayerX, newPlayerY);
@@ -213,6 +213,7 @@ namespace projectz {
                         }
                         break;
                     }
+                    /*
                     case ActorType::Goal:
                     {
                         Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);
@@ -222,6 +223,7 @@ namespace projectz {
                         m_beatLevel = true;
                         break;
                     }
+                    */
                     case ActorType::Key:
                     {
                         Key* collidedKey = dynamic_cast<Key*>(collidedActor);
@@ -233,16 +235,6 @@ namespace projectz {
                             m_player.SetPosition(newPlayerX, newPlayerY);
                             AudioManager::GetInstance()->PlayKeyPickupSound();
                         }
-                        break;
-                    }
-                    case ActorType::Money:
-                    {
-                        Money* collidedMoney = dynamic_cast<Money*>(collidedActor);
-                        assert(collidedMoney);
-                        collidedMoney->Remove();
-                        m_player.AddMoney(collidedMoney->GetWorth());
-                        AudioManager::GetInstance()->PlayMoneySound();
-                        m_player.SetPosition(newPlayerX, newPlayerY);
                         break;
                     }
                 }

@@ -7,7 +7,6 @@
 #include "Goal.h"
 #include "Key.h"
 #include "Level.h"
-#include "Money.h"
 #include "Player.h"
 #include "PlaceableActor.h"
 #include "Zombie.h"
@@ -374,19 +373,18 @@ namespace projectz {
                 {
                     if ((*actor)->GetType() == ActorType::Zombie)
                     {
-                        (*actor)->Update(m_playerX, m_playerY);
+                        (*actor)->Update(newPlayerX, newPlayerY);
                     }
                     else
                     {
                         (*actor)->Update();
                     }
-                    
-                }                
-                if (newPlayerX == (*actor)->GetXPosition() && newPlayerY == (*actor)->GetYPosition())
-                {
-                    assert(collidedActor == nullptr);
-                    collidedActor = (*actor);
-                }
+                    if (newPlayerX == (*actor)->GetXPosition() && newPlayerY == (*actor)->GetYPosition())
+                    {
+                        assert(collidedActor == nullptr);
+                        collidedActor = (*actor);
+                    }
+                }     
             }
 
             return collidedActor;
