@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 
 namespace projectz {
     namespace game {
@@ -17,6 +18,17 @@ namespace projectz {
             {
                 this->x = x;
                 this->y = y;
+            }
+
+            double DistanceTo(int x, int y)
+            {
+                x = x - this->x;
+                y = y - this->y;
+                x *= x;
+                y *= y;
+                return sqrt(
+                    x + y
+                );
             }
         };
     }

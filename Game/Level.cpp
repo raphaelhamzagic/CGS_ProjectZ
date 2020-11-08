@@ -154,6 +154,29 @@ namespace projectz {
             return m_pLevelData[GetIndexFromCoordinates(x, y)] == WALL;
         }
 
+        bool Level::IsDoor(int x, int y)
+        {
+            switch (m_pLevelData[GetIndexFromCoordinates(x, y)])
+            {
+                case 'A':
+                case 'B':
+                case 'C':
+                case 'D':
+                case 'E':
+                case 'F':
+                case 'G':
+                case 'Z':
+                case 'Y':
+                case 'X':
+                case 'W':
+                case 'V':
+                case 'U':
+                case 'T':
+                    return true;
+            }
+            return false;
+        }
+
         bool Level::Convert()
         {
             bool anyWarnings = false;
@@ -373,7 +396,7 @@ namespace projectz {
                 {
                     if ((*actor)->GetType() == ActorType::Zombie)
                     {
-                        (*actor)->Update(newPlayerX, newPlayerY);
+                        (*actor)->Update(this, newPlayerX, newPlayerY);
                     }
                     else
                     {

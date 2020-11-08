@@ -1,39 +1,66 @@
 #include "Zombie.h"
 #include <iostream>
 #include <Windows.h>
+#include "Level.h"
 
 using namespace std;
 
 namespace projectz {
     namespace game {
-        int Zombie::s_count = 0;
-
         Zombie::Zombie(int x, int y)
             : PlaceableActor(x, y)
-            , m_color(ActorColor::Red)
+            , m_color(ActorColor::Brown)
+            , m_isChasing(false)
+            , m_chasingColor(ActorColor::Red)
         {
-            m_id = s_count++;
         }
 
         void Zombie::Draw()
         {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute(console, (int)m_color);
+            if (m_isChasing)
+            {
+                SetConsoleTextAttribute(console, (int)m_chasingColor);
+            }
+            else
+            {
+                SetConsoleTextAttribute(console, (int)m_color);
+            }
             std::cout << 'z';
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
 
-        void Zombie::Update(int playerX, int playerY)
+        void Zombie::Update(Level* pLevel, int playerX, int playerY)
         {
-            int newPositionX = m_pPosition->x;
-            int newPositionY = m_pPosition->y;
+            if (m_IsActive)
+            {
+                double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
+                Point newPosition;
+                if (std::abs(distanceToPlayer) <= kChaseDistance)
+                {
+                    newPosition = Chase(playerX, playerY);
+                    m_isChasing = true;
+                }
+                else
+                {
+                    newPosition = Wander();
+                    m_isChasing = false;
+                }
+                if (!pLevel->IsWall(newPosition.x, newPosition.y) && !pLevel->IsDoor(newPosition.x, newPosition.y))
+                {
+                    SetPosition(newPosition.x, newPosition.y);
+                }
+            }            
+        }
+
+        Point Zombie::Chase(int playerX, int playerY)
+        {
+            Point newPosition{ m_pPosition->x, m_pPosition->y };
 
             int diffX = playerX - m_pPosition->x;
             int diffY = playerY - m_pPosition->y;
-            
-            int directionX = 0;
-            int directionY = 0;
 
+            int directionX = 0;
             if (diffX > 0)
             {
                 directionX = 1;
@@ -42,8 +69,9 @@ namespace projectz {
             {
                 directionX = -1;
             }
-            newPositionX = m_pPosition->x + directionX;
+            int newPositionX = m_pPosition->x + directionX;
 
+            int directionY = 0;
             if (diffY > 0)
             {
                 directionY = 1;
@@ -52,32 +80,48 @@ namespace projectz {
             {
                 directionY = -1;
             }
-            newPositionY = m_pPosition->y + directionY;
+            int newPositionY = m_pPosition->y + directionY;
 
             if (newPositionX != m_pPosition->x && newPositionY != m_pPosition->y)
             {
                 int randomAxis = rand() % 2;
                 if (randomAxis)
                 {
-                    SetPosition(newPositionX, m_pPosition->y);
+                    newPosition.x = newPositionX;
                 }
                 else
                 {
-                    SetPosition(m_pPosition->x, newPositionY);
+                    newPosition.y = newPositionY;
                 }
             }
             else if (newPositionX != m_pPosition->x)
             {
-                SetPosition(newPositionX, m_pPosition->y);
+                newPosition.x = newPositionX;
             }
             else if (newPositionY != m_pPosition->y)
             {
-                SetPosition(m_pPosition->x, newPositionY);
+                newPosition.y = newPositionY;
+            }
+
+            return newPosition;
+        }
+
+        Point Zombie::Wander()
+        {
+            Point newPosition{ m_pPosition->x, m_pPosition->y };
+
+            int randomAxis = rand() % 2;
+            int randomDirection = ((rand() % 2)) ? 1 : -1;
+            if (randomAxis)
+            {
+                newPosition.x = m_pPosition->x + (kMovementOffset * randomDirection);
             }
             else
             {
-                SetPosition(m_pPosition->x, m_pPosition->y);
+                newPosition.y = m_pPosition->y + (kMovementOffset * randomDirection);
             }
+
+            return newPosition;
         }
     }
 }

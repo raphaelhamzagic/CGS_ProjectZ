@@ -30,6 +30,7 @@ namespace projectz {
 
             bool IsSpace(int x, int y);
             bool IsWall(int x, int y);
+            bool IsDoor(int x, int y);
 
             int GetHeight() { return m_height; }
             int GetWidth() { return m_width; }
