@@ -7,11 +7,10 @@ namespace projectz {
 
         class Zombie : public PlaceableActor
         {
-            static int constexpr kMovementOffset = 1;
-            static int constexpr kChaseDistance = 3;
-
             bool m_isChasing;
-            ActorColor m_chasingColor;          
+            ActorColor m_chasingColor;
+
+            int m_updateControl;
             ActorColor m_color;
 
         public:

@@ -261,6 +261,7 @@ namespace projectz {
                         case 'M':
                             m_pLevelData[index] = WINDOW_H;
                             break;
+
                         case 'N':
                             m_pLevelData[index] = WINDOW_V;
                             break;                            

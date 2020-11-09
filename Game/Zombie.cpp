@@ -7,11 +7,17 @@ using namespace std;
 
 namespace projectz {
     namespace game {
+
+        static int constexpr kMovementOffset = 1;
+        static int constexpr kChaseDistance = 3;
+        static int constexpr kUpdateSpeed = 2;
+
         Zombie::Zombie(int x, int y)
             : PlaceableActor(x, y)
             , m_color(ActorColor::Brown)
             , m_isChasing(false)
             , m_chasingColor(ActorColor::Red)
+            , m_updateControl(0)        
         {
         }
 
@@ -34,23 +40,30 @@ namespace projectz {
         {
             if (m_IsActive)
             {
-                double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
-                Point newPosition;
-                if (std::abs(distanceToPlayer) <= kChaseDistance)
+                ++m_updateControl;
+                if (m_updateControl % kUpdateSpeed == 0)
                 {
-                    newPosition = Chase(playerX, playerY);
-                    m_isChasing = true;
+                    m_updateControl = 0;
+
+                    double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
+                    Point newPosition;
+                    if (std::abs(distanceToPlayer) <= kChaseDistance)
+                    {
+                        newPosition = Chase(playerX, playerY);
+                        m_isChasing = true;
+                    }
+                    else
+                    {
+                        newPosition = Wander();
+                        m_isChasing = false;
+                    }
+                    if (!pLevel->IsWall(newPosition.x, newPosition.y) && !pLevel->IsDoor(newPosition.x, newPosition.y))
+                    {
+                        SetPosition(newPosition.x, newPosition.y);
+                    }
                 }
-                else
-                {
-                    newPosition = Wander();
-                    m_isChasing = false;
-                }
-                if (!pLevel->IsWall(newPosition.x, newPosition.y) && !pLevel->IsDoor(newPosition.x, newPosition.y))
-                {
-                    SetPosition(newPosition.x, newPosition.y);
-                }
-            }            
+                
+            }
         }
 
         Point Zombie::Chase(int playerX, int playerY)
