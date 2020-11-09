@@ -111,14 +111,16 @@ namespace projectz {
                     if (
                         m_pLevelBlueprint[index] == playerRoom
                         || 
-                        m_pLevelData[index] == WALL
+                        IsWall(x, y)
+                        ||
+                        IsWindow(x, y)
                     )
                     {
                         cout << m_pLevelData[index];
                     }
                     else
                     {
-                        cout << ' ';
+                        cout << (char)176;
                     }
                 }
                 cout << endl;
@@ -175,6 +177,12 @@ namespace projectz {
                     return true;
             }
             return false;
+        }
+
+        bool Level::IsWindow(int x, int y)
+        {
+            char c = m_pLevelData[GetIndexFromCoordinates(x, y)];
+            return (c == WINDOW_H || c == WINDOW_V);
         }
 
         bool Level::Convert()

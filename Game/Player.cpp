@@ -9,7 +9,7 @@ using namespace std;
 namespace projectz {
     namespace game {
 
-        constexpr int kStartingNumberOfLives = 3;
+        constexpr int kStartingNumberOfLives = 2;
         constexpr char kPlayerSymbol = '@';
 
         Player::Player()

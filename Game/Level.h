@@ -21,6 +21,10 @@ namespace projectz {
             std::vector<PlaceableActor*> m_pActors;
 
         public:
+            static constexpr char WALL = (char)219;
+            static constexpr char WINDOW_H = (char)196;
+            static constexpr char WINDOW_V = (char)179;
+
             Level(int* playerX, int* playerY);
             ~Level();
 
@@ -31,13 +35,10 @@ namespace projectz {
             bool IsSpace(int x, int y);
             bool IsWall(int x, int y);
             bool IsDoor(int x, int y);
+            bool IsWindow(int x, int y);
 
             int GetHeight() { return m_height; }
             int GetWidth() { return m_width; }
-
-            static constexpr char WALL = (char)219;
-            static constexpr char WINDOW_H = (char)196;
-            static constexpr char WINDOW_V = (char)179;
 
 
         private:
