@@ -40,7 +40,6 @@ namespace projectz {
             int GetHeight() { return m_height; }
             int GetWidth() { return m_width; }
 
-
         private:
             bool Convert();
             int GetIndexFromCoordinates(int x, int y);

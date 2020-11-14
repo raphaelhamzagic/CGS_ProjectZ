@@ -6,7 +6,6 @@
 
 #include "AudioManager.h"
 #include "Door.h"
-#include "Enemy.h"
 #include "Goal.h"
 #include "Key.h"
 #include "Utility.h"
@@ -69,7 +68,7 @@ namespace projectz {
                 return true;
             }
 
-            if (processInput && !m_beatLevel)
+            if (processInput && !m_beatLevel && m_player.IsAlive())
             {
                 int input = _getch();
                 int arrowInput = 0;
@@ -127,7 +126,8 @@ namespace projectz {
                     ++m_currentLevel;
                     if (m_currentLevel == m_LevelNames.size())
                     {
-                        Utility::WriteHighScore(m_player.GetMoney());
+                        // TODO 
+                        Utility::WriteHighScore(100);
                         AudioManager::GetInstance()->PlayWinSound();
                         m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Win);
                     }
@@ -135,6 +135,18 @@ namespace projectz {
                     {
                         Load();
                     }
+                }
+            }
+
+            if (!m_player.IsAlive())
+            {
+                ++m_skipFrameCount;
+                if (m_skipFrameCount > kFramesToSkip)
+                {
+                    m_skipFrameCount = 0;
+                    AudioManager::GetInstance()->PlayLoseSound();
+                    system("pause");
+                    m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
                 }
             }
 
@@ -202,14 +214,15 @@ namespace projectz {
                     {
                         Zombie* collidedEnemy = dynamic_cast<Zombie*>(collidedActor);
                         assert(collidedEnemy);
-                        collidedEnemy->Remove();
-                        m_player.SetPosition(newPlayerX, newPlayerY);
-                        m_player.DecrementLives();
+                        //m_player.SetPosition(newPlayerX, newPlayerY);
+                        m_player.TakeDamage();
                         AudioManager::GetInstance()->PlayLoseLivesSound();
-                        if (m_player.GetLives() < 0)
+                        if (m_player.GetLives() == 0)
                         {
+                            /*
                             AudioManager::GetInstance()->PlayLoseSound();
                             m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
+                            */                            
                         }
                         break;
                     }
@@ -264,7 +277,7 @@ namespace projectz {
             cout << Level::WALL;
 
             cout << " wasd-move " << Level::WALL << " z-drop key " << Level::WALL;
-            cout << " $: " << m_player.GetMoney() << " " << Level::WALL;
+            // cout << " $: " << m_player.GetMoney() << " " << Level::WALL;
             cout << " lives: " << m_player.GetLives() << " " << Level::WALL;
             cout << " key: ";
             if (m_player.HasKey())
@@ -293,6 +306,8 @@ namespace projectz {
             {
                 cout << Level::WALL;
             }
+
+            cout << endl;
         }
     }
 }

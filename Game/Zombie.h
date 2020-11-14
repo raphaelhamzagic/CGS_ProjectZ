@@ -17,7 +17,8 @@ namespace projectz {
             Zombie(int x, int y);
             virtual ActorType GetType() override { return ActorType::Zombie; }
             virtual void Draw() override;
-            virtual void Update(Level* level, int playerX, int playerY);
+            virtual bool Update(Level* level, int playerX, int playerY);
+
         private:
             Point Chase(int diffX, int diffY);
             Point Wander();

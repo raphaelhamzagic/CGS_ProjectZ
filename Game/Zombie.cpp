@@ -9,7 +9,7 @@ namespace projectz {
     namespace game {
 
         static int constexpr kMovementOffset = 1;
-        static int constexpr kChaseDistance = 3;
+        static int constexpr kChaseDistance = 4;
         static int constexpr kUpdateSpeed = 2;
 
         Zombie::Zombie(int x, int y)
@@ -24,46 +24,54 @@ namespace projectz {
         void Zombie::Draw()
         {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            if (m_isChasing)
-            {
-                SetConsoleTextAttribute(console, (int)m_chasingColor);
-            }
-            else
-            {
-                SetConsoleTextAttribute(console, (int)m_color);
-            }
+            int color = (m_isChasing) ? static_cast<int>(m_chasingColor) : static_cast<int>(m_color);
+            SetConsoleTextAttribute(console, color);
             std::cout << 'z';
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
 
-        void Zombie::Update(Level* pLevel, int playerX, int playerY)
+        bool Zombie::Update(Level* pLevel, int playerX, int playerY)
         {
+            bool hasCollided = false;
             if (m_IsActive)
             {
                 ++m_updateControl;
                 if (m_updateControl % kUpdateSpeed == 0)
                 {
                     m_updateControl = 0;
-
-                    double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
                     Point newPosition;
-                    if (std::abs(distanceToPlayer) <= kChaseDistance)
+                    if (m_isChasing)
                     {
                         newPosition = Chase(playerX, playerY);
-                        m_isChasing = true;
                     }
                     else
                     {
-                        newPosition = Wander();
-                        m_isChasing = false;
+                        double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
+                        if (std::abs(distanceToPlayer) <= kChaseDistance)
+                        {
+                            m_isChasing = true;
+                            newPosition = Chase(playerX, playerY);
+                        }
+                        else
+                        {
+                            newPosition = Wander();
+                        }
                     }
+
                     if (!pLevel->IsWall(newPosition.x, newPosition.y) && !pLevel->IsDoor(newPosition.x, newPosition.y))
                     {
-                        SetPosition(newPosition.x, newPosition.y);
+                        if (newPosition.x == playerX && newPosition.y == playerY)
+                        {
+                            hasCollided = true;
+                        }
+                        else
+                        {
+                            SetPosition(newPosition.x, newPosition.y);
+                        }
                     }
                 }
-                
             }
+            return hasCollided;
         }
 
         Point Zombie::Chase(int playerX, int playerY)

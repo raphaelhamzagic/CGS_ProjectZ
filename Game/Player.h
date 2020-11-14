@@ -10,6 +10,9 @@ namespace projectz {
         public:
             Player();
 
+            virtual ActorType GetType() override { return ActorType::Player; }
+            virtual void Draw() override;
+
             bool HasKey();
             bool HasKey(ActorColor color);
             void PickupKey(Key* key);
@@ -17,17 +20,12 @@ namespace projectz {
             void DropKey();
             Key* GetKey() { return m_pCurrentKey; }
 
-            void AddMoney(int money) { m_money += money; }
-            int GetMoney() { return m_money; }
-
             int GetLives() { return m_lives; }
-            void DecrementLives() { m_lives--; }
-            virtual ActorType GetType() override { return ActorType::Player; }
-            virtual void Draw() override;
+            void TakeDamage();
+            bool IsAlive();
 
         private:
             Key* m_pCurrentKey;
-            int m_money;
             int m_lives;
         };
     }

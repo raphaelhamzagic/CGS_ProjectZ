@@ -64,8 +64,8 @@ namespace projectz {
 
             virtual ActorType GetType() = 0;
             virtual void Draw() = 0;
-            virtual void Update() {};
-            virtual void Update(Level* pLevel, int playerX, int playerY) {};
+            virtual bool Update() { return false; };
+            virtual bool Update(Level* pLevel, int playerX, int playerY) { return false; };
 
         protected:
             Point* m_pPosition;

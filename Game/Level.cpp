@@ -3,7 +3,6 @@
 #include <Windows.h>
 #include <assert.h>
 #include "Door.h"
-#include "Enemy.h"
 #include "Goal.h"
 #include "Key.h"
 #include "Level.h"

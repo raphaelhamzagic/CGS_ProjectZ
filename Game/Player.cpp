@@ -1,4 +1,5 @@
 #include <iostream>
+#include <Windows.h>
 
 #include "Player.h"
 #include "Key.h"
@@ -9,13 +10,19 @@ using namespace std;
 namespace projectz {
     namespace game {
 
-        constexpr int kStartingNumberOfLives = 2;
-        constexpr char kPlayerSymbol = '@';
+        constexpr char kPlayerAliveSymbol = '@';
+        constexpr char kPlayerDeadSymbol = 'X';
+        constexpr int kStartingNumberOfLives = 3;
+        const ActorColor kPlayerColor[] = {
+            ActorColor::Red,
+            ActorColor::Brown,
+            ActorColor::Yellow,
+            ActorColor::Green
+        };
 
         Player::Player()
             : PlaceableActor(0, 0)
             , m_pCurrentKey(nullptr)
-            , m_money(0)
             , m_lives(kStartingNumberOfLives)
         {
         }
@@ -53,7 +60,31 @@ namespace projectz {
 
         void Player::Draw()
         {
-            cout << kPlayerSymbol;
+            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+            int color = static_cast<int>(kPlayerColor[m_lives]);
+            SetConsoleTextAttribute(console, color);
+            if (IsAlive())
+            {
+                cout << kPlayerAliveSymbol;
+            }
+            else
+            {
+                cout << kPlayerDeadSymbol;
+            }
+            SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
+        }
+
+        void Player::TakeDamage()
+        {
+            if (m_lives > 0)
+            {
+                --m_lives;
+            }
+        }
+
+        bool Player::IsAlive()
+        {
+            return m_lives > 0;
         }
     }
 }
