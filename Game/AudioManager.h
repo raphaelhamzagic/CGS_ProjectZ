@@ -19,10 +19,11 @@ namespace projectz {
             void PlayDoorOpenSound();
             void PlayKeyPickupSound();
             void PlayKeyDropSound();
-            void PlayMoneySound();
+            void PlayWallHitSound();
             void PlayLoseLivesSound();
             void PlayLoseSound();
             void PlayWinSound();
+            void PlayGunShootingSound();
         };
     }
 }

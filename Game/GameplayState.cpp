@@ -8,10 +8,10 @@
 #include "Door.h"
 #include "Goal.h"
 #include "Key.h"
+#include "Point.h"
+#include "StateMachineExampleGame.h"
 #include "Utility.h"
 #include "Zombie.h"
-
-#include "StateMachineExampleGame.h"
 
 using namespace std;
 
@@ -24,6 +24,7 @@ namespace projectz {
         constexpr int kUpArrow = 72;
         constexpr int kDownArrow = 80;
         constexpr int kEscape = 27;
+        constexpr int kSpaceBar = 32;
 
         GameplayState::GameplayState(StateMachineExampleGame* pOwner)
             : m_pOwner(pOwner)
@@ -107,6 +108,10 @@ namespace projectz {
                 else if ((char)input == 'Z' || (char)input == 'z')
                 {
                     m_player.DropKey();
+                }
+                else if (input == kSpaceBar)
+                {
+                    PlayerShoot();
                 }
 
                 if (newPlayerX != m_player.GetXPosition() || newPlayerY != m_player.GetYPosition())
@@ -214,29 +219,10 @@ namespace projectz {
                     {
                         Zombie* collidedEnemy = dynamic_cast<Zombie*>(collidedActor);
                         assert(collidedEnemy);
-                        //m_player.SetPosition(newPlayerX, newPlayerY);
                         m_player.TakeDamage();
-                        AudioManager::GetInstance()->PlayLoseLivesSound();
-                        if (m_player.GetLives() == 0)
-                        {
-                            /*
-                            AudioManager::GetInstance()->PlayLoseSound();
-                            m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
-                            */                            
-                        }
+                        AudioManager::GetInstance()->PlayLoseLivesSound();                        
                         break;
                     }
-                    /*
-                    case ActorType::Goal:
-                    {
-                        Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);
-                        assert(collidedGoal);
-                        collidedGoal->Remove();
-                        m_player.SetPosition(newPlayerX, newPlayerY);
-                        m_beatLevel = true;
-                        break;
-                    }
-                    */
                     case ActorType::Key:
                     {
                         Key* collidedKey = dynamic_cast<Key*>(collidedActor);
@@ -258,8 +244,36 @@ namespace projectz {
             }
             else if (m_pLevel->IsWall(newPlayerX, newPlayerY))
             {
-                // wall collision, do nothing
+                AudioManager::GetInstance()->PlayWallHitSound();
             }
+        }
+
+        void GameplayState::PlayerShoot()
+        {
+            AudioManager::GetInstance()->PlayGunShootingSound();
+
+            bool hit = false;
+            Point position = m_player.GetPosition() + m_player.GetDirection();
+            do
+            {
+                if (m_pLevel->IsSpace(position.x, position.y))
+                {
+                    PlaceableActor* zombieActor = m_pLevel->GetActorAtPosition(position);
+                    if (zombieActor != nullptr && zombieActor->IsActive())
+                    {
+                        zombieActor->TakeDamage(&m_player.GetDirection());
+                        hit = true;
+                    }
+                    else
+                    {
+                        position = position + m_player.GetDirection();
+                    }                    
+                }
+                else
+                {
+                    hit = true;
+                }
+            } while (!hit);
         }
 
         void GameplayState::DrawHUD(const HANDLE& console)

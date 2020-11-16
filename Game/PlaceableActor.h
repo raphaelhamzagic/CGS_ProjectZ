@@ -1,5 +1,4 @@
 #pragma once
-#include "Point.h"
 
 namespace projectz {
     namespace game {
@@ -42,7 +41,8 @@ namespace projectz {
             Vertical
         };
 
-        class Level;
+        class Point;
+        class Level; // TODO try to remove
 
         class PlaceableActor
         {
@@ -54,7 +54,11 @@ namespace projectz {
             int GetYPosition();
             int* GetXPositionPointer();
             int* GetYPositionPointer();
+            Point GetPosition();
+            Point* GetPositionPointer();
             void SetPosition(int x, int y);
+
+            Point GetDirection();
 
             ActorColor GetColor() { return m_color; }
 
@@ -67,11 +71,15 @@ namespace projectz {
             virtual bool Update() { return false; };
             virtual bool Update(Level* pLevel, int playerX, int playerY) { return false; };
 
+            virtual void TakeDamage(const Point* pDamageDirection = nullptr) {};
+
         protected:
             Point* m_pPosition;
 
             bool m_IsActive;
             ActorColor m_color;
+
+            Point* m_pDirection;
         };
     }
 }

@@ -8,6 +8,7 @@
 #include "Level.h"
 #include "Player.h"
 #include "PlaceableActor.h"
+#include "Point.h"
 #include "Zombie.h"
 
 using namespace std;
@@ -157,6 +158,8 @@ namespace projectz {
 
         bool Level::IsDoor(int x, int y)
         {
+            return m_pLevelBlueprint[GetIndexFromCoordinates(x, y)] == 'D';
+            /*
             switch (m_pLevelData[GetIndexFromCoordinates(x, y)])
             {
                 case 'A':
@@ -176,12 +179,27 @@ namespace projectz {
                     return true;
             }
             return false;
+            */
         }
 
         bool Level::IsWindow(int x, int y)
         {
             char c = m_pLevelData[GetIndexFromCoordinates(x, y)];
             return (c == WINDOW_H || c == WINDOW_V);
+        }
+
+        PlaceableActor* Level::GetActorAtPosition(Point position)
+        {
+            PlaceableActor* pActor = nullptr;
+            for (auto actor = m_pActors.begin(); actor != m_pActors.end(); ++actor)
+            {
+                if ((*actor)->GetPosition() == position)
+                {
+                    assert(pActor == nullptr);
+                    pActor = (*actor);
+                }               
+            }
+            return pActor;
         }
 
         bool Level::Convert()
@@ -255,7 +273,7 @@ namespace projectz {
                         // enemies
                         case 'z':
                             m_pLevelData[index] = ' ';
-                            m_pActors.push_back(new Zombie(x, y));
+                            m_pActors.push_back(new Zombie(x, y, this));
                             break;
 
                         case '<':

@@ -8,7 +8,6 @@ namespace projectz {
             : m_soundOn(true)
         {}
 
-
         void AudioManager::ToggleSound()
         {
             m_soundOn = !m_soundOn;
@@ -70,11 +69,11 @@ namespace projectz {
             }
         }
 
-        void AudioManager::PlayMoneySound()
+        void AudioManager::PlayWallHitSound()
         {
             if (m_soundOn)
             {
-                Beep(1568, 50);
+                Beep(500, 75);
             }
         }
 
@@ -111,5 +110,14 @@ namespace projectz {
                 Beep(1175, 1000);
             }
         }
+
+        void AudioManager::PlayGunShootingSound()
+        {
+            if (m_soundOn)
+            {
+                Beep(150, 150);                
+            }
+        }
+
     }
 }

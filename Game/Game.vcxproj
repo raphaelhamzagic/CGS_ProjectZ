@@ -153,6 +153,7 @@
     <ClCompile Include="Money.cpp" />
     <ClCompile Include="PlaceableActor.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="SettingsState.cpp" />
     <ClCompile Include="StateMachineExampleGame.cpp" />
     <ClCompile Include="Utility.cpp" />

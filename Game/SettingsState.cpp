@@ -33,7 +33,7 @@ namespace projectz {
                 else if ((char)input == kSound)
                 {
                     AudioManager::GetInstance()->ToggleSound();
-                    AudioManager::GetInstance()->PlayMoneySound();
+                    AudioManager::GetInstance()->PlayWallHitSound();
                 }
             }
             return false;

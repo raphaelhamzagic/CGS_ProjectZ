@@ -2,8 +2,9 @@
 #include <Windows.h>
 
 #include "Player.h"
-#include "Key.h"
 #include "AudioManager.h"
+#include "Key.h"
+#include "Point.h"
 
 using namespace std;
 
@@ -25,6 +26,8 @@ namespace projectz {
             , m_pCurrentKey(nullptr)
             , m_lives(kStartingNumberOfLives)
         {
+            m_pDirection->x = 1;
+            m_pDirection->y = 0;
         }
 
         bool Player::HasKey()
@@ -74,7 +77,7 @@ namespace projectz {
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
 
-        void Player::TakeDamage()
+        void Player::TakeDamage(const Point* pDamageDirection)
         {
             if (m_lives > 0)
             {

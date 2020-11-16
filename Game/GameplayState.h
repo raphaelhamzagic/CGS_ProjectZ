@@ -37,6 +37,7 @@ namespace projectz {
         private:
             void Load();
             void HandleCollision(int newPlayerX, int newPlayerY);
+            void PlayerShoot();
             void DrawHUD(const HANDLE& console);
         };
     }

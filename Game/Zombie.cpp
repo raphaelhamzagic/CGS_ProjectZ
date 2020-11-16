@@ -1,7 +1,8 @@
-#include "Zombie.h"
 #include <iostream>
 #include <Windows.h>
+#include "Zombie.h"
 #include "Level.h"
+#include "Point.h"
 
 using namespace std;
 
@@ -12,12 +13,13 @@ namespace projectz {
         static int constexpr kChaseDistance = 4;
         static int constexpr kUpdateSpeed = 2;
 
-        Zombie::Zombie(int x, int y)
+        Zombie::Zombie(int x, int y, Level* pLevel)
             : PlaceableActor(x, y)
             , m_color(ActorColor::Brown)
             , m_isChasing(false)
             , m_chasingColor(ActorColor::Red)
-            , m_updateControl(0)        
+            , m_updateControl(0)
+            , m_pLevel(pLevel)
         {
         }
 
@@ -72,6 +74,20 @@ namespace projectz {
                 }
             }
             return hasCollided;
+        }
+
+        void Zombie::TakeDamage(const Point* pDamageDirection)
+        {
+            if (pDamageDirection)
+            {
+                int newPositionX = m_pPosition->x + pDamageDirection->x;
+                int newPositionY = m_pPosition->y + pDamageDirection->y;
+                if (!m_pLevel->IsWall(newPositionX, newPositionY) && !m_pLevel->IsDoor(newPositionX, newPositionY) && !m_pLevel->IsWindow(newPositionX, newPositionY))
+                {
+                    m_pPosition->x = newPositionX;
+                    m_pPosition->y = newPositionY;
+                }
+            }
         }
 
         Point Zombie::Chase(int playerX, int playerY)

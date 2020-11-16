@@ -12,7 +12,7 @@ namespace projectz {
 
             virtual ActorType GetType() override { return ActorType::Player; }
             virtual void Draw() override;
-
+            
             bool HasKey();
             bool HasKey(ActorColor color);
             void PickupKey(Key* key);
@@ -21,8 +21,8 @@ namespace projectz {
             Key* GetKey() { return m_pCurrentKey; }
 
             int GetLives() { return m_lives; }
-            void TakeDamage();
             bool IsAlive();
+            virtual void TakeDamage(const Point* pDamageDirection = nullptr) override;
 
         private:
             Key* m_pCurrentKey;

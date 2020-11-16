@@ -14,14 +14,17 @@ namespace projectz {
             ActorColor m_color;
 
         public:
-            Zombie(int x, int y);
+            Zombie(int x, int y, Level* pLevel);
             virtual ActorType GetType() override { return ActorType::Zombie; }
             virtual void Draw() override;
             virtual bool Update(Level* level, int playerX, int playerY);
+            virtual void TakeDamage(const Point* pDamageDirection = nullptr) override;
+
 
         private:
             Point Chase(int diffX, int diffY);
             Point Wander();
+            Level* m_pLevel;
         };
     }
 }

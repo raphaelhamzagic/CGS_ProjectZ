@@ -6,6 +6,8 @@ namespace projectz {
     namespace game {
         class PlaceableActor;
 
+        class Point;
+
         class Level
         {
             char* m_pLevelBlueprint;
@@ -39,6 +41,8 @@ namespace projectz {
 
             int GetHeight() { return m_height; }
             int GetWidth() { return m_width; }
+
+            PlaceableActor* GetActorAtPosition(Point position);
 
         private:
             bool Convert();
