@@ -10,6 +10,7 @@
 #include "FireWeapon.h"
 #include "Goal.h"
 #include "Gun.h"
+#include "HealthKit.h"
 #include "Key.h"
 #include "Point.h"
 #include "StateMachineExampleGame.h"
@@ -265,6 +266,16 @@ namespace projectz {
                             AudioManager::GetInstance()->PlayDoorClosedSound();
                         }
                         break;
+                    }
+                    case ActorType::HealthKit:
+                    {
+                        HealthKit* collidedHealthKit = dynamic_cast<HealthKit*>(collidedActor);
+                        assert(collidedHealthKit);
+                        m_player.PickupHealthKit();
+                        collidedHealthKit->Remove();
+                        m_player.SetPosition(newPlayerX, newPlayerY);
+                        // TODO change sound
+                        AudioManager::GetInstance()->PlayDoorOpenSound(); 
                     }
                 }
             }

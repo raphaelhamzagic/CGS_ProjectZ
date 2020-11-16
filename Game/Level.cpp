@@ -6,6 +6,7 @@
 #include "Door.h"
 #include "Gun.h"
 #include "GunAmmo.h"
+#include "HealthKit.h"
 #include "Key.h"
 #include "Level.h"
 #include "Player.h"
@@ -112,7 +113,6 @@ namespace projectz {
                 {
                     int index = GetIndexFromCoordinates(x, y);
                     if (
-                        // m_pLevelBlueprint[index] == playerRoom
                         visibleRooms[m_pLevelBlueprint[index]]
                         || 
                         IsWall(x, y)
@@ -260,6 +260,10 @@ namespace projectz {
                         case '*':
                         // items
                         case 'l':
+                            // health
+                            m_pLevelData[index] = ' ';
+                            m_pActors.push_back(new HealthKit(x, y));
+                            break;
                         case 'w':
                         case 'x':
                             break;
@@ -406,28 +410,23 @@ namespace projectz {
 
         PlaceableActor* Level::UpdateActors(int newPlayerX, int newPlayerY)
         {
-            char newPlayerRoom = GetRoom(newPlayerX, newPlayerY);
             PlaceableActor* collidedActor = nullptr;
             
             for (auto actor = m_pActors.begin(); actor != m_pActors.end(); ++actor)
             {
-                char actorRoom = GetRoom((*actor)->GetXPosition(), (*actor)->GetYPosition());
-                if (actorRoom == newPlayerRoom)
+                if ((*actor)->GetType() == ActorType::Zombie)
                 {
-                    if ((*actor)->GetType() == ActorType::Zombie)
-                    {
-                        (*actor)->Update(this, newPlayerX, newPlayerY);
-                    }
-                    else
-                    {
-                        (*actor)->Update();
-                    }
-                    if (newPlayerX == (*actor)->GetXPosition() && newPlayerY == (*actor)->GetYPosition())
-                    {
-                        assert(collidedActor == nullptr);
-                        collidedActor = (*actor);
-                    }
-                }     
+                    (*actor)->Update(this, newPlayerX, newPlayerY);
+                }
+                else
+                {
+                    (*actor)->Update();
+                }
+                if (newPlayerX == (*actor)->GetXPosition() && newPlayerY == (*actor)->GetYPosition())
+                {
+                    assert(collidedActor == nullptr);
+                    collidedActor = (*actor);
+                }
             }
 
             return collidedActor;

@@ -147,6 +147,7 @@
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="GunAmmo.cpp" />
+    <ClCompile Include="HealthKit.cpp" />
     <ClCompile Include="HighScoreState.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="GunAmmo.h" />
+    <ClInclude Include="HealthKit.h" />
     <ClInclude Include="HighScoreState.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Level.h" />

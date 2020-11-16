@@ -129,6 +129,14 @@ namespace projectz {
             }
         }
 
+        void Player::PickupHealthKit()
+        {
+            if (m_lives < 3)
+            {
+                ++m_lives;
+            }
+        }
+
 
         bool Player::IsAlive()
         {

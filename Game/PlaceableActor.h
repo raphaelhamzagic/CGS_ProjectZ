@@ -1,7 +1,9 @@
 #pragma once
 
-namespace projectz {
-    namespace game {
+namespace projectz 
+{
+    namespace game 
+    {
         enum class ActorColor
         {
             Blue = 1,
@@ -34,7 +36,8 @@ namespace projectz {
             Player,
             Zombie,
             Gun,
-            GunAmmo
+            GunAmmo,
+            HealthKit
         };
 
         enum class ActorOrientation

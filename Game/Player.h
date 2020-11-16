@@ -30,8 +30,9 @@ namespace projectz {
             bool HasGun();
             int GetAmmo();
             bool ShootFireWeapon();
-
             void PickupGunAmmo(Ammo* ammo);
+
+            void PickupHealthKit();
 
         private:
             Key* m_pCurrentKey;
