@@ -8,10 +8,7 @@ namespace projectz {
         class Zombie : public PlaceableActor
         {
             bool m_isChasing;
-            ActorColor m_chasingColor;
-
             int m_updateControl;
-            ActorColor m_color;
 
         public:
             Zombie(int x, int y, Level* pLevel);

@@ -139,11 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ammo.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameplayState.cpp" />
     <ClCompile Include="Goal.cpp" />
+    <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="GunAmmo.cpp" />
     <ClCompile Include="HighScoreState.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -157,10 +160,12 @@
     <ClCompile Include="SettingsState.cpp" />
     <ClCompile Include="StateMachineExampleGame.cpp" />
     <ClCompile Include="Utility.cpp" />
+    <ClCompile Include="FireWeapon.cpp" />
     <ClCompile Include="WinState.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ammo.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Game.h" />
@@ -168,6 +173,8 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateMachine.h" />
     <ClInclude Include="Goal.h" />
+    <ClInclude Include="Gun.h" />
+    <ClInclude Include="GunAmmo.h" />
     <ClInclude Include="HighScoreState.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Level.h" />
@@ -180,6 +187,7 @@
     <ClInclude Include="SettingsState.h" />
     <ClInclude Include="StateMachineExampleGame.h" />
     <ClInclude Include="Utility.h" />
+    <ClInclude Include="FireWeapon.h" />
     <ClInclude Include="WinState.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>

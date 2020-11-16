@@ -3,7 +3,8 @@
 #include <Windows.h>
 #include <assert.h>
 #include "Door.h"
-#include "Goal.h"
+#include "Gun.h"
+#include "GunAmmo.h"
 #include "Key.h"
 #include "Level.h"
 #include "Player.h"
@@ -159,27 +160,6 @@ namespace projectz {
         bool Level::IsDoor(int x, int y)
         {
             return m_pLevelBlueprint[GetIndexFromCoordinates(x, y)] == 'D';
-            /*
-            switch (m_pLevelData[GetIndexFromCoordinates(x, y)])
-            {
-                case 'A':
-                case 'B':
-                case 'C':
-                case 'D':
-                case 'E':
-                case 'F':
-                case 'G':
-                case 'Z':
-                case 'Y':
-                case 'X':
-                case 'W':
-                case 'V':
-                case 'U':
-                case 'T':
-                    return true;
-            }
-            return false;
-            */
         }
 
         bool Level::IsWindow(int x, int y)
@@ -257,12 +237,22 @@ namespace projectz {
                         case ' ':
                             break;
 
-                        // TODO:
                         // weapons
                         case '1':
+                            m_pLevelData[index] = ' ';
+                            m_pActors.push_back(new Gun(x, y));
+                            break;
+
                         case '2':
+                            // TODO
+                            break;
+
                         // ammo
                         case '.':
+                            m_pLevelData[index] = ' ';
+                            m_pActors.push_back(new GunAmmo(x, y));
+                            break;
+
                         case '*':
                         // items
                         case 'l':

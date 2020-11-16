@@ -1,18 +1,20 @@
 #include <iostream>
 #include <Windows.h>
 
+#include "Ammo.h"
 #include "Player.h"
 #include "AudioManager.h"
 #include "Key.h"
 #include "Point.h"
+#include "FireWeapon.h"
 
 using namespace std;
 
 namespace projectz {
     namespace game {
 
-        constexpr char kPlayerAliveSymbol = '@';
-        constexpr char kPlayerDeadSymbol = 'X';
+        constexpr char kAliveSymbol = '@';
+        constexpr char kDeadSymbol = 'X';
         constexpr int kStartingNumberOfLives = 3;
         const ActorColor kPlayerColor[] = {
             ActorColor::Red,
@@ -25,6 +27,7 @@ namespace projectz {
             : PlaceableActor(0, 0)
             , m_pCurrentKey(nullptr)
             , m_lives(kStartingNumberOfLives)
+            , m_hasGun(false)
         {
             m_pDirection->x = 1;
             m_pDirection->y = 0;
@@ -68,11 +71,11 @@ namespace projectz {
             SetConsoleTextAttribute(console, color);
             if (IsAlive())
             {
-                cout << kPlayerAliveSymbol;
+                cout << kAliveSymbol;
             }
             else
             {
-                cout << kPlayerDeadSymbol;
+                cout << kDeadSymbol;
             }
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
@@ -84,6 +87,48 @@ namespace projectz {
                 --m_lives;
             }
         }
+
+        void Player::PickupGun(FireWeapon* gun)
+        {
+            m_hasGun = true;
+            m_pCurrentFireWeapon = gun;
+        }
+
+        bool Player::HasGun()
+        {
+            return m_hasGun;
+        }
+
+        int Player::GetAmmo()
+        {
+            if (m_pCurrentFireWeapon != nullptr)
+            {
+                return m_pCurrentFireWeapon->GetAmmo();
+            }
+            return 0;
+        }
+
+        bool Player::ShootFireWeapon()
+        {
+            if (m_pCurrentFireWeapon != nullptr && GetAmmo() > 0)
+            {
+                AudioManager::GetInstance()->PlayGunShootingSound();
+                m_pCurrentFireWeapon->Shoot();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        void Player::PickupGunAmmo(Ammo* ammo)
+        {
+            if (m_pCurrentFireWeapon != nullptr)
+            {
+                m_pCurrentFireWeapon->AddAmmo(ammo->GetAmount());
+            }
+        }
+
 
         bool Player::IsAlive()
         {

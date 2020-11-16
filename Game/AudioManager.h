@@ -17,6 +17,8 @@ namespace projectz {
             bool IsSoundOn();
             void PlayDoorClosedSound();
             void PlayDoorOpenSound();
+            void PlayGunPickupSound();
+            void PlayGunAmmoPickupSound();
             void PlayKeyPickupSound();
             void PlayKeyDropSound();
             void PlayWallHitSound();

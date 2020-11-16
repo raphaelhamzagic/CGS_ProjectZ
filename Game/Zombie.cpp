@@ -9,26 +9,28 @@ using namespace std;
 namespace projectz {
     namespace game {
 
+        static ActorColor constexpr kColor = ActorColor::Brown;
+        static char constexpr kSymbol = 'z';
+        static ActorColor constexpr kChasingColor = ActorColor::Red;
+        
         static int constexpr kMovementOffset = 1;
         static int constexpr kChaseDistance = 4;
         static int constexpr kUpdateSpeed = 2;
 
         Zombie::Zombie(int x, int y, Level* pLevel)
-            : PlaceableActor(x, y)
-            , m_color(ActorColor::Brown)
-            , m_isChasing(false)
-            , m_chasingColor(ActorColor::Red)
-            , m_updateControl(0)
+            : PlaceableActor(x, y, kColor)
             , m_pLevel(pLevel)
+            , m_isChasing(false)
+            , m_updateControl(0)
         {
         }
 
         void Zombie::Draw()
         {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            int color = (m_isChasing) ? static_cast<int>(m_chasingColor) : static_cast<int>(m_color);
+            int color = (m_isChasing) ? static_cast<int>(kChasingColor) : static_cast<int>(m_color);
             SetConsoleTextAttribute(console, color);
-            std::cout << 'z';
+            std::cout << kSymbol;
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
 

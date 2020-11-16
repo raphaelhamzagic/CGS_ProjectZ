@@ -1,0 +1,14 @@
+#pragma once
+#include "FireWeapon.h"
+
+namespace projectz {
+    namespace game {
+
+        class Gun : public FireWeapon
+        {
+        public:
+            Gun(int x, int y);
+            virtual ActorType GetType() override;
+        };
+    }
+}

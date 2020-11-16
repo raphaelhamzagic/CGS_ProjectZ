@@ -4,6 +4,8 @@
 namespace projectz {
     namespace game {
         class Key;
+        class FireWeapon;
+        class Ammo;
 
         class Player : public PlaceableActor
         {
@@ -24,9 +26,20 @@ namespace projectz {
             bool IsAlive();
             virtual void TakeDamage(const Point* pDamageDirection = nullptr) override;
 
+            void PickupGun(FireWeapon* gun);
+            bool HasGun();
+            int GetAmmo();
+            bool ShootFireWeapon();
+
+            void PickupGunAmmo(Ammo* ammo);
+
         private:
             Key* m_pCurrentKey;
+
             int m_lives;
+
+            FireWeapon* m_pCurrentFireWeapon;
+            bool m_hasGun;
         };
     }
 }

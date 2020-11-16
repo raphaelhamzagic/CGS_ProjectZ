@@ -60,6 +60,24 @@ namespace projectz {
             }
         }
 
+        void AudioManager::PlayGunPickupSound()
+        {
+            if (m_soundOn)
+            {
+                Beep(1350, 50);
+                Beep(1350, 200);
+            }
+        }
+
+        void AudioManager::PlayGunAmmoPickupSound()
+        {
+            if (m_soundOn)
+            {
+                Beep(1350, 50);
+                Beep(1350, 200);
+            }
+        }
+
         void AudioManager::PlayKeyDropSound()
         {
             if (m_soundOn)

@@ -32,7 +32,9 @@ namespace projectz {
             Key,
             Money,
             Player,
-            Zombie
+            Zombie,
+            Gun,
+            GunAmmo
         };
 
         enum class ActorOrientation

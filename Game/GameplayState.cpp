@@ -4,9 +4,12 @@
 #include <iostream>
 #include <Windows.h>
 
+#include "Ammo.h"
 #include "AudioManager.h"
 #include "Door.h"
+#include "FireWeapon.h"
 #include "Goal.h"
+#include "Gun.h"
 #include "Key.h"
 #include "Point.h"
 #include "StateMachineExampleGame.h"
@@ -236,6 +239,33 @@ namespace projectz {
                         }
                         break;
                     }
+                    case ActorType::Gun:
+                    {
+                        FireWeapon* colliedGun = dynamic_cast<FireWeapon*>(collidedActor);
+                        assert(colliedGun);
+                        m_player.PickupGun(colliedGun);
+                        colliedGun->Remove();
+                        m_player.SetPosition(newPlayerX, newPlayerY);
+                        AudioManager::GetInstance()->PlayGunPickupSound();
+                        break;
+                    }
+                    case ActorType::GunAmmo:
+                    {
+                        Ammo* collidedAmmo = dynamic_cast<Ammo*>(collidedActor);
+                        assert(collidedAmmo);
+                        if (m_player.HasGun())
+                        {
+                            m_player.PickupGunAmmo(collidedAmmo);
+                            collidedAmmo->Remove();
+                            m_player.SetPosition(newPlayerX, newPlayerY);
+                            AudioManager::GetInstance()->PlayGunAmmoPickupSound();
+                        }
+                        else
+                        {
+                            AudioManager::GetInstance()->PlayDoorClosedSound();
+                        }
+                        break;
+                    }
                 }
             }
             else if (m_pLevel->IsSpace(newPlayerX, newPlayerY))
@@ -250,30 +280,31 @@ namespace projectz {
 
         void GameplayState::PlayerShoot()
         {
-            AudioManager::GetInstance()->PlayGunShootingSound();
-
-            bool hit = false;
-            Point position = m_player.GetPosition() + m_player.GetDirection();
-            do
+            if (m_player.ShootFireWeapon())
             {
-                if (m_pLevel->IsSpace(position.x, position.y))
+                bool hit = false;
+                Point position = m_player.GetPosition() + m_player.GetDirection();
+                do
                 {
-                    PlaceableActor* zombieActor = m_pLevel->GetActorAtPosition(position);
-                    if (zombieActor != nullptr && zombieActor->IsActive())
+                    if (m_pLevel->IsSpace(position.x, position.y))
                     {
-                        zombieActor->TakeDamage(&m_player.GetDirection());
-                        hit = true;
+                        PlaceableActor* zombieActor = m_pLevel->GetActorAtPosition(position);
+                        if (zombieActor != nullptr && zombieActor->IsActive())
+                        {
+                            zombieActor->TakeDamage(&m_player.GetDirection());
+                            hit = true;
+                        }
+                        else
+                        {
+                            position = position + m_player.GetDirection();
+                        }
                     }
                     else
                     {
-                        position = position + m_player.GetDirection();
-                    }                    
-                }
-                else
-                {
-                    hit = true;
-                }
-            } while (!hit);
+                        hit = true;
+                    }
+                } while (!hit);
+            }            
         }
 
         void GameplayState::DrawHUD(const HANDLE& console)
@@ -292,6 +323,7 @@ namespace projectz {
 
             cout << " wasd-move " << Level::WALL << " z-drop key " << Level::WALL;
             // cout << " $: " << m_player.GetMoney() << " " << Level::WALL;
+            cout << " bullets: " << m_player.GetAmmo() << " " << Level::WALL;
             cout << " lives: " << m_player.GetLives() << " " << Level::WALL;
             cout << " key: ";
             if (m_player.HasKey())

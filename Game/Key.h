@@ -1,8 +1,10 @@
 #pragma once
 #include "PlaceableActor.h"
 
-namespace projectz {
-    namespace game {
+namespace projectz
+{
+    namespace game
+    {
         class Key : public PlaceableActor
         {
         public:
