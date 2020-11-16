@@ -1,3 +1,4 @@
+#include <iostream>
 #include "PlaceableActor.h"
 #include "Point.h"
 
@@ -78,6 +79,18 @@ namespace projectz {
         Point PlaceableActor::GetDirection()
         {
             return *m_pDirection;
+        }
+
+        void PlaceableActor::SetDirection(int x, int y)
+        {
+            if (x == 0 || std::abs(x) == 1)
+            {
+                m_pDirection->x = x;
+            }
+            if (y == 0 || std::abs(y) == 1)
+            {
+                m_pDirection->y = y;
+            }
         }
 
         Point PlaceableActor::GetPosition()

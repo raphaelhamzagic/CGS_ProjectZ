@@ -285,6 +285,39 @@ namespace projectz {
             }
             else if (m_pLevel->IsWall(newPlayerX, newPlayerY))
             {
+                int playerX = m_player.GetXPosition();
+                int directionX = 0;
+                if (newPlayerX != playerX)
+                {
+                    if (newPlayerX > playerX)
+                    {
+                        directionX = 1;
+                    }
+                    else
+                    {
+                        directionX = -1;
+                    }
+                }
+
+                int playerY = m_player.GetYPosition();
+                int directionY = 0;
+                if (newPlayerY != playerY)
+                {
+                    if (newPlayerY > playerY)
+                    {
+                        directionY = 1;
+                    }
+                    else
+                    {
+                        directionY = -1;
+                    }
+                }
+
+                if (directionX != 0 || directionY != 0)
+                {
+                    m_player.SetDirection(directionX, directionY);
+                }
+                
                 AudioManager::GetInstance()->PlayWallHitSound();
             }
         }

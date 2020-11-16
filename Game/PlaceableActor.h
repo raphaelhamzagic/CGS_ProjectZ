@@ -64,6 +64,7 @@ namespace projectz
             void SetPosition(int x, int y);
 
             Point GetDirection();
+            void SetDirection(int x, int y);
 
             ActorColor GetColor() { return m_color; }
 

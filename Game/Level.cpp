@@ -181,7 +181,7 @@ namespace projectz {
                 {
                     assert(pActor == nullptr);
                     pActor = (*actor);
-                }               
+                }
             }
             return pActor;
         }
