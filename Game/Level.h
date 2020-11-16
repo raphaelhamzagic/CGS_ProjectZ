@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <map>
 #include <vector>
 
 namespace projectz {
@@ -48,6 +49,7 @@ namespace projectz {
             bool Convert();
             int GetIndexFromCoordinates(int x, int y);
             char GetRoom(int x, int y);
+            std::map<char, bool> GetSurroundingRooms(int x, int y);
         };
     }
 }

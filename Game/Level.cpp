@@ -2,6 +2,7 @@
 #include <fstream>
 #include <Windows.h>
 #include <assert.h>
+
 #include "Door.h"
 #include "Gun.h"
 #include "GunAmmo.h"
@@ -101,7 +102,8 @@ namespace projectz {
         {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
-            char playerRoom = GetRoom(*m_playerX, *m_playerY);
+       
+            std::map<char, bool> visibleRooms = GetSurroundingRooms(*m_playerX, *m_playerY);
 
             // Draw the level
             for (int y = 0; y < GetHeight(); y++)
@@ -110,7 +112,8 @@ namespace projectz {
                 {
                     int index = GetIndexFromCoordinates(x, y);
                     if (
-                        m_pLevelBlueprint[index] == playerRoom
+                        // m_pLevelBlueprint[index] == playerRoom
+                        visibleRooms[m_pLevelBlueprint[index]]
                         || 
                         IsWall(x, y)
                         ||
@@ -134,15 +137,16 @@ namespace projectz {
             {
                 if ((*actor)->IsActive())
                 {
+                    char actorRoom = GetRoom((*actor)->GetXPosition(), (*actor)->GetYPosition());
                     if ((*actor)->GetType() == ActorType::Door
                         ||
-                        GetRoom((*actor)->GetXPosition(), (*actor)->GetYPosition()) == playerRoom)
+                        visibleRooms[actorRoom])
                     {
                         actorCursorPosition.X = (short)(*actor)->GetXPosition();
                         actorCursorPosition.Y = (short)(*actor)->GetYPosition();
                         SetConsoleCursorPosition(console, actorCursorPosition);
                         (*actor)->Draw();
-                    }                    
+                    }
                 }
             }
         }
@@ -244,7 +248,7 @@ namespace projectz {
                             break;
 
                         case '2':
-                            // TODO
+                            // TODO shotgun
                             break;
 
                         // ammo
@@ -451,6 +455,45 @@ namespace projectz {
                     return m_pLevelBlueprint[index];
             }
             return ' ';
+        }
+
+        std::map<char, bool> Level::GetSurroundingRooms(int x, int y)
+        {
+            std::vector<Point> points = {
+                Point(x - 1, y),
+                Point(x + 1, y),
+                Point(x, y - 1),
+                Point(x, y + 1)
+            };
+
+            // TODO improve this
+            std::map<char, bool> rooms;
+            rooms['a'] = false;
+            rooms['b'] = false;
+            rooms['c'] = false;
+            rooms['d'] = false;
+            rooms['e'] = false;
+            rooms['f'] = false;
+            rooms['g'] = false;
+            rooms['h'] = false;
+            rooms['i'] = false;
+            rooms['j'] = false;
+            rooms['k'] = false;
+            rooms['l'] = false;
+            rooms['m'] = false;
+            rooms['n'] = false;
+            for (auto point = points.begin(); point != points.end(); ++point)
+            {
+                if (point->x > 0 && point->x <= m_width && point->y > 0 && point->y <= m_height)
+                {
+                    char room = GetRoom(point->x, point->y);
+                    if (room != ' ')
+                    {
+                        rooms[room] = true;
+                    }
+                }
+            }        
+            return rooms;
         }
 
     }
