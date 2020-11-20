@@ -8,7 +8,7 @@ namespace projectz
         class GunAmmo : public Ammo
         {
         public:
-            GunAmmo(int x, int y);
+            GunAmmo(int x, int y, char symbol);
         };
 
     }

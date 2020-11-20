@@ -8,14 +8,11 @@ namespace projectz
         class Ammo : public PlaceableActor
         {
         public:
-            Ammo(int x, int y, ActorColor color, char symbol, int amount);
+            Ammo(int x, int y, char symbol, ActorColor color, int amount);
             virtual ActorType GetType() override;
-            virtual void Draw() override;
             virtual int GetAmount();
-
         private:
             int m_amount;
-            char m_symbol;
         };
     }
 }

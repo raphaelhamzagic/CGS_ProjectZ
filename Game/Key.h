@@ -8,12 +8,11 @@ namespace projectz
         class Key : public PlaceableActor
         {
         public:
-            Key(int x, int y, ActorColor color)
-                : PlaceableActor(x, y, color)
+            Key(int x, int y, char symbol, ActorColor color)
+                : PlaceableActor(x, y, symbol, color)
             {
             }
             virtual ActorType GetType() override { return ActorType::Key; }
-            virtual void Draw() override;
         };
     }
 }

@@ -1,16 +1,19 @@
 #pragma once
 #include "PlaceableActor.h"
 
-namespace projectz {
-    namespace game {
+namespace projectz
+{
+    namespace game
+    {
         class Key;
         class FireWeapon;
         class Ammo;
+        class Map;
 
         class Player : public PlaceableActor
         {
         public:
-            Player();
+            Player(int x, int y, char aliveSymbol, char deadSymbol);
 
             virtual ActorType GetType() override { return ActorType::Player; }
             virtual void Draw() override;
@@ -24,7 +27,7 @@ namespace projectz {
 
             int GetLives() { return m_lives; }
             bool IsAlive();
-            virtual void TakeDamage(const Point* pDamageDirection = nullptr) override;
+            virtual void TakeDamage() override;
 
             void PickupGun(FireWeapon* gun);
             bool HasGun();
@@ -35,6 +38,7 @@ namespace projectz {
             void PickupHealthKit();
 
         private:
+            char m_deadSymbol;
             Key* m_pCurrentKey;
 
             int m_lives;

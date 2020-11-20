@@ -6,11 +6,8 @@ namespace projectz
 {
     namespace game
     {
-        static constexpr ActorColor kColor = ActorColor::LightGreen;
-        static constexpr char kSymbol = '+';
-
-        HealthKit::HealthKit(int x, int y)
-            : PlaceableActor(x, y, kColor)
+        HealthKit::HealthKit(int x, int y, char symbol, ActorColor color)
+            : PlaceableActor(x, y, symbol, color)
         {
         }
 
@@ -19,13 +16,5 @@ namespace projectz
             return ActorType::HealthKit;;
         }
 
-        void HealthKit::Draw()
-        {
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute(console, (int)m_color);
-            std::cout << kSymbol;
-            SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
- 
-        }
     }
 }

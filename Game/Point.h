@@ -1,8 +1,10 @@
 #pragma once
 #include <math.h>
 
-namespace projectz {
-    namespace game {
+namespace projectz 
+{
+    namespace game 
+    {
         class Point
         {
         public:

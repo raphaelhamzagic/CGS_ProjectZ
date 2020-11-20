@@ -8,8 +8,7 @@ namespace projectz
         class FireWeapon : public PlaceableActor
         {
         public:
-            FireWeapon(int x, int y, ActorColor color, char symbol,  int ammo, int damage, int bulletsPerShot);
-            virtual void Draw() override;
+            FireWeapon(int x, int y, char symbol, ActorColor color, int ammo, int damage, int bulletsPerShot);
             virtual int GetAmmo();
             virtual void AddAmmo(int amount);
 
@@ -17,7 +16,6 @@ namespace projectz
             virtual void Shoot();
 
         private:
-            char m_symbol;
             int m_ammo;
             int m_damage;
             int m_bulletsPerShot;

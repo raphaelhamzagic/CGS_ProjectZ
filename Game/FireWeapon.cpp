@@ -6,21 +6,12 @@ namespace projectz
 {
     namespace game
     {
-        FireWeapon::FireWeapon(int x, int y, ActorColor color, char symbol, int ammo, int damage, int bulletsPerShot)
-            : PlaceableActor(x, y, color)
-            , m_symbol(symbol)
+        FireWeapon::FireWeapon(int x, int y, char symbol, ActorColor color, int ammo, int damage, int bulletsPerShot)
+            : PlaceableActor(x, y, symbol, color)
             , m_ammo(ammo)
             , m_damage(damage)
             , m_bulletsPerShot(bulletsPerShot)
         {
-        }
-
-        void FireWeapon::Draw()
-        {
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute(console, (int)m_color);
-            std::cout << m_symbol;
-            SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
 
         int FireWeapon::GetAmmo()

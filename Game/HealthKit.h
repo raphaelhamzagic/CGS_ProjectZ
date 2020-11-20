@@ -8,9 +8,8 @@ namespace projectz
         class HealthKit : public PlaceableActor
         {
         public:
-            HealthKit(int x, int y);
+            HealthKit(int x, int y, char symbol, ActorColor color);
             virtual ActorType GetType() override;
-            virtual void Draw() override;
         };
     }
 }

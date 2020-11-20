@@ -1,17 +1,21 @@
 #include <iostream>
+#include <Windows.h>
 #include "PlaceableActor.h"
 #include "Point.h"
 
-namespace projectz {
-    namespace game {
-
-        PlaceableActor::PlaceableActor(int x, int y, ActorColor color)
+namespace projectz
+{
+    namespace game
+    {
+        PlaceableActor::PlaceableActor(int x, int y, char symbol, ActorColor color)
             : m_pPosition(new Point(x, y))
+            , m_pLastPosition(new Point(x, y))
             , m_pDirection(new Point())
-            , m_IsActive(true)
+            , m_symbol(symbol)
             , m_color(color)
+            , m_isActive(true)
         {
-        }
+        }        
 
         PlaceableActor::~PlaceableActor()
         {
@@ -29,14 +33,14 @@ namespace projectz {
             return m_pPosition->y;
         }
 
-        int* PlaceableActor::GetXPositionPointer()
+        int PlaceableActor::GetXDirection()
         {
-            return &(m_pPosition->x);
+            return m_pDirection->x;
         }
 
-        int* PlaceableActor::GetYPositionPointer()
+        int PlaceableActor::GetYDirection()
         {
-            return &(m_pPosition->y);
+            return m_pDirection->y;
         }
 
         void PlaceableActor::SetPosition(int x, int y)
@@ -51,6 +55,7 @@ namespace projectz {
                 {
                     m_pDirection->x = -1;
                 }
+                m_pLastPosition->x = m_pPosition->x;
                 m_pPosition->x = x;
             }
             else
@@ -68,6 +73,7 @@ namespace projectz {
                 {
                     m_pDirection->y = -1;
                 }
+                m_pLastPosition->y = m_pPosition->y;
                 m_pPosition->y = y;
             }
             else
@@ -76,11 +82,7 @@ namespace projectz {
             }           
         }
 
-        Point PlaceableActor::GetDirection()
-        {
-            return *m_pDirection;
-        }
-
+        
         void PlaceableActor::SetDirection(int x, int y)
         {
             if (x == 0 || std::abs(x) == 1)
@@ -93,23 +95,31 @@ namespace projectz {
             }
         }
 
-        Point PlaceableActor::GetPosition()
-        {
-            return *m_pPosition;
-            return *m_pPosition;
-        }
-
-        Point* PlaceableActor::GetPositionPointer()
-        {
-            return m_pPosition;
-        }
-
         void PlaceableActor::Place(int x, int y)
         {
-            m_pPosition->x = x;
-            m_pPosition->y = y;
-            m_IsActive = true;
+            SetPosition(x, y);
+            m_isActive = true;
         }
 
+        void PlaceableActor::Remove()
+        {
+            m_isActive = false;
+        }
+
+        void PlaceableActor::Update()
+        {
+        }
+
+        void PlaceableActor::TakeDamage()
+        {
+        }
+
+        void PlaceableActor::Draw()
+        {
+            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+            SetConsoleTextAttribute(console, (int)m_color);
+            std::cout << m_symbol;
+            SetConsoleTextAttribute(console, (int)ActorColor::LightGray);            
+        }
     }
 }

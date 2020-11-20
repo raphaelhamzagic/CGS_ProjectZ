@@ -40,52 +40,40 @@ namespace projectz
             HealthKit
         };
 
-        enum class ActorOrientation
-        {
-            Horizontal,
-            Vertical
-        };
-
         class Point;
         class Level; // TODO try to remove
 
         class PlaceableActor
         {
         public:
-            PlaceableActor(int x, int y, ActorColor color = ActorColor::LightGray);
+            PlaceableActor(int x, int y, char symbol, ActorColor color = ActorColor::LightGray);
             virtual ~PlaceableActor();
 
             int GetXPosition();
             int GetYPosition();
-            int* GetXPositionPointer();
-            int* GetYPositionPointer();
-            Point GetPosition();
-            Point* GetPositionPointer();
+            int GetXDirection();
+            int GetYDirection();
             void SetPosition(int x, int y);
-
-            Point GetDirection();
             void SetDirection(int x, int y);
 
             ActorColor GetColor() { return m_color; }
 
-            void Remove() { m_IsActive = false; }
-            bool IsActive() { return m_IsActive; }
             void Place(int x, int y);
+            void Remove();
+            bool IsActive() { return m_isActive; }
 
             virtual ActorType GetType() = 0;
-            virtual void Draw() = 0;
-            virtual bool Update() { return false; };
-            virtual bool Update(Level* pLevel, int playerX, int playerY) { return false; };
-
-            virtual void TakeDamage(const Point* pDamageDirection = nullptr) {};
+            virtual void Draw();
+            virtual void Update();
+            virtual void TakeDamage();
 
         protected:
             Point* m_pPosition;
-
-            bool m_IsActive;
-            ActorColor m_color;
-
+            Point* m_pLastPosition;
             Point* m_pDirection;
+            bool m_isActive;
+            char m_symbol;
+            ActorColor m_color;
         };
     }
 }

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <Windows.h>
 
 #include "Ammo.h"
@@ -10,12 +11,12 @@
 
 using namespace std;
 
-namespace projectz {
-    namespace game {
-
-        constexpr char kAliveSymbol = '@';
-        constexpr char kDeadSymbol = 'X';
+namespace projectz 
+{
+    namespace game
+    {        
         constexpr int kStartingNumberOfLives = 3;
+
         const ActorColor kPlayerColor[] = {
             ActorColor::Red,
             ActorColor::Brown,
@@ -23,14 +24,13 @@ namespace projectz {
             ActorColor::Green
         };
 
-        Player::Player()
-            : PlaceableActor(0, 0)
+        Player::Player(int x, int y, char aliveSymbol, char deadSymbol)
+            : PlaceableActor(x, y, aliveSymbol)
+            , m_deadSymbol(deadSymbol)
             , m_pCurrentKey(nullptr)
             , m_lives(kStartingNumberOfLives)
             , m_hasGun(false)
         {
-            m_pDirection->x = 1;
-            m_pDirection->y = 0;
         }
 
         bool Player::HasKey()
@@ -71,16 +71,16 @@ namespace projectz {
             SetConsoleTextAttribute(console, color);
             if (IsAlive())
             {
-                cout << kAliveSymbol;
+                cout << m_symbol;
             }
             else
             {
-                cout << kDeadSymbol;
+                cout << m_deadSymbol;
             }
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
 
-        void Player::TakeDamage(const Point* pDamageDirection)
+        void Player::TakeDamage()
         {
             if (m_lives > 0)
             {
@@ -136,7 +136,6 @@ namespace projectz {
                 ++m_lives;
             }
         }
-
 
         bool Player::IsAlive()
         {

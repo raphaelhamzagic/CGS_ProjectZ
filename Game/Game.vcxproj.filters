@@ -24,16 +24,7 @@
     <ClCompile Include="GameplayState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Goal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HighScoreState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Key.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LoseState.cpp">
@@ -43,9 +34,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainMenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Money.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlaceableActor.cpp">
@@ -90,6 +78,9 @@
     <ClCompile Include="HealthKit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h">
@@ -110,25 +101,16 @@
     <ClInclude Include="GameStateMachine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Goal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HighScoreState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Key.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LoseState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MainMenuState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Money.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlaceableActor.h">
@@ -168,6 +150,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HealthKit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapChars.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,9 +6,8 @@ namespace projectz
 {
     namespace game
     {
-        Ammo::Ammo(int x, int y, ActorColor color, char symbol, int amount)
-            : PlaceableActor(x, y, color)
-            , m_symbol(symbol)
+        Ammo::Ammo(int x, int y, char symbol, ActorColor color, int amount)
+            : PlaceableActor(x, y, symbol, color)
             , m_amount(amount)
         {
         }
@@ -21,14 +20,6 @@ namespace projectz
         int Ammo::GetAmount()
         {
             return m_amount;
-        }
-
-        void Ammo::Draw()
-        {
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-            SetConsoleTextAttribute(console, (int)m_color);
-            std::cout << m_symbol;
-            SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
     }
 }

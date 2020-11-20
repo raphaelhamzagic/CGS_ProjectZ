@@ -1,27 +1,28 @@
-#include "GameplayState.h"
+#include <algorithm>
 #include <assert.h>
 #include <conio.h>
 #include <iostream>
 #include <Windows.h>
 
+#include "GameplayState.h"
 #include "Ammo.h"
 #include "AudioManager.h"
 #include "Door.h"
 #include "FireWeapon.h"
-#include "Goal.h"
 #include "Gun.h"
 #include "HealthKit.h"
 #include "Key.h"
+#include "Map.h"
+#include "MapChars.h"
 #include "Point.h"
 #include "StateMachineExampleGame.h"
 #include "Utility.h"
 #include "Zombie.h"
 
-using namespace std;
-
-namespace projectz {
-    namespace game {
-
+namespace projectz 
+{
+    namespace game 
+    {
         constexpr int kArrowInput = 224;
         constexpr int kLeftArrow = 75;
         constexpr int kRightArrow = 77;
@@ -32,33 +33,52 @@ namespace projectz {
 
         GameplayState::GameplayState(StateMachineExampleGame* pOwner)
             : m_pOwner(pOwner)
+            , m_pMap(nullptr)
+            , m_isMapLoaded(false)
+            , m_currentLevel(0)
             , m_beatLevel(false)
             , m_skipFrameCount(0)
-            , m_currentLevel(0)
-            , m_pLevel(nullptr)
         {
             m_LevelNames.push_back("Level1.txt");
             // m_LevelNames.push_back("Level2.txt");
             // m_LevelNames.push_back("Level3.txt");
         }
 
+        void GameplayState::Unload()
+        {
+            if (m_pMap)
+            {
+                delete m_pMap;
+                m_pMap = nullptr;
+                m_isMapLoaded = false;
+            }
+
+            if (m_pPlayer)
+            {
+                delete m_pPlayer;
+                m_pPlayer = nullptr;
+            }
+
+            while (!m_actors.empty())
+            {
+                delete m_actors.back();
+                m_actors.pop_back();
+            }
+        }
+
         GameplayState::~GameplayState()
         {
-            delete m_pLevel;
-            m_pLevel = nullptr;
+            Unload();
         }
 
         void GameplayState::Load()
         {
-            if (m_pLevel)
-            {
-                delete m_pLevel;
-                m_pLevel = nullptr;
-                m_levelLoaded = false;
-            }
+            Unload();
 
-            m_pLevel = new Level(m_player.GetXPositionPointer(), m_player.GetYPositionPointer());
-            m_levelLoaded = m_pLevel->Load(m_LevelNames.at(m_currentLevel));
+            m_pMap = new Map;
+            Point playerPosition;
+            m_isMapLoaded = m_pMap->Load(m_LevelNames.at(m_currentLevel), m_actors, playerPosition);
+            m_pPlayer = new Player{ playerPosition.x, playerPosition.y, MapChars::PlayerAlive, MapChars::PlayerDead };
         }
 
         void GameplayState::Enter()
@@ -68,17 +88,17 @@ namespace projectz {
 
         bool GameplayState::Update(bool processInput)
         {
-            if (!m_levelLoaded)
+            if (!m_isMapLoaded)
             {
                 return true;
             }
 
-            if (processInput && !m_beatLevel && m_player.IsAlive())
+            if (processInput && !m_beatLevel && m_pPlayer->IsActive() && m_pPlayer->IsAlive())
             {
                 int input = _getch();
                 int arrowInput = 0;
-                int newPlayerX = m_player.GetXPosition();
-                int newPlayerY = m_player.GetYPosition();
+                int newPlayerX = m_pPlayer->GetXPosition();
+                int newPlayerY = m_pPlayer->GetYPosition();
 
                 if (input == kArrowInput)
                 {
@@ -105,23 +125,25 @@ namespace projectz {
                 {
                     newPlayerY++;
                 }
-                else if (input == kEscape)
-                {
-                    m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
-                }
                 else if ((char)input == 'Z' || (char)input == 'z')
                 {
-                    m_player.DropKey();
+                    m_pPlayer->DropKey();
                 }
                 else if (input == kSpaceBar)
                 {
                     PlayerShoot();
                 }
-
-                if (newPlayerX != m_player.GetXPosition() || newPlayerY != m_player.GetYPosition())
+                else if (input == kEscape)
                 {
-                    HandleCollision(newPlayerX, newPlayerY);
+                    m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
+                    return false;
                 }
+
+                if (m_pPlayer->GetXPosition() != newPlayerX || m_pPlayer->GetYPosition() != newPlayerY)
+                {
+                    UpdatePlayer(newPlayerX, newPlayerY);
+                }
+                UpdateActors();
             }
 
             if (m_beatLevel)
@@ -147,7 +169,7 @@ namespace projectz {
                 }
             }
 
-            if (!m_player.IsAlive())
+            if (!m_pPlayer->IsAlive())
             {
                 ++m_skipFrameCount;
                 if (m_skipFrameCount > kFramesToSkip)
@@ -162,36 +184,19 @@ namespace projectz {
             return false;
         }
 
-        void GameplayState::Draw()
+
+        void GameplayState::UpdatePlayer(const int newPlayerX, const int newPlayerY)
         {
-            if (m_levelLoaded)
+            PlaceableActor* collidedActor = nullptr;
+            for (auto actor = m_actors.begin(); actor != m_actors.end(); ++actor)
             {
-                HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-                system("cls");
-
-                m_pLevel->Draw();
-
-                // Set cursor position for player
-                COORD actorCursorPosition;
-                actorCursorPosition.X = m_player.GetXPosition();
-                actorCursorPosition.Y = m_player.GetYPosition();
-                SetConsoleCursorPosition(console, actorCursorPosition);
-                m_player.Draw();
-
-                // Set the cursor to the end of the level
-                COORD currentCursorPosition;
-                currentCursorPosition.X = 0;
-                currentCursorPosition.Y = m_pLevel->GetHeight();
-                SetConsoleCursorPosition(console, currentCursorPosition);
-
-                DrawHUD(console);
+                if ((*actor)->GetXPosition() == newPlayerX && (*actor)->GetYPosition() == newPlayerY)
+                {
+                    collidedActor = (*actor);
+                    break;
+                }
             }
-        }
-   
 
-        void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
-        {
-            PlaceableActor* collidedActor = m_pLevel->UpdateActors(newPlayerX, newPlayerY);
             if (collidedActor != nullptr && collidedActor->IsActive())
             {
                 switch (collidedActor->GetType())
@@ -199,13 +204,14 @@ namespace projectz {
                     case ActorType::Door:
                     {
                         Door* collidedDoor = dynamic_cast<Door*>(collidedActor);
+                        assert(collidedDoor);
                         if (collidedDoor->IsLocked())
                         {
-                            if (m_player.HasKey(collidedDoor->GetColor()))
+                            if (m_pPlayer->HasKey(collidedDoor->GetColor()))
                             {
                                 collidedDoor->Open();
-                                m_player.UseKey();
-                                m_player.SetPosition(newPlayerX, newPlayerY);
+                                m_pPlayer->UseKey();
+                                m_pPlayer->SetPosition(newPlayerX, newPlayerY);
                                 AudioManager::GetInstance()->PlayDoorOpenSound();
                             }
                             else
@@ -215,7 +221,7 @@ namespace projectz {
                         }
                         else
                         {
-                            m_player.SetPosition(newPlayerX, newPlayerY);
+                            m_pPlayer->SetPosition(newPlayerX, newPlayerY);
                         }
                         break;
                     }
@@ -223,19 +229,23 @@ namespace projectz {
                     {
                         Zombie* collidedEnemy = dynamic_cast<Zombie*>(collidedActor);
                         assert(collidedEnemy);
-                        m_player.TakeDamage();
-                        AudioManager::GetInstance()->PlayLoseLivesSound();                        
+                        m_pPlayer->TakeDamage();
+                        AudioManager::GetInstance()->PlayLoseLivesSound();
                         break;
                     }
                     case ActorType::Key:
                     {
                         Key* collidedKey = dynamic_cast<Key*>(collidedActor);
                         assert(collidedKey);
-                        if (!m_player.HasKey())
+                        if (m_pPlayer->HasKey())
                         {
-                            m_player.PickupKey(collidedKey);
+                            AudioManager::GetInstance()->PlayDoorClosedSound();
+                        }
+                        else
+                        {
+                            m_pPlayer->PickupKey(collidedKey);
                             collidedKey->Remove();
-                            m_player.SetPosition(newPlayerX, newPlayerY);
+                            m_pPlayer->SetPosition(newPlayerX, newPlayerY);
                             AudioManager::GetInstance()->PlayKeyPickupSound();
                         }
                         break;
@@ -244,9 +254,9 @@ namespace projectz {
                     {
                         FireWeapon* colliedGun = dynamic_cast<FireWeapon*>(collidedActor);
                         assert(colliedGun);
-                        m_player.PickupGun(colliedGun);
+                        m_pPlayer->PickupGun(colliedGun);
                         colliedGun->Remove();
-                        m_player.SetPosition(newPlayerX, newPlayerY);
+                        m_pPlayer->SetPosition(newPlayerX, newPlayerY);
                         AudioManager::GetInstance()->PlayGunPickupSound();
                         break;
                     }
@@ -254,11 +264,11 @@ namespace projectz {
                     {
                         Ammo* collidedAmmo = dynamic_cast<Ammo*>(collidedActor);
                         assert(collidedAmmo);
-                        if (m_player.HasGun())
+                        if (m_pPlayer->HasGun())
                         {
-                            m_player.PickupGunAmmo(collidedAmmo);
+                            m_pPlayer->PickupGunAmmo(collidedAmmo);
                             collidedAmmo->Remove();
-                            m_player.SetPosition(newPlayerX, newPlayerY);
+                            m_pPlayer->SetPosition(newPlayerX, newPlayerY);
                             AudioManager::GetInstance()->PlayGunAmmoPickupSound();
                         }
                         else
@@ -271,76 +281,55 @@ namespace projectz {
                     {
                         HealthKit* collidedHealthKit = dynamic_cast<HealthKit*>(collidedActor);
                         assert(collidedHealthKit);
-                        m_player.PickupHealthKit();
+                        m_pPlayer->PickupHealthKit();
                         collidedHealthKit->Remove();
-                        m_player.SetPosition(newPlayerX, newPlayerY);
+                        m_pPlayer->SetPosition(newPlayerX, newPlayerY);
                         // TODO change sound
-                        AudioManager::GetInstance()->PlayDoorOpenSound(); 
+                        AudioManager::GetInstance()->PlayDoorOpenSound();
                     }
                 }
             }
-            else if (m_pLevel->IsSpace(newPlayerX, newPlayerY))
+            else if (m_pMap->IsWall(newPlayerX, newPlayerY))
             {
-                m_player.SetPosition(newPlayerX, newPlayerY);
-            }
-            else if (m_pLevel->IsWall(newPlayerX, newPlayerY))
-            {
-                int playerX = m_player.GetXPosition();
-                int directionX = 0;
-                if (newPlayerX != playerX)
-                {
-                    if (newPlayerX > playerX)
-                    {
-                        directionX = 1;
-                    }
-                    else
-                    {
-                        directionX = -1;
-                    }
-                }
-
-                int playerY = m_player.GetYPosition();
-                int directionY = 0;
-                if (newPlayerY != playerY)
-                {
-                    if (newPlayerY > playerY)
-                    {
-                        directionY = 1;
-                    }
-                    else
-                    {
-                        directionY = -1;
-                    }
-                }
-
-                if (directionX != 0 || directionY != 0)
-                {
-                    m_player.SetDirection(directionX, directionY);
-                }
-                
                 AudioManager::GetInstance()->PlayWallHitSound();
+            }
+            else
+            {
+                m_pPlayer->SetPosition(newPlayerX, newPlayerY);
             }
         }
 
         void GameplayState::PlayerShoot()
         {
-            if (m_player.ShootFireWeapon())
+            if (m_pPlayer->ShootFireWeapon())
             {
                 bool hit = false;
-                Point position = m_player.GetPosition() + m_player.GetDirection();
+                
+                int projectileX = m_pPlayer->GetXPosition() + m_pPlayer->GetXDirection();
+                int projectileY = m_pPlayer->GetYPosition() + m_pPlayer->GetYDirection();
                 do
                 {
-                    if (m_pLevel->IsSpace(position.x, position.y))
+                    if (m_pMap->IsEmpty(projectileX, projectileY))
                     {
-                        PlaceableActor* zombieActor = m_pLevel->GetActorAtPosition(position);
-                        if (zombieActor != nullptr && zombieActor->IsActive())
+                        PlaceableActor* actor = GetActorAtPosition(projectileX, projectileY);
+                        if (actor != nullptr && actor->IsActive())
                         {
-                            zombieActor->TakeDamage(&m_player.GetDirection());
+                            if (actor->GetType() == ActorType::Zombie)
+                            {
+                                actor->TakeDamage();
+                                int newX = actor->GetXPosition() + m_pPlayer->GetXDirection();
+                                int newY = actor->GetYPosition() + m_pPlayer->GetYDirection();
+                                if (IsPositionEmpty(newX, newY))
+                                {
+                                    actor->SetPosition(newX, newY);
+                                }
+                            }                            
                             hit = true;
                         }
                         else
                         {
-                            position = position + m_player.GetDirection();
+                            projectileX += m_pPlayer->GetXDirection();
+                            projectileY += m_pPlayer->GetYDirection();
                         }
                     }
                     else
@@ -351,32 +340,157 @@ namespace projectz {
             }            
         }
 
+        void GameplayState::UpdateActors()
+        {
+            for (auto actor = m_actors.begin(); actor != m_actors.end(); ++actor)
+            {
+                if ((*actor)->IsActive() && (*actor)->GetType() == ActorType::Zombie)
+                {
+                    Zombie* zombie = dynamic_cast<Zombie*>(*actor);
+                    std::vector<Point> positionsAround{};
+                    GetEmptyPositionsAround(zombie->GetXPosition(), zombie->GetYPosition(), positionsAround);
+                    bool hasHitPlayer = zombie->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), positionsAround);
+                    if (hasHitPlayer)
+                    {
+                        m_pPlayer->TakeDamage();
+                        AudioManager::GetInstance()->PlayLoseLivesSound();
+                    }
+                }
+            }
+        }
+
+        bool GameplayState::IsPositionEmpty(int x, int y)
+        {
+            bool result = false;
+            if (m_pMap->IsEmpty(x, y))
+            {
+                PlaceableActor* actor = GetActorAtPosition(x, y);
+                result = (actor == nullptr);
+            }
+            return result;
+        }
+
+        void GameplayState::GetEmptyPositionsAround(int x, int y, std::vector<Point>& positions)
+        {
+            std::vector<Point> surroundings = {
+                Point(x - 1, y),
+                Point(x + 1, y),
+                Point(x, y - 1),
+                Point(x, y + 1)
+            };
+            for (auto position = surroundings.begin(); position != surroundings.end(); ++position)
+            {
+                if (IsPositionEmpty(position->x, position->y))
+                {
+                    positions.push_back(*position);
+                }
+            }
+        }
+
+
+        PlaceableActor* GameplayState::GetActorAtPosition(int x, int y)
+        {
+            PlaceableActor* actorAtPosition{ nullptr };
+            for (auto actor = m_actors.begin(); actor != m_actors.end(); ++actor)
+            {
+                if ((*actor)->IsActive())
+                {
+                    if ((*actor)->GetXPosition() == x && (*actor)->GetYPosition() == y)
+                    {
+                        actorAtPosition = *actor;
+                        break;
+                    }
+                }
+            }
+            return actorAtPosition;
+        }
+
+        void GameplayState::Draw()
+        {
+            if (m_isMapLoaded)
+            {
+                system("cls");
+                
+                m_pMap->Draw(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition());
+
+                HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+                DrawActors(console);
+                DrawPlayer(console);               
+                DrawHUD(console);
+            }
+        }
+
+        void GameplayState::DrawPlayer(const HANDLE& console)
+        {
+            COORD playerCursorPosition;
+            playerCursorPosition.X = m_pPlayer->GetXPosition();
+            playerCursorPosition.Y = m_pPlayer->GetYPosition();
+            SetConsoleCursorPosition(console, playerCursorPosition);
+            m_pPlayer->Draw();
+        }
+
+        void GameplayState::DrawActors(const HANDLE& console)
+        {      
+            std::vector<char> playerSurroundingRooms{};
+            m_pMap->GetSurroundingRoomsFromPosition(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), playerSurroundingRooms);
+
+            COORD actorCursorPosition;
+            for (auto actor = m_actors.begin(); actor != m_actors.end(); ++actor)
+            {
+                if ((*actor)->IsActive())
+                {
+                    std::vector<char> actorSurroundingRooms{};
+                    const int actorX = (*actor)->GetXPosition();
+                    const int actorY = (*actor)->GetYPosition();
+                    m_pMap->GetSurroundingRoomsFromPosition(actorX, actorY, actorSurroundingRooms);
+                    for (char actorRoom : actorSurroundingRooms)
+                    {
+                        auto found = std::find(playerSurroundingRooms.begin(), playerSurroundingRooms.end(), actorRoom);
+                        if (found != playerSurroundingRooms.end())
+                        {
+                            actorCursorPosition.X = actorX;
+                            actorCursorPosition.Y = actorY;
+                            SetConsoleCursorPosition(console, actorCursorPosition);
+                            (*actor)->Draw();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         void GameplayState::DrawHUD(const HANDLE& console)
         {
-            cout << endl;
+            // Set the cursor to the end of the level
+            COORD currentCursorPosition;
+            currentCursorPosition.X = 0;
+            currentCursorPosition.Y = m_pMap->GetHeight();
+            SetConsoleCursorPosition(console, currentCursorPosition);
+
+            std::cout << std::endl;
 
             // top border
-            for (int i = 0; i < m_pLevel->GetWidth(); i++)
+            for (int i = 0; i < m_pMap->GetWidth(); i++)
             {
-                cout << Level::WALL;
+                std::cout << MapChars::Wall;
             }
-            cout << endl;
+            std::cout << std::endl;
 
             // left border
-            cout << Level::WALL;
+            std::cout << MapChars::Wall;
 
-            cout << " wasd-move " << Level::WALL << " z-drop key " << Level::WALL;
+            std::cout << " wasd-move " << MapChars::Wall << " z-drop key " << MapChars::Wall;
             // cout << " $: " << m_player.GetMoney() << " " << Level::WALL;
-            cout << " bullets: " << m_player.GetAmmo() << " " << Level::WALL;
-            cout << " lives: " << m_player.GetLives() << " " << Level::WALL;
-            cout << " key: ";
-            if (m_player.HasKey())
+            std::cout << " bullets: " << m_pPlayer->GetAmmo() << " " << MapChars::Wall;
+            std::cout << " lives: " << m_pPlayer->GetLives() << " " << MapChars::Wall;
+            std::cout << " key: ";
+            if (m_pPlayer->HasKey())
             {
-                m_player.GetKey()->Draw();
+                m_pPlayer->GetKey()->Draw();
             }
             else
             {
-                cout << " ";
+                std::cout << " ";
             }
 
             // right border
@@ -384,20 +498,20 @@ namespace projectz {
             GetConsoleScreenBufferInfo(console, &csbi);
 
             COORD pos;
-            pos.X = m_pLevel->GetWidth() - 1;
+            pos.X = m_pMap->GetWidth() - 1;
             pos.Y = csbi.dwCursorPosition.Y;
             SetConsoleCursorPosition(console, pos);
 
-            cout << Level::WALL;
-            cout << endl;
+            std::cout << MapChars::Wall;
+            std::cout << std::endl;
 
             // bottom border
-            for (int i = 0; i < m_pLevel->GetWidth(); i++)
+            for (int i = 0; i < m_pMap->GetWidth(); i++)
             {
-                cout << Level::WALL;
+                std::cout << MapChars::Wall;
             }
 
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 }

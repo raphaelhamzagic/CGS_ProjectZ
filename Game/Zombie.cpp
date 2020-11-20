@@ -1,25 +1,24 @@
+#include <algorithm>
 #include <iostream>
+#include <vector>
 #include <Windows.h>
 #include "Zombie.h"
-#include "Level.h"
 #include "Point.h"
 
 using namespace std;
 
-namespace projectz {
-    namespace game {
-
+namespace projectz
+{
+    namespace game
+    {
         static ActorColor constexpr kColor = ActorColor::Brown;
-        static char constexpr kSymbol = 'z';
-        static ActorColor constexpr kChasingColor = ActorColor::Red;
+        static ActorColor constexpr kChasingColor = ActorColor::Red;        
         
-        static int constexpr kMovementOffset = 1;
         static int constexpr kChaseDistance = 4;
         static int constexpr kUpdateSpeed = 2;
 
-        Zombie::Zombie(int x, int y, Level* pLevel)
-            : PlaceableActor(x, y, kColor)
-            , m_pLevel(pLevel)
+        Zombie::Zombie(int x, int y, char symbol)
+            : PlaceableActor(x, y, symbol, kColor)
             , m_isChasing(false)
             , m_updateControl(0)
         {
@@ -30,14 +29,14 @@ namespace projectz {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
             int color = (m_isChasing) ? static_cast<int>(kChasingColor) : static_cast<int>(m_color);
             SetConsoleTextAttribute(console, color);
-            std::cout << kSymbol;
+            std::cout << m_symbol;
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
 
-        bool Zombie::Update(Level* pLevel, int playerX, int playerY)
+        bool Zombie::Update(const int playerX, const int playerY, const std::vector<Point> &emptyPositionsAround)
         {
-            bool hasCollided = false;
-            if (m_IsActive)
+            bool hasHitPlayer = false;
+            if (m_isActive)
             {
                 ++m_updateControl;
                 if (m_updateControl % kUpdateSpeed == 0)
@@ -46,7 +45,7 @@ namespace projectz {
                     Point newPosition;
                     if (m_isChasing)
                     {
-                        newPosition = Chase(playerX, playerY);
+                        hasHitPlayer = Chase(playerX, playerY, emptyPositionsAround);
                     }
                     else
                     {
@@ -54,113 +53,133 @@ namespace projectz {
                         if (std::abs(distanceToPlayer) <= kChaseDistance)
                         {
                             m_isChasing = true;
-                            newPosition = Chase(playerX, playerY);
+                            hasHitPlayer = Chase(playerX, playerY, emptyPositionsAround);
                         }
                         else
                         {
-                            newPosition = Wander();
-                        }
-                    }
-
-                    if (!pLevel->IsWall(newPosition.x, newPosition.y) && !pLevel->IsDoor(newPosition.x, newPosition.y))
-                    {
-                        if (newPosition.x == playerX && newPosition.y == playerY)
-                        {
-                            hasCollided = true;
-                        }
-                        else
-                        {
-                            SetPosition(newPosition.x, newPosition.y);
+                            Wander(emptyPositionsAround);
                         }
                     }
                 }
             }
-            return hasCollided;
+            return hasHitPlayer;
         }
 
-        void Zombie::TakeDamage(const Point* pDamageDirection)
+        bool Zombie::Chase(int playerX, int playerY, const std::vector<Point> &emptyPositionsAround)
         {
-            if (pDamageDirection)
-            {
-                int newPositionX = m_pPosition->x + pDamageDirection->x;
-                int newPositionY = m_pPosition->y + pDamageDirection->y;
-                if (!m_pLevel->IsWall(newPositionX, newPositionY) && !m_pLevel->IsDoor(newPositionX, newPositionY) && !m_pLevel->IsWindow(newPositionX, newPositionY))
-                {
-                    m_pPosition->x = newPositionX;
-                    m_pPosition->y = newPositionY;
-                }
-            }
-        }
-
-        Point Zombie::Chase(int playerX, int playerY)
-        {
-            Point newPosition{ m_pPosition->x, m_pPosition->y };
-
             int diffX = playerX - m_pPosition->x;
-            int diffY = playerY - m_pPosition->y;
-
-            int directionX = 0;
-            if (diffX > 0)
-            {
-                directionX = 1;
-            }
-            else if (diffX < 0)
-            {
-                directionX = -1;
-            }
+            int directionX = GetDirection(diffX);
             int newPositionX = m_pPosition->x + directionX;
 
-            int directionY = 0;
-            if (diffY > 0)
-            {
-                directionY = 1;
-            }
-            else if (diffY < 0)
-            {
-                directionY = -1;
-            }
+            int diffY = playerY - m_pPosition->y;
+            int directionY = GetDirection(diffY);
             int newPositionY = m_pPosition->y + directionY;
 
-            if (newPositionX != m_pPosition->x && newPositionY != m_pPosition->y)
+            if (newPositionX == playerX && newPositionY == playerY)
             {
-                int randomAxis = rand() % 2;
-                if (randomAxis)
+                return true;
+            }            
+            else
+            {
+                Point newPosition = GetRandomChasePosition(newPositionX, newPositionY, emptyPositionsAround);
+                if (newPosition.x != m_pPosition->x || newPosition.y != m_pPosition->y)
                 {
-                    newPosition.x = newPositionX;
+                    SetPosition(newPosition.x, newPosition.y);
+                }
+            }
+            return false;            
+        }
+
+        Point Zombie::GetRandomChasePosition(const int newPositionX, const int newPositionY, const std::vector<Point> &emptyPositionsAround)
+        {
+            Point newPosition{ m_pPosition->x , m_pPosition->y };
+            Point p{};
+
+            if (newPositionX != m_pPosition->x && newPositionY != m_pPosition->y)
+            {                
+                int axis = rand() % 2;
+                if (axis)
+                {
+                    p.x = newPositionX;
+                    p.y = m_pPosition->y;
                 }
                 else
                 {
-                    newPosition.y = newPositionY;
+                    p.x = m_pPosition->x;
+                    p.y = newPositionY;
+                }
+                auto found = std::find(emptyPositionsAround.begin(), emptyPositionsAround.end(), p);
+                if (found == emptyPositionsAround.end())
+                {
+                    axis = (axis == 1) ? 0 : 1;
+                    if (axis)
+                    {
+                        p.x = newPositionX;
+                        p.y = m_pPosition->y;
+                    }
+                    else
+                    {
+                        p.x = m_pPosition->x;
+                        p.y = newPositionY;
+                    }
+                    found = std::find(emptyPositionsAround.begin(), emptyPositionsAround.end(), p);
+                    if (found != emptyPositionsAround.end())
+                    {
+                        newPosition = p;
+                    }
+                }
+                else
+                {
+                    newPosition = p;
                 }
             }
-            else if (newPositionX != m_pPosition->x)
-            {
-                newPosition.x = newPositionX;
-            }
-            else if (newPositionY != m_pPosition->y)
-            {
-                newPosition.y = newPositionY;
-            }
+            else {
+                if (newPositionX != m_pPosition->x)
+                {
+                    p.x = newPositionX;
+                    p.y = m_pPosition->y;
+                }
+                else if (newPositionY != m_pPosition->y)
+                {
+                    p.x = m_pPosition->x;
+                    p.y = newPositionY;
+                }
+                if (p.x || p.y)
+                {
+                    auto found = std::find(emptyPositionsAround.begin(), emptyPositionsAround.end(), p);
+                    if (found != emptyPositionsAround.end())
+                    {
+                        newPosition = p;
+                    }
+                }
+            }            
 
             return newPosition;
         }
 
-        Point Zombie::Wander()
+        int Zombie::GetDirection(const int value)
+        {
+            int direction{};
+            if (value > 0)
+            {
+                direction = 1;
+            }
+            else if (value < 0)
+            {
+                direction = -1;
+            }
+            return direction;
+        }
+
+        void Zombie::Wander(const std::vector<Point>& emptyPositionsAround)
         {
             Point newPosition{ m_pPosition->x, m_pPosition->y };
-
-            int randomAxis = rand() % 2;
-            int randomDirection = ((rand() % 2)) ? 1 : -1;
-            if (randomAxis)
+            if (emptyPositionsAround.size() > 0)
             {
-                newPosition.x = m_pPosition->x + (kMovementOffset * randomDirection);
-            }
-            else
-            {
-                newPosition.y = m_pPosition->y + (kMovementOffset * randomDirection);
-            }
-
-            return newPosition;
+                int randomPosition = rand() % emptyPositionsAround.size();
+                newPosition = emptyPositionsAround.at(randomPosition);
+                SetPosition(newPosition.x, newPosition.y);
+            }            
         }
     }
 }
