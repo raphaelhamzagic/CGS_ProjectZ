@@ -12,10 +12,12 @@ namespace projectz
             virtual ActorType GetType() override { return ActorType::Zombie; }
             virtual void Draw() override;
             bool Update(const int playerX, const int playerY, const std::vector<Point> &emptyPositionsAround);
+            virtual void TakeDamage() override;
 
         private:
             bool m_isChasing;
             int m_updateControl;
+            bool m_isHit;
 
             int GetDirection(const int value);
             bool Chase(int playerX, int playerY, const std::vector<Point>& emptyPositionsAround);

@@ -27,6 +27,7 @@ namespace projectz
             bool m_beatLevel;
             std::vector<std::string> m_LevelNames;
 
+            bool m_isPlayerHit;
             int m_skipFrameCount;
             static constexpr int kFramesToSkip = 2;
 

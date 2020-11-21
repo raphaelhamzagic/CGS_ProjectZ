@@ -14,13 +14,14 @@ namespace projectz
         static ActorColor constexpr kColor = ActorColor::Brown;
         static ActorColor constexpr kChasingColor = ActorColor::Red;        
         
-        static int constexpr kChaseDistance = 4;
+        static int constexpr kChaseDistance = 6;
         static int constexpr kUpdateSpeed = 2;
 
         Zombie::Zombie(int x, int y, char symbol)
             : PlaceableActor(x, y, symbol, kColor)
             , m_isChasing(false)
             , m_updateControl(0)
+            , m_isHit(false)
         {
         }
 
@@ -36,33 +37,44 @@ namespace projectz
         bool Zombie::Update(const int playerX, const int playerY, const std::vector<Point> &emptyPositionsAround)
         {
             bool hasHitPlayer = false;
-            if (m_isActive)
+            if (m_isHit)
             {
-                ++m_updateControl;
-                if (m_updateControl % kUpdateSpeed == 0)
+                m_isHit = false;
+            }
+            else
+            {
+                if (m_isActive)
                 {
-                    m_updateControl = 0;
-                    Point newPosition;
                     if (m_isChasing)
                     {
                         hasHitPlayer = Chase(playerX, playerY, emptyPositionsAround);
                     }
                     else
                     {
-                        double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
-                        if (std::abs(distanceToPlayer) <= kChaseDistance)
+                        ++m_updateControl;
+                        if (m_updateControl % kUpdateSpeed == 0)
                         {
-                            m_isChasing = true;
-                            hasHitPlayer = Chase(playerX, playerY, emptyPositionsAround);
-                        }
-                        else
-                        {
-                            Wander(emptyPositionsAround);
+                            m_updateControl = 0;
+                            double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
+                            if (std::abs(distanceToPlayer) <= kChaseDistance)
+                            {
+                                m_isChasing = true;
+                                hasHitPlayer = Chase(playerX, playerY, emptyPositionsAround);
+                            }
+                            else
+                            {
+                                Wander(emptyPositionsAround);
+                            }
                         }
                     }
                 }
-            }
+            }         
             return hasHitPlayer;
+        }
+
+        void Zombie::TakeDamage()
+        {
+            m_isHit = true;
         }
 
         bool Zombie::Chase(int playerX, int playerY, const std::vector<Point> &emptyPositionsAround)
@@ -75,19 +87,16 @@ namespace projectz
             int directionY = GetDirection(diffY);
             int newPositionY = m_pPosition->y + directionY;
 
-            if (newPositionX == playerX && newPositionY == playerY)
+            Point newPosition = GetRandomChasePosition(newPositionX, newPositionY, emptyPositionsAround);
+            if (newPosition.x == playerX && newPosition.y == playerY)
             {
                 return true;
-            }            
-            else
-            {
-                Point newPosition = GetRandomChasePosition(newPositionX, newPositionY, emptyPositionsAround);
-                if (newPosition.x != m_pPosition->x || newPosition.y != m_pPosition->y)
-                {
-                    SetPosition(newPosition.x, newPosition.y);
-                }
             }
-            return false;            
+            else if (newPosition.x != m_pPosition->x || newPosition.y != m_pPosition->y)
+            {
+               SetPosition(newPosition.x, newPosition.y);
+            }
+            return false;         
         }
 
         Point Zombie::GetRandomChasePosition(const int newPositionX, const int newPositionY, const std::vector<Point> &emptyPositionsAround)
@@ -152,7 +161,7 @@ namespace projectz
                         newPosition = p;
                     }
                 }
-            }            
+            }
 
             return newPosition;
         }

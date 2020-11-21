@@ -38,6 +38,7 @@ namespace projectz
             , m_currentLevel(0)
             , m_beatLevel(false)
             , m_skipFrameCount(0)
+            , m_isPlayerHit(false)
         {
             m_LevelNames.push_back("Level1.txt");
             // m_LevelNames.push_back("Level2.txt");
@@ -95,6 +96,8 @@ namespace projectz
 
             if (processInput && !m_beatLevel && m_pPlayer->IsActive() && m_pPlayer->IsAlive())
             {
+                m_isPlayerHit = false;
+
                 int input = _getch();
                 int arrowInput = 0;
                 int newPlayerX = m_pPlayer->GetXPosition();
@@ -230,6 +233,7 @@ namespace projectz
                         Zombie* collidedEnemy = dynamic_cast<Zombie*>(collidedActor);
                         assert(collidedEnemy);
                         m_pPlayer->TakeDamage();
+                        m_isPlayerHit = true;
                         AudioManager::GetInstance()->PlayLoseLivesSound();
                         break;
                     }
@@ -350,7 +354,7 @@ namespace projectz
                     std::vector<Point> positionsAround{};
                     GetEmptyPositionsAround(zombie->GetXPosition(), zombie->GetYPosition(), positionsAround);
                     bool hasHitPlayer = zombie->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), positionsAround);
-                    if (hasHitPlayer)
+                    if (hasHitPlayer && !m_isPlayerHit)
                     {
                         m_pPlayer->TakeDamage();
                         AudioManager::GetInstance()->PlayLoseLivesSound();

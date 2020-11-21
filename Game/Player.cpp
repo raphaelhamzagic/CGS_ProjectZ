@@ -114,9 +114,11 @@ namespace projectz
             {
                 AudioManager::GetInstance()->PlayGunShootingSound();
                 m_pCurrentFireWeapon->Shoot();
+                return true;
             }
             else
             {
+                AudioManager::GetInstance()->PlayDoorClosedSound();
                 return false;
             }
         }
