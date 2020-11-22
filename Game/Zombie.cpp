@@ -15,12 +15,14 @@ namespace projectz
         static ActorColor constexpr kChasingColor = ActorColor::Red;        
         
         static int constexpr kChaseDistance = 6;
-        static int constexpr kUpdateSpeed = 2;
+        static int constexpr kWanderUpdateSpeed = 2;
+        static int constexpr kChaseUpdateSpeed = 2;
 
         Zombie::Zombie(int x, int y, char symbol)
             : PlaceableActor(x, y, symbol, kColor)
             , m_isChasing(false)
-            , m_updateControl(0)
+            , m_wanderUpdateControl(0)
+            , m_chaseUpdateControl(0)
             , m_isHit(false)
         {
         }
@@ -47,14 +49,19 @@ namespace projectz
                 {
                     if (m_isChasing)
                     {
-                        hasHitPlayer = Chase(playerX, playerY, emptyPositionsAround);
+                        ++m_chaseUpdateControl;
+                        if (m_chaseUpdateControl % kChaseUpdateSpeed == 0)
+                        {
+                            m_chaseUpdateControl = 0;
+                            hasHitPlayer = Chase(playerX, playerY, emptyPositionsAround);
+                        }
                     }
                     else
                     {
-                        ++m_updateControl;
-                        if (m_updateControl % kUpdateSpeed == 0)
+                        ++m_wanderUpdateControl;
+                        if (m_wanderUpdateControl % kWanderUpdateSpeed == 0)
                         {
-                            m_updateControl = 0;
+                            m_wanderUpdateControl = 0;
                             double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
                             if (std::abs(distanceToPlayer) <= kChaseDistance)
                             {

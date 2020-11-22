@@ -288,7 +288,6 @@ namespace projectz
                         m_pPlayer->PickupHealthKit();
                         collidedHealthKit->Remove();
                         m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-                        // TODO change sound
                         AudioManager::GetInstance()->PlayDoorOpenSound();
                     }
                 }
@@ -320,14 +319,8 @@ namespace projectz
                         {
                             if (actor->GetType() == ActorType::Zombie)
                             {
-                                actor->TakeDamage();
-                                int newX = actor->GetXPosition() + m_pPlayer->GetXDirection();
-                                int newY = actor->GetYPosition() + m_pPlayer->GetYDirection();
-                                if (IsPositionEmpty(newX, newY))
-                                {
-                                    actor->SetPosition(newX, newY);
-                                }
-                            }                            
+                                HitEnemy(actor, m_pPlayer->GetXDirection(), m_pPlayer->GetYDirection());
+                            }                
                             hit = true;
                         }
                         else
@@ -341,7 +334,23 @@ namespace projectz
                         hit = true;
                     }
                 } while (!hit);
-            }            
+            }
+        }
+
+        void GameplayState::HitEnemy (PlaceableActor* enemy, const int directionX, const int directionY)
+        {           
+            enemy->TakeDamage();
+            int newX = enemy->GetXPosition() + directionX;
+            int newY = enemy->GetYPosition() + directionY;
+            PlaceableActor* actor = GetActorAtPosition(newX, newY);
+            if (actor != nullptr && actor->IsActive())
+            {
+                if (actor->GetType() == ActorType::Zombie)
+                {
+                    HitEnemy(actor, directionX, directionY);
+                }
+            }
+            enemy->SetPosition(newX, newY);
         }
 
         void GameplayState::UpdateActors()

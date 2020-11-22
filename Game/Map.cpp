@@ -356,7 +356,6 @@ namespace projectz
             return m_pGameplayMap[GetIndexFromCoordinates(x, y)] == MapChars::Empty;
         }
 
-
         void Map::Draw(const int playerX, const int playerY)
         {
             HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);

@@ -12,6 +12,7 @@ namespace projectz
     namespace game 
     {
         class StateMachineExampleGame;
+        class Zombie;
 
         class GameplayState : public GameState
         {
@@ -44,6 +45,7 @@ namespace projectz
             
             void UpdatePlayer(const int newPlayerX, const int newPlayerY);
             void PlayerShoot();
+            void HitEnemy(PlaceableActor* enemy, const int directionX, const int directionY);
             void DrawPlayer(const HANDLE& console);
             void UpdateActors();
             void DrawActors(const HANDLE& console);

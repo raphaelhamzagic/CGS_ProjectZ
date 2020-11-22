@@ -16,7 +16,8 @@ namespace projectz
 
         private:
             bool m_isChasing;
-            int m_updateControl;
+            int m_wanderUpdateControl;
+            int m_chaseUpdateControl;
             bool m_isHit;
 
             int GetDirection(const int value);
