@@ -81,6 +81,9 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SpittingCreature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h">
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MapChars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpittingCreature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

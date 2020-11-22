@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Ammo.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="SpittingCreature.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameplayState.cpp" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="Ammo.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="SpittingCreature.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameplayState.h" />

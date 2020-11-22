@@ -15,6 +15,7 @@
 #include "PlaceableActor.h"
 #include "Player.h"
 #include "Point.h"
+#include "SpittingCreature.h"
 #include "Zombie.h"
 
 namespace projectz
@@ -194,8 +195,15 @@ namespace projectz
                             );
                             break;
                         case '<':
+                            actorsOut.push_back(
+                                new SpittingCreature{ x, y, MapChars::EnemyGooSpittingLeft }
+                            );
+                            break;
                         case '>':
-                            // TODO boo spiting creature
+                            actorsOut.push_back(
+                                new SpittingCreature{ x, y, MapChars::EnemyGooSpittingRight }
+                            );
+                            break;
 
                         // cabinet (save progress)
                         case 'P':

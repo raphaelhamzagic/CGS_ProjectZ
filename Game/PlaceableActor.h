@@ -37,7 +37,8 @@ namespace projectz
             Zombie,
             Gun,
             GunAmmo,
-            HealthKit
+            HealthKit,
+            SpittingCreature
         };
 
         class Point;

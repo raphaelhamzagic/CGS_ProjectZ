@@ -1,7 +1,9 @@
 #pragma once
 #include "PlaceableActor.h"
-namespace projectz {
-    namespace game {
+namespace projectz
+{
+    namespace game
+    {
         struct DoorConfig
         {
             char symbol;

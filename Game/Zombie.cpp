@@ -5,8 +5,6 @@
 #include "Zombie.h"
 #include "Point.h"
 
-using namespace std;
-
 namespace projectz
 {
     namespace game

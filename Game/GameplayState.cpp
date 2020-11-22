@@ -15,6 +15,7 @@
 #include "Map.h"
 #include "MapChars.h"
 #include "Point.h"
+#include "SpittingCreature.h"
 #include "StateMachineExampleGame.h"
 #include "Utility.h"
 #include "Zombie.h"
@@ -337,11 +338,11 @@ namespace projectz
             }
         }
 
-        void GameplayState::HitEnemy (PlaceableActor* enemy, const int directionX, const int directionY)
+        void GameplayState::HitEnemy (PlaceableActor* pEnemy, const int directionX, const int directionY)
         {           
-            enemy->TakeDamage();
-            int newX = enemy->GetXPosition() + directionX;
-            int newY = enemy->GetYPosition() + directionY;
+            pEnemy->TakeDamage();
+            int newX = pEnemy->GetXPosition() + directionX;
+            int newY = pEnemy->GetYPosition() + directionY;
             PlaceableActor* actor = GetActorAtPosition(newX, newY);
             if (actor != nullptr && actor->IsActive())
             {
@@ -350,19 +351,32 @@ namespace projectz
                     HitEnemy(actor, directionX, directionY);
                 }
             }
-            enemy->SetPosition(newX, newY);
+            pEnemy->SetPosition(newX, newY);
         }
 
         void GameplayState::UpdateActors()
         {
             for (auto actor = m_actors.begin(); actor != m_actors.end(); ++actor)
             {
-                if ((*actor)->IsActive() && (*actor)->GetType() == ActorType::Zombie)
+                if ((*actor)->IsActive())
                 {
-                    Zombie* zombie = dynamic_cast<Zombie*>(*actor);
-                    std::vector<Point> positionsAround{};
-                    GetEmptyPositionsAround(zombie->GetXPosition(), zombie->GetYPosition(), positionsAround);
-                    bool hasHitPlayer = zombie->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), positionsAround);
+                    bool hasHitPlayer{ false };
+
+                    if ((*actor)->GetType() == ActorType::Zombie)
+                    {
+                        Zombie* zombie = dynamic_cast<Zombie*>(*actor);
+                        std::vector<Point> positionsAround{};
+                        GetEmptyPositionsAround(zombie->GetXPosition(), zombie->GetYPosition(), positionsAround);
+                        hasHitPlayer = zombie->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), positionsAround);
+                    }
+                    else if ((*actor)->GetType() == ActorType::SpittingCreature)
+                    {
+                        SpittingCreature* spittingCreature = dynamic_cast<SpittingCreature*>(*actor);
+                        std::vector<Point> positionsAround{};
+                        GetEmptyPositionsAround(spittingCreature->GetXPosition(), spittingCreature->GetYPosition(), positionsAround);
+                        hasHitPlayer = spittingCreature->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), positionsAround);
+                    }
+
                     if (hasHitPlayer && !m_isPlayerHit)
                     {
                         m_pPlayer->TakeDamage();
