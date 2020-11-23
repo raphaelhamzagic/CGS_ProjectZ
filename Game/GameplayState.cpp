@@ -80,7 +80,7 @@ namespace projectz
             m_pMap = new Map;
             Point playerPosition;
             m_isMapLoaded = m_pMap->Load(m_LevelNames.at(m_currentLevel), m_actors, playerPosition);
-            m_pPlayer = new Player{ playerPosition.x, playerPosition.y, MapChars::PlayerAlive, MapChars::PlayerDead };
+            m_pPlayer = new Player{ playerPosition.x, playerPosition.y, MapChars::PlayerAliveRight, MapChars::PlayerAliveLeft, MapChars::PlayerAliveUp, MapChars::PlayerAliveDown, MapChars::PlayerDead };
         }
 
         void GameplayState::Enter()
@@ -318,10 +318,10 @@ namespace projectz
                         PlaceableActor* actor = GetActorAtPosition(projectileX, projectileY);
                         if (actor != nullptr && actor->IsActive())
                         {
-                            if (actor->GetType() == ActorType::Zombie)
+                            if (actor->GetType() == ActorType::Zombie || actor->GetType() == ActorType::SpittingCreature)
                             {
                                 HitEnemy(actor, m_pPlayer->GetXDirection(), m_pPlayer->GetYDirection());
-                            }                
+                            }
                             hit = true;
                         }
                         else
@@ -339,19 +339,22 @@ namespace projectz
         }
 
         void GameplayState::HitEnemy (PlaceableActor* pEnemy, const int directionX, const int directionY)
-        {           
+        {
             pEnemy->TakeDamage();
-            int newX = pEnemy->GetXPosition() + directionX;
-            int newY = pEnemy->GetYPosition() + directionY;
-            PlaceableActor* actor = GetActorAtPosition(newX, newY);
-            if (actor != nullptr && actor->IsActive())
+            if (pEnemy->GetType() == ActorType::Zombie)
             {
-                if (actor->GetType() == ActorType::Zombie)
+                int newX = pEnemy->GetXPosition() + directionX;
+                int newY = pEnemy->GetYPosition() + directionY;
+                PlaceableActor* actor = GetActorAtPosition(newX, newY);
+                if (actor != nullptr && actor->IsActive())
                 {
-                    HitEnemy(actor, directionX, directionY);
+                    if (actor->GetType() == ActorType::Zombie)
+                    {
+                        HitEnemy(actor, directionX, directionY);
+                    }
                 }
-            }
-            pEnemy->SetPosition(newX, newY);
+                pEnemy->SetPosition(newX, newY);
+            }          
         }
 
         void GameplayState::UpdateActors()
@@ -372,9 +375,7 @@ namespace projectz
                     else if ((*actor)->GetType() == ActorType::SpittingCreature)
                     {
                         SpittingCreature* spittingCreature = dynamic_cast<SpittingCreature*>(*actor);
-                        std::vector<Point> positionsAround{};
-                        GetEmptyPositionsAround(spittingCreature->GetXPosition(), spittingCreature->GetYPosition(), positionsAround);
-                        hasHitPlayer = spittingCreature->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), positionsAround);
+                        hasHitPlayer = spittingCreature->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), this);
                     }
 
                     if (hasHitPlayer && !m_isPlayerHit)
@@ -391,8 +392,11 @@ namespace projectz
             bool result = false;
             if (m_pMap->IsEmpty(x, y))
             {
-                PlaceableActor* actor = GetActorAtPosition(x, y);
-                result = (actor == nullptr);
+                if (m_pPlayer->GetXPosition() != x || m_pPlayer->GetYPosition() != y)
+                {
+                    PlaceableActor* actor = GetActorAtPosition(x, y);
+                    result = (actor == nullptr);
+                }
             }
             return result;
         }
@@ -442,18 +446,14 @@ namespace projectz
 
                 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
                 DrawActors(console);
-                DrawPlayer(console);               
+                DrawPlayer(console);          
                 DrawHUD(console);
             }
         }
 
         void GameplayState::DrawPlayer(const HANDLE& console)
         {
-            COORD playerCursorPosition;
-            playerCursorPosition.X = m_pPlayer->GetXPosition();
-            playerCursorPosition.Y = m_pPlayer->GetYPosition();
-            SetConsoleCursorPosition(console, playerCursorPosition);
-            m_pPlayer->Draw();
+            m_pPlayer->Draw(console);
         }
 
         void GameplayState::DrawActors(const HANDLE& console)
@@ -461,7 +461,6 @@ namespace projectz
             std::vector<char> playerSurroundingRooms{};
             m_pMap->GetSurroundingRoomsFromPosition(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), playerSurroundingRooms);
 
-            COORD actorCursorPosition;
             for (auto actor = m_actors.begin(); actor != m_actors.end(); ++actor)
             {
                 if ((*actor)->IsActive())
@@ -475,10 +474,7 @@ namespace projectz
                         auto found = std::find(playerSurroundingRooms.begin(), playerSurroundingRooms.end(), actorRoom);
                         if (found != playerSurroundingRooms.end())
                         {
-                            actorCursorPosition.X = actorX;
-                            actorCursorPosition.Y = actorY;
-                            SetConsoleCursorPosition(console, actorCursorPosition);
-                            (*actor)->Draw();
+                            (*actor)->Draw(console);
                             break;
                         }
                     }

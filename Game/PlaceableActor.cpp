@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Windows.h>
+
 #include "PlaceableActor.h"
 #include "Point.h"
 
@@ -33,6 +33,16 @@ namespace projectz
             return m_pPosition->y;
         }
 
+        int PlaceableActor::GetLastXPosition()
+        {
+            return m_pLastPosition->x;
+        }
+
+        int PlaceableActor::GetLastYPosition()
+        {
+            return m_pLastPosition->y;
+        }
+
         int PlaceableActor::GetXDirection()
         {
             return m_pDirection->x;
@@ -55,13 +65,13 @@ namespace projectz
                 {
                     m_pDirection->x = -1;
                 }
-                m_pLastPosition->x = m_pPosition->x;
-                m_pPosition->x = x;
             }
             else
             {
                 m_pDirection->x = 0;
             }
+            m_pLastPosition->x = m_pPosition->x;
+            m_pPosition->x = x;
 
             if (y != m_pPosition->y)
             {
@@ -73,13 +83,13 @@ namespace projectz
                 {
                     m_pDirection->y = -1;
                 }
-                m_pLastPosition->y = m_pPosition->y;
-                m_pPosition->y = y;
             }
             else
             {
                 m_pDirection->y = 0;
-            }           
+            }
+            m_pLastPosition->y = m_pPosition->y;
+            m_pPosition->y = y;
         }
 
         
@@ -114,12 +124,16 @@ namespace projectz
         {
         }
 
-        void PlaceableActor::Draw()
+        void PlaceableActor::Draw(const HANDLE& console)
         {
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+            COORD actorCursorPosition;
+            actorCursorPosition.X = m_pPosition->x;
+            actorCursorPosition.Y = m_pPosition->y;
+            SetConsoleCursorPosition(console, actorCursorPosition);
+
             SetConsoleTextAttribute(console, (int)m_color);
             std::cout << m_symbol;
-            SetConsoleTextAttribute(console, (int)ActorColor::LightGray);            
+            SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
     }
 }

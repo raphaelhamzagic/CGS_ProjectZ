@@ -10,7 +10,7 @@ namespace projectz
         public:
             Zombie(int x, int y, char symbol);
             virtual ActorType GetType() override { return ActorType::Zombie; }
-            virtual void Draw() override;
+            virtual void Draw(const HANDLE& console) override;
             bool Update(const int playerX, const int playerY, const std::vector<Point> &emptyPositionsAround);
             virtual void TakeDamage() override;
 

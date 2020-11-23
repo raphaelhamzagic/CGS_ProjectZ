@@ -13,6 +13,7 @@ namespace projectz
             {
             }
             virtual ActorType GetType() override { return ActorType::Key; }
+            void Draw();
         };
     }
 }

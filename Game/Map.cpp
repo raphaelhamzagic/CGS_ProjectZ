@@ -196,12 +196,12 @@ namespace projectz
                             break;
                         case '<':
                             actorsOut.push_back(
-                                new SpittingCreature{ x, y, MapChars::EnemyGooSpittingLeft }
+                                new SpittingCreature{ x, y, MapChars::EnemyGooSpittingLeft, MapChars::EnemyGooSpittingLeftProjectile, -1 }
                             );
                             break;
                         case '>':
                             actorsOut.push_back(
-                                new SpittingCreature{ x, y, MapChars::EnemyGooSpittingRight }
+                                new SpittingCreature{ x, y, MapChars::EnemyGooSpittingRight, MapChars::EnemyGooSpittingRightProjectile, 1 }
                             );
                             break;
 

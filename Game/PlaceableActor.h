@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 
 namespace projectz 
 {
@@ -42,7 +43,6 @@ namespace projectz
         };
 
         class Point;
-        class Level; // TODO try to remove
 
         class PlaceableActor
         {
@@ -56,6 +56,8 @@ namespace projectz
             int GetYDirection();
             void SetPosition(int x, int y);
             void SetDirection(int x, int y);
+            int GetLastXPosition();
+            int GetLastYPosition();
 
             ActorColor GetColor() { return m_color; }
 
@@ -64,7 +66,7 @@ namespace projectz
             bool IsActive() { return m_isActive; }
 
             virtual ActorType GetType() = 0;
-            virtual void Draw();
+            virtual void Draw(const HANDLE& console);
             virtual void Update();
             virtual void TakeDamage();
 

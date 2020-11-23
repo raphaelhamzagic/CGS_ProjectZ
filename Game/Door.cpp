@@ -1,6 +1,8 @@
-#include "Door.h"
 #include <iostream>
 #include <Windows.h>
+
+#include "Door.h"
+#include "Point.h"
 
 namespace projectz
 {
@@ -13,9 +15,13 @@ namespace projectz
         {
         }
 
-        void Door::Draw()
+        void Door::Draw(const HANDLE& console)
         {
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+            COORD actorPosition;
+            actorPosition.X = m_pPosition->x;
+            actorPosition.Y = m_pPosition->y;
+            SetConsoleCursorPosition(console, actorPosition);
+
             ActorColor color = m_isLocked ? m_color : m_unlockedColor;
             SetConsoleTextAttribute(console, (int)color);
             std::cout << m_symbol;

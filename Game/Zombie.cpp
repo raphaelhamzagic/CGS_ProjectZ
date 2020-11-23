@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <Windows.h>
+
 #include "Zombie.h"
 #include "Point.h"
 
@@ -10,7 +11,7 @@ namespace projectz
     namespace game
     {
         static ActorColor constexpr kColor = ActorColor::Brown;
-        static ActorColor constexpr kChasingColor = ActorColor::Red;        
+        static ActorColor constexpr kChasingColor = ActorColor::Red;
         
         static int constexpr kChaseDistance = 6;
         static int constexpr kWanderUpdateSpeed = 2;
@@ -25,9 +26,13 @@ namespace projectz
         {
         }
 
-        void Zombie::Draw()
+        void Zombie::Draw(const HANDLE& console)
         {
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+            COORD actorPosition;
+            actorPosition.X = m_pPosition->x;
+            actorPosition.Y = m_pPosition->y;
+            SetConsoleCursorPosition(console, actorPosition);
+
             int color = (m_isChasing) ? static_cast<int>(kChasingColor) : static_cast<int>(m_color);
             SetConsoleTextAttribute(console, color);
             std::cout << m_symbol;

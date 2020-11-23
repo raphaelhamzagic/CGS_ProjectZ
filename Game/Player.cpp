@@ -6,10 +6,9 @@
 #include "Player.h"
 #include "AudioManager.h"
 #include "Key.h"
+#include "MapChars.h"
 #include "Point.h"
 #include "FireWeapon.h"
-
-using namespace std;
 
 namespace projectz 
 {
@@ -24,12 +23,13 @@ namespace projectz
             ActorColor::Green
         };
 
-        Player::Player(int x, int y, char aliveSymbol, char deadSymbol)
-            : PlaceableActor(x, y, aliveSymbol)
+        Player::Player(int x, int y, char aliveRightSymbol, char aliveLefSymbol, char aliveUpSymbol, char aliveDownSymbol, char deadSymbol)
+            : PlaceableActor(x, y, aliveRightSymbol)
             , m_deadSymbol(deadSymbol)
             , m_pCurrentKey(nullptr)
             , m_lives(kStartingNumberOfLives)
             , m_hasGun(false)
+            , m_pCurrentFireWeapon(nullptr)
         {
         }
 
@@ -64,19 +64,40 @@ namespace projectz
             }
         }
 
-        void Player::Draw()
+        void Player::Draw(const HANDLE& console)
         {
-            HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+            COORD playerCursorPosition;
+            playerCursorPosition.X = m_pPosition->x;
+            playerCursorPosition.Y = m_pPosition->y;
+            SetConsoleCursorPosition(console, playerCursorPosition);
+
             int color = static_cast<int>(kPlayerColor[m_lives]);
             SetConsoleTextAttribute(console, color);
+            char symbol;
             if (IsAlive())
             {
-                cout << m_symbol;
+                if (m_pDirection->x == 1)
+                {
+                    symbol = MapChars::PlayerAliveRight;
+                }
+                else if (m_pDirection->x == -1)
+                {
+                    symbol = MapChars::PlayerAliveLeft;
+                }
+                else if (m_pDirection->y == 1)
+                {
+                    symbol = MapChars::PlayerAliveDown;
+                }
+                else
+                {
+                    symbol = MapChars::PlayerAliveUp;
+                }
             }
             else
             {
-                cout << m_deadSymbol;
+                symbol = m_deadSymbol;
             }
+            std::cout << symbol;
             SetConsoleTextAttribute(console, (int)ActorColor::LightGray);
         }
 

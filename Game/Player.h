@@ -13,10 +13,10 @@ namespace projectz
         class Player : public PlaceableActor
         {
         public:
-            Player(int x, int y, char aliveSymbol, char deadSymbol);
+            Player(int x, int y, char aliveRightSymbol, char aliveLefSymbol, char aliveUpSymbol, char aliveDownSymbol, char deadSymbol);
 
             virtual ActorType GetType() override { return ActorType::Player; }
-            virtual void Draw() override;
+            virtual void Draw(const HANDLE& console) override;
             
             bool HasKey();
             bool HasKey(ActorColor color);

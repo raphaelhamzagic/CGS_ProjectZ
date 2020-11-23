@@ -39,6 +39,10 @@ namespace projectz
             virtual bool Update(bool processInput = true) override;
             virtual void Draw() override;
 
+            PlaceableActor* GetActorAtPosition(int x, int y);
+            void GetEmptyPositionsAround(int x, int y, std::vector<Point>& positions);
+            bool IsPositionEmpty(int x, int y);
+
         private:
             void Load();
             void Unload();
@@ -51,9 +55,6 @@ namespace projectz
             void DrawActors(const HANDLE& console);
             void DrawHUD(const HANDLE& console);
 
-            PlaceableActor* GetActorAtPosition(int x, int y);
-            bool IsPositionEmpty(int x, int y);
-            void GetEmptyPositionsAround(int x, int y, std::vector<Point>& positions);
         };
     }
 }

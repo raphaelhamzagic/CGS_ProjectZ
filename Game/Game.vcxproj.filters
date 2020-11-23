@@ -84,6 +84,9 @@
     <ClCompile Include="SpittingCreature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Key.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h">

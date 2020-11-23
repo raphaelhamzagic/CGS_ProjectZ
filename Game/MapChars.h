@@ -17,8 +17,10 @@ namespace projectz
             static constexpr char HealthKit = '+';
 
             static constexpr char EnemyZombie = 'z';
-            static constexpr char EnemyGooSpittingLeft = '<';
-            static constexpr char EnemyGooSpittingRight = '>';
+            static constexpr char EnemyGooSpittingLeft = (char)185;
+            static constexpr char EnemyGooSpittingRight = (char)204;
+            static constexpr char EnemyGooSpittingLeftProjectile = (char)174;
+            static constexpr char EnemyGooSpittingRightProjectile = (char)175;
 
             static constexpr char WindowHorizontal = (char)196;
             static constexpr char WindowVertical = (char)179;
@@ -30,6 +32,10 @@ namespace projectz
 
             static constexpr char PlayerAlive = '@';
             static constexpr char PlayerDead = 'X';
+            static constexpr char PlayerAliveRight = '>';
+            static constexpr char PlayerAliveLeft = '<';
+            static constexpr char PlayerAliveUp = '^';
+            static constexpr char PlayerAliveDown = 'v';
         };
     }
 }

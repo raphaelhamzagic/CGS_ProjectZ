@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Ammo.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="Key.cpp" />
     <ClCompile Include="SpittingCreature.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Game.cpp" />

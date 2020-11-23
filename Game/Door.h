@@ -1,5 +1,6 @@
 #pragma once
 #include "PlaceableActor.h"
+
 namespace projectz
 {
     namespace game
@@ -16,7 +17,7 @@ namespace projectz
         {
         public:
             Door(int x, int y, char symbol, bool isLocked, ActorColor lockedColor, ActorColor unlockedColor);
-            virtual void Draw() override;
+            virtual void Draw(const HANDLE& console) override;
 
             virtual ActorType GetType() override { return ActorType::Door; }
             bool IsLocked() { return m_isLocked; }
