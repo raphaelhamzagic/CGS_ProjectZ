@@ -65,7 +65,7 @@ namespace projectz
                         if (m_wanderUpdateControl % kWanderUpdateSpeed == 0)
                         {
                             m_wanderUpdateControl = 0;
-                            double distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
+                            int distanceToPlayer = m_pPosition->DistanceTo(playerX, playerY);
                             if (std::abs(distanceToPlayer) <= kChaseDistance)
                             {
                                 m_isChasing = true;

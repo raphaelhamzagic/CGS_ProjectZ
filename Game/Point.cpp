@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Point.h"
 
 namespace projectz 
@@ -16,15 +17,11 @@ namespace projectz
         {
         }
 
-        double Point::DistanceTo(int x, int y)
+        int Point::DistanceTo(int x, int y)
         {
-            x = x - this->x;
-            y = y - this->y;
-            x *= x;
-            y *= y;
-            return sqrt(
-                x + y
-            );
+            int diffX = std::abs(x - this->x);
+            int diffY = std::abs(y - this->y);
+            return (diffX + diffY);
         }
 
         Point operator+(const Point &p1, const Point &p2) 

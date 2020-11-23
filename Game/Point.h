@@ -13,7 +13,7 @@ namespace projectz
 
             Point();
             Point(int x, int y);
-            double DistanceTo(int x, int y);
+            int DistanceTo(int x, int y);
 
         };
         Point operator+ (const Point& p1, const Point& p2);

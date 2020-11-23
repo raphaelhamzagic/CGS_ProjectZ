@@ -35,6 +35,7 @@ namespace projectz
         GameplayState::GameplayState(StateMachineExampleGame* pOwner)
             : m_pOwner(pOwner)
             , m_pMap(nullptr)
+            , m_pPlayer(nullptr)
             , m_isMapLoaded(false)
             , m_currentLevel(0)
             , m_beatLevel(false)
@@ -217,9 +218,14 @@ namespace projectz
                                 m_pPlayer->UseKey();
                                 m_pPlayer->SetPosition(newPlayerX, newPlayerY);
                                 AudioManager::GetInstance()->PlayDoorOpenSound();
+                                if (collidedDoor->GetColor() == ActorColor::Yellow)
+                                {
+                                    m_beatLevel = true;
+                                }
                             }
                             else
                             {
+                                m_pPlayer->SetDirection(newPlayerX - m_pPlayer->GetXPosition(), newPlayerY - m_pPlayer->GetYPosition());
                                 AudioManager::GetInstance()->PlayDoorClosedSound();
                             }
                         }
@@ -244,6 +250,7 @@ namespace projectz
                         assert(collidedKey);
                         if (m_pPlayer->HasKey())
                         {
+                            m_pPlayer->SetDirection(newPlayerX - m_pPlayer->GetXPosition(), newPlayerY - m_pPlayer->GetYPosition());
                             AudioManager::GetInstance()->PlayDoorClosedSound();
                         }
                         else
@@ -278,6 +285,7 @@ namespace projectz
                         }
                         else
                         {
+                            m_pPlayer->SetDirection(newPlayerX - m_pPlayer->GetXPosition(), newPlayerY - m_pPlayer->GetYPosition());
                             AudioManager::GetInstance()->PlayDoorClosedSound();
                         }
                         break;
@@ -295,6 +303,7 @@ namespace projectz
             }
             else if (m_pMap->IsWall(newPlayerX, newPlayerY))
             {
+                m_pPlayer->SetDirection(newPlayerX - m_pPlayer->GetXPosition(), newPlayerY - m_pPlayer->GetYPosition());
                 AudioManager::GetInstance()->PlayWallHitSound();
             }
             else
@@ -351,9 +360,13 @@ namespace projectz
                     if (actor->GetType() == ActorType::Zombie)
                     {
                         HitEnemy(actor, directionX, directionY);
+                        pEnemy->SetPosition(newX, newY);
                     }
                 }
-                pEnemy->SetPosition(newX, newY);
+                else
+                {
+                    pEnemy->SetPosition(newX, newY);
+                }
             }          
         }
 
@@ -374,8 +387,13 @@ namespace projectz
                     }
                     else if ((*actor)->GetType() == ActorType::SpittingCreature)
                     {
+                        std::vector<char> playerRoomsOut;
+                        m_pMap->GetSurroundingRoomsFromPosition(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), playerRoomsOut);
+                        char creatureRoom = m_pMap->GetRoomAtPosition((*actor)->GetXPosition(), (*actor)->GetYPosition());
+                        auto found = std::find(playerRoomsOut.begin(), playerRoomsOut.end(), creatureRoom);
+                        bool isPlayerInRoom = (found != playerRoomsOut.end());
                         SpittingCreature* spittingCreature = dynamic_cast<SpittingCreature*>(*actor);
-                        hasHitPlayer = spittingCreature->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), this);
+                        hasHitPlayer = spittingCreature->Update(m_pPlayer->GetXPosition(), m_pPlayer->GetYPosition(), this, isPlayerInRoom);
                     }
 
                     if (hasHitPlayer && !m_isPlayerHit)

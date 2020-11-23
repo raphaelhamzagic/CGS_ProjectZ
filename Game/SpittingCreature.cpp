@@ -26,6 +26,7 @@ namespace projectz
             , m_state(State::STATE_AIMING)
             , m_shootingInterval(0)
             , m_recoveringInterval(0)
+            , m_isHit(false)
         {
             if (shootingDirectionX == -1)
             {
@@ -51,33 +52,40 @@ namespace projectz
             return ActorType::SpittingCreature;
         }
 
-        bool SpittingCreature::Update(const int playerX, const int playerY, GameplayState* pOwner)
+        bool SpittingCreature::Update(const int playerX, const int playerY, GameplayState* pOwner, bool isPlayerInRoom)
         {
             bool hasHitPlayer = false;
-            if (m_isActive)
+            if (m_isHit)
             {
-                if (!m_projectiles.empty())
+                m_isHit = false;
+            }
+            else
+            {
+                if (m_isActive && isPlayerInRoom)
                 {
-                    hasHitPlayer = UpdateProjectiles(playerX, playerY, pOwner);
-                }
-
-                if (m_state == State::STATE_RECOVERING)
-                {
-                    ++m_recoveringInterval;
-                    if (m_recoveringInterval % kRecoveringMaxInterval == 0)
+                    if (!m_projectiles.empty())
                     {
-                        m_recoveringInterval = 0;
+                        hasHitPlayer = UpdateProjectiles(playerX, playerY, pOwner);
+                    }
+
+                    if (m_state == State::STATE_RECOVERING)
+                    {
+                        ++m_recoveringInterval;
+                        if (m_recoveringInterval % kRecoveringMaxInterval == 0)
+                        {
+                            m_recoveringInterval = 0;
+                            if (UpdateCreature(playerX, playerY, pOwner))
+                            {
+                                hasHitPlayer = true;
+                            }
+                        }
+                    }
+                    else
+                    {
                         if (UpdateCreature(playerX, playerY, pOwner))
                         {
                             hasHitPlayer = true;
                         }
-                    }
-                }
-                else
-                {
-                    if (UpdateCreature(playerX, playerY, pOwner))
-                    {
-                        hasHitPlayer = true;
                     }
                 }
             }
@@ -235,6 +243,7 @@ namespace projectz
 
         void SpittingCreature::TakeDamage()
         {
+            m_isHit = true;
             m_state = State::STATE_RECOVERING;
             m_recoveringInterval = 0;
         }

@@ -23,13 +23,13 @@ namespace projectz
             ~SpittingCreature();
             virtual ActorType GetType() override;
             virtual void Draw(const HANDLE& console);
-            bool Update(const int playerX, const int playerY, GameplayState* pOwner);
+            bool Update(const int playerX, const int playerY, GameplayState* pOwner, bool isPlayerInRoom);
             virtual void TakeDamage() override;
 
         private:
             char m_projectileSymbol;
             std::vector<SpittingCreatureProjectile*> m_projectiles;
-
+            bool m_isHit;
             State m_state;
             int m_shootingInterval;
             int m_recoveringInterval;
