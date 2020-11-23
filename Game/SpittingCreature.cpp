@@ -61,30 +61,33 @@ namespace projectz
             }
             else
             {
-                if (m_isActive && isPlayerInRoom)
+                if (m_isActive)
                 {
                     if (!m_projectiles.empty())
                     {
                         hasHitPlayer = UpdateProjectiles(playerX, playerY, pOwner);
                     }
 
-                    if (m_state == State::STATE_RECOVERING)
+                    if (isPlayerInRoom)
                     {
-                        ++m_recoveringInterval;
-                        if (m_recoveringInterval % kRecoveringMaxInterval == 0)
+                        if (m_state == State::STATE_RECOVERING)
                         {
-                            m_recoveringInterval = 0;
+                            ++m_recoveringInterval;
+                            if (m_recoveringInterval % kRecoveringMaxInterval == 0)
+                            {
+                                m_recoveringInterval = 0;
+                                if (UpdateCreature(playerX, playerY, pOwner))
+                                {
+                                    hasHitPlayer = true;
+                                }
+                            }
+                        }
+                        else
+                        {
                             if (UpdateCreature(playerX, playerY, pOwner))
                             {
                                 hasHitPlayer = true;
                             }
-                        }
-                    }
-                    else
-                    {
-                        if (UpdateCreature(playerX, playerY, pOwner))
-                        {
-                            hasHitPlayer = true;
                         }
                     }
                 }
