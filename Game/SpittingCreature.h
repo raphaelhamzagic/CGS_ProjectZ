@@ -36,9 +36,9 @@ namespace projectz
             int m_shootingDirectionX;
 
             int GetDirection(const int value);
-            void Shoot(const int playerX);
+            bool Shoot(const int playerX, const int playerY);
             bool UpdateProjectiles(const int playerX, const int playerY, GameplayState* pOwner);
-            void UpdateCreature(const int playerX, const int playerY, GameplayState* pOwner);
+            bool UpdateCreature(const int playerX, const int playerY, GameplayState* pOwner);
         };
     }
 }

@@ -67,27 +67,34 @@ namespace projectz
                     if (m_recoveringInterval % kRecoveringMaxInterval == 0)
                     {
                         m_recoveringInterval = 0;
-                        UpdateCreature(playerX, playerY, pOwner);
+                        if (UpdateCreature(playerX, playerY, pOwner))
+                        {
+                            hasHitPlayer = true;
+                        }
                     }
                 }
                 else
                 {
-                    UpdateCreature(playerX, playerY, pOwner);
-                }                        
+                    if (UpdateCreature(playerX, playerY, pOwner))
+                    {
+                        hasHitPlayer = true;
+                    }
+                }
             }
             return hasHitPlayer;
         }
 
         
-        void SpittingCreature::UpdateCreature(const int playerX, const int playerY, GameplayState* pOwner)
+        bool SpittingCreature::UpdateCreature(const int playerX, const int playerY, GameplayState* pOwner)
         {
+            bool hitPlayer = false;
             int diffX = playerX - m_pPosition->x;
             int directionX = GetDirection(diffX);
             int diffY = playerY - m_pPosition->y;
             int directionY = GetDirection(diffY);
             if (directionY == 0 && directionX == m_shootingDirectionX)
             {
-                Shoot(playerX);
+                hitPlayer = Shoot(playerX, playerY);
             }
             else
             {
@@ -106,6 +113,7 @@ namespace projectz
                     m_state = State::STATE_STOPPED;
                 }
             }
+            return hitPlayer;
         }
 
 
@@ -123,8 +131,9 @@ namespace projectz
             return direction;
         }
 
-        void SpittingCreature::Shoot(const int playerX)
+        bool SpittingCreature::Shoot(const int playerX, const int playerY)
         {
+            bool hitPlayer = false;
             ++m_shootingInterval;
             if (m_shootingInterval % kShootingMaxInterval == 0)
             {
@@ -132,13 +141,24 @@ namespace projectz
                 m_state = State::STATE_SHOOTING;
                 int diffX = playerX - m_pPosition->x;
                 int directionX = GetDirection(diffX);
-                m_projectiles.push_back(
-                    new SpittingCreatureProjectile{
-                        Point {m_pPosition->x + directionX, m_pPosition->y},
-                        directionX
-                    }
-                );
-            }            
+
+                int projectileX = m_pPosition->x + directionX;
+                if (projectileX == playerX && m_pPosition->y == playerY)
+                {
+                    hitPlayer = true;
+                }
+                else
+                {
+                    m_projectiles.push_back(
+                        new SpittingCreatureProjectile{
+                            Point {projectileX, m_pPosition->y},
+                            directionX
+                        }
+                    );
+                }
+                
+            }
+            return hitPlayer;
         }
 
         bool SpittingCreature::UpdateProjectiles(const int playerX, const int playerY, GameplayState* pOwner)

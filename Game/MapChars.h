@@ -10,7 +10,7 @@ namespace projectz
             static constexpr char Empty = ' ';
             static constexpr char Fog = (char)176;
 
-            static constexpr char WeaponGun = '1';
+            static constexpr char WeaponGun = (char)170;
 
             static constexpr char AmmoGun = '.';
 
