@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2940dcf4-ac43-4b07-8345-ee5ad00a7815}</ProjectGuid>
-    <RootNamespace>Game</RootNamespace>
+    <ProjectGuid>{52d5825c-12e9-484d-a33f-73afb9b46775}</ProjectGuid>
+    <RootNamespace>CGSProjectZ</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -112,7 +112,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -139,58 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Ammo.cpp" />
-    <ClCompile Include="AudioManager.cpp" />
-    <ClCompile Include="Key.cpp" />
-    <ClCompile Include="SpittingCreature.cpp" />
-    <ClCompile Include="Door.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameplayState.cpp" />
-    <ClCompile Include="Gun.cpp" />
-    <ClCompile Include="GunAmmo.cpp" />
-    <ClCompile Include="HealthKit.cpp" />
-    <ClCompile Include="HighScoreState.cpp" />
-    <ClCompile Include="LoseState.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="PlaceableActor.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Point.cpp" />
-    <ClCompile Include="SettingsState.cpp" />
-    <ClCompile Include="StateMachineExampleGame.cpp" />
-    <ClCompile Include="Utility.cpp" />
-    <ClCompile Include="FireWeapon.cpp" />
-    <ClCompile Include="WinState.cpp" />
-    <ClCompile Include="Zombie.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Ammo.h" />
-    <ClInclude Include="AudioManager.h" />
-    <ClInclude Include="SpittingCreature.h" />
-    <ClInclude Include="Door.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameplayState.h" />
-    <ClInclude Include="GameState.h" />
-    <ClInclude Include="GameStateMachine.h" />
-    <ClInclude Include="Gun.h" />
-    <ClInclude Include="GunAmmo.h" />
-    <ClInclude Include="HealthKit.h" />
-    <ClInclude Include="HighScoreState.h" />
-    <ClInclude Include="Key.h" />
-    <ClInclude Include="LoseState.h" />
-    <ClInclude Include="MainMenuState.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="MapChars.h" />
-    <ClInclude Include="PlaceableActor.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Point.h" />
-    <ClInclude Include="SettingsState.h" />
-    <ClInclude Include="StateMachineExampleGame.h" />
-    <ClInclude Include="Utility.h" />
-    <ClInclude Include="FireWeapon.h" />
-    <ClInclude Include="WinState.h" />
-    <ClInclude Include="Zombie.h" />
+    <ClCompile Include="CGS_ProjectZ.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
