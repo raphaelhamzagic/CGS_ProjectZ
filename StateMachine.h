@@ -5,9 +5,9 @@ class State;
 class StateMachine
 {
 public:
-    virtual bool UpdateState(bool processInput = true);
     virtual void DrawCurrentState();
     virtual void ChangeState(State* pNewState);
+    virtual bool UpdateCurrentState(bool processInput = true);
 
 private:
     State* m_pCurrentState;

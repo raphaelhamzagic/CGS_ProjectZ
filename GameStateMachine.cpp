@@ -1,15 +1,16 @@
 #include "GameStateMachine.h"
-#include "State.h"
 #include "GameStateMainMenu.h"
+#include "State.h"
+#include "StateMachine.h"
 
-void GameStateMachine::ChangeState(GameState state)
+void GameStateMachine::ChangeState(const GameStateName state)
 {
     State* pNewState{};
     switch (state)
     {
-        case GameStateMachine::GameState::MAIN_MENU:
-            pNewState = new GameStateMainMenu;
+        case GameStateMachine::GameStateName::MAIN_MENU:
+            pNewState = new GameStateMainMenu{ this };
             break;
     }
-    ChangeState(pNewState);
+    StateMachine::ChangeState(pNewState);
 }

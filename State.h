@@ -3,7 +3,7 @@ class State
 {
 public:
     virtual void Enter();
-    virtual bool Update(bool processInput);
-    virtual void Draw();
     virtual void Exit();
+    virtual void Draw() = 0;
+    virtual bool Update(bool processInput) = 0;
 };

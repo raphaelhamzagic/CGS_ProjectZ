@@ -5,18 +5,18 @@
 Game::Game()
     : m_stateMachine{ new GameStateMachine{} }
 {
-    m_stateMachine->ChangeState(GameStateMachine::GameState::MAIN_MENU);
+    m_stateMachine->ChangeState(GameStateMachine::GameStateName::MAIN_MENU);
 }
 
 void Game::Loop()
 {
-    bool loop{};
+    bool leaveGameLoop{};
     do {
-        m_stateMachine->UpdateState(false);
+        m_stateMachine->UpdateCurrentState(false);
         m_stateMachine->DrawCurrentState();
-        loop = m_stateMachine->UpdateState(true);
+        leaveGameLoop = m_stateMachine->UpdateCurrentState(true);
     } 
-    while (loop);
+    while (!leaveGameLoop);
 }
 
 Game::~Game()
