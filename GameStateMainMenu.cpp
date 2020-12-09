@@ -63,8 +63,15 @@ bool GameStateMainMenu::ProcessInput()
 void GameStateMainMenu::Draw()
 {
     system("cls");
-    std::cout << "Main Menu:" << std::endl;
-    std::cout << static_cast<int>(MenuOption::OPTIONS) << ": Options" << std::endl;
+    std::cout << "MAIN MENU" << std::endl;
+    std::cout << "=========" << std::endl << std::endl;
+
     std::cout << static_cast<int>(MenuOption::PLAY) << ": Play" << std::endl;
+    std::cout << static_cast<int>(MenuOption::OPTIONS) << ": Options" << std::endl;
     std::cout << static_cast<int>(MenuOption::EXIT) << ": Exit" << std::endl;
+    std::cout << std::endl<< "Select an option: ";
+    if (m_isInvalidInput)
+    {
+        std::cout << std::endl << "Invalid option! Select an option: " << std::endl;
+    }
 }

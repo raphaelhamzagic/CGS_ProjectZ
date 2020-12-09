@@ -9,8 +9,8 @@ class GameStateMainMenu : public State
     bool m_isInvalidInput;
     enum class MenuOption
     {
-        OPTIONS = 1,
-        PLAY,
+        PLAY = 1,
+        OPTIONS,
         EXIT,
     };
 

@@ -3,10 +3,10 @@
 #include "State.h"
 #include "StateMachine.h"
 
-void GameStateMachine::ChangeState(const GameStateName state)
+void GameStateMachine::ChangeState(const GameStateName stateName)
 {
     State* pNewState{};
-    switch (state)
+    switch (stateName)
     {
         case GameStateMachine::GameStateName::MAIN_MENU:
             pNewState = new GameStateMainMenu{ this };
