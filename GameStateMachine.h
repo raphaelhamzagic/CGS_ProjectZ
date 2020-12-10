@@ -3,18 +3,15 @@
 
 class GameStateMachine : public StateMachine
 {
-public:
+    GameState* m_pCurrentGameState;
 
+public:
     enum class GameStateName
     {
+        GAMEPLAY,
         MAIN_MENU,
-        OPTIONS,
-        GAMEPLAY
+        OPTIONS
     };
-
-    // virtual bool UpdateState(bool processInput = true);
-    // virtual void DrawCurrentState();
-    // virtual void ChangeState(State* pNewState) override;
-    void ChangeState(const GameStateName stateName);
+    void ChangeState(const GameStateName stateName);    
 };
 

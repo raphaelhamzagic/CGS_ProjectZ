@@ -3,7 +3,7 @@
 #include "GameStateMachine.h"
 
 GameStateMainMenu::GameStateMainMenu(GameStateMachine* pGameStateMachine)
-    : m_pGameStateMachine{ pGameStateMachine }
+    : GameState{ pGameStateMachine }
 {
 }
 

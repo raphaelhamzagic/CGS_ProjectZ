@@ -140,16 +140,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameplayState.cpp" />
+    <ClCompile Include="GameplayStateLoading.cpp" />
+    <ClCompile Include="GameplayStateMachine.cpp" />
+    <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="GameStateGameplay.cpp" />
     <ClCompile Include="GameStateMachine.cpp" />
     <ClCompile Include="GameStateMainMenu.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameplayState.h" />
+    <ClInclude Include="GameplayStateLoading.h" />
+    <ClInclude Include="GameplayStateMachine.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateGameplay.h" />
     <ClInclude Include="GameStateMachine.h" />
     <ClInclude Include="GameStateMainMenu.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
   </ItemGroup>

@@ -9,6 +9,6 @@ public:
     virtual void ChangeState(State* pNewState);
     virtual bool UpdateCurrentState(bool processInput = true);
 
-private:
+protected:
     State* m_pCurrentState;
 };

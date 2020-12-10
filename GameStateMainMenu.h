@@ -1,11 +1,10 @@
 #pragma once
-#include "State.h"
+#include "GameState.h"
 
 class GameStateMachine;
 
-class GameStateMainMenu : public State
+class GameStateMainMenu : public GameState
 {
-    GameStateMachine* m_pGameStateMachine;
     bool m_isInvalidInput;
     enum class MenuOption
     {
