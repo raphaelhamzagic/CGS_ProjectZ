@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 class Level
 {
     int m_width;
@@ -6,5 +8,9 @@ class Level
 
 public:
     Level();
+    bool Load(std::string levelFileName);
+
+private:
+    void Convert(char* blueprintLayer, char* gameplayLayer);
 };
 
