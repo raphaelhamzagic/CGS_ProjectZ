@@ -1,6 +1,8 @@
 #pragma once
 #include "StateMachine.h"
 
+class GameState;
+
 class GameStateMachine : public StateMachine
 {
     GameState* m_pCurrentGameState;

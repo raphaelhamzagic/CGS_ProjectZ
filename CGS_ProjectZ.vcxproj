@@ -142,7 +142,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameplayState.cpp" />
     <ClCompile Include="GameplayStateLoading.cpp" />
-    <ClCompile Include="GameplayStateMachine.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateGameplay.cpp" />
     <ClCompile Include="GameStateMachine.cpp" />
@@ -156,7 +155,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameplayState.h" />
     <ClInclude Include="GameplayStateLoading.h" />
-    <ClInclude Include="GameplayStateMachine.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateGameplay.h" />
     <ClInclude Include="GameStateMachine.h" />

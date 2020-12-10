@@ -5,7 +5,7 @@
 class GameplayStateLoading : public GameplayState
 {
 public:
-    GameplayStateLoading(GameplayStateMachine* pGameplayStateMachine);
+    GameplayStateLoading(GameStateGameplay* pGameStateGameplay);
     virtual void Draw() override;
     virtual bool Update(bool processInput) override;
 };

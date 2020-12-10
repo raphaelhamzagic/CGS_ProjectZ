@@ -1,7 +1,7 @@
 #include "GameplayState.h"
-#include "GameplayStateMachine.h"
+#include "GameStateGameplay.h"
 
-GameplayState::GameplayState(GameplayStateMachine* pGameplayStateMachine)
-    : m_pGameplayStateMachine{ pGameplayStateMachine }
+GameplayState::GameplayState(GameStateGameplay* pGameStateGameplay)
+    : m_pGameStateGameplay{ pGameStateGameplay }
 {
 }

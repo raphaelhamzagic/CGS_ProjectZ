@@ -1,11 +1,11 @@
 #include <iostream>
 
 #include "GameplayStateLoading.h"
-#include "GameplayStateMachine.h"
+#include "GameStateGameplay.h"
 
 
-GameplayStateLoading::GameplayStateLoading(GameplayStateMachine* pGameplayStateMachine)
-    : GameplayState{ pGameplayStateMachine }
+GameplayStateLoading::GameplayStateLoading(GameStateGameplay* pGameStateGameplay)
+    : GameplayState{ pGameStateGameplay }
 {
 }
 
