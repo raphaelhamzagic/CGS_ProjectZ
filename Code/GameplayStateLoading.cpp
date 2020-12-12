@@ -8,8 +8,7 @@
 GameplayStateLoading::GameplayStateLoading(GameStateGameplay* pGameStateGameplay)
     : GameplayState{ pGameStateGameplay }
 {
-    Level* pLevel = m_pGameStateGameplay->GetLevel();
-    pLevel->Load("../Map/1.txt");
+    m_pGameStateGameplay->GetLevel()->Load("Map/1.txt");
 }
 
 void GameplayStateLoading::Draw()

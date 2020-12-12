@@ -1,0 +1,212 @@
+title ProjectZ
+https://sequencediagram.org/assets/open.svg
+participant Main
+participant Game
+participant GameStateMachine
+participant MainMenuState
+participant SettingsState
+participant GameplayState
+participant Level
+participant GameObject
+participant Player
+participant Enemy
+participant Key
+participant Door
+participant HealthKit
+participant LoseState
+participant WinState
+participant HighScoreState
+
+bottomparticipants
+
+Main->Game : Initialize()
+Game->GameStateMachine : Init()
+GameStateMachine-->Game : 
+Game-->Main : 
+
+Main -> Game : RunGameLoop()
+loop !quit
+
+  expandable− quit = Update()
+    Game -> Game : Update(processInput):bool
+    Game -> GameStateMachine : UpdateCurrentState(processInput):bool
+    alt MainMenu
+      expandable+ MainMenu
+        GameStateMachine -> MainMenuState : Update(processInput):bool
+        MainMenuState-->GameStateMachine : 
+      end
+      
+    else Settings
+      expandable+ Settings
+        GameStateMachine -> SettingsState : Update(processInput):bool
+        SettingsState-->GameStateMachine : 
+      end
+      
+    else Gameplay
+      expandable+ Gameplay
+        GameStateMachine -> GameplayState : Update(processInput):bool
+        GameplayState->GameplayState : IsGameOver():bool
+        alt no
+          GameplayState -> Level : Update(processInput)
+          expandable− Player->Update(processInput, pLevel)
+            Level -> Player : Update(processInput, pLevel)
+
+            alt Move
+              expandable− 
+                Player->Player : Move(newX, newY)
+                Player->Player : HandleCollisions(newX, newY)
+                Player->Level : GetGameOject(newX, newY)
+                Level-->Player : GameObject
+                alt Empty
+                  Player->Player : SetPosition(newX, newY)
+
+                else Zombie
+                  Player->Player : TakeDamage(directionX, directionY, damage)
+
+                else Key
+                  Player->Player : HasKey()
+                  alt no
+                  Player->Player : PickupKey()
+                  Player->Key : SetActive(false)
+                  Key-->Player : 
+                  Player->Player : SetPosition(newX, newY)
+                  end
+
+                else Door
+                  Player->Player : HasKey()
+                  alt yes
+                  Player->Player : UseKey()
+                  Player->Door : Open()
+                  Door-->Player :        
+                  end
+
+                else Health Kit
+                  Player->Player : PickupHealthKit()
+                  Player->HealthKit : SetActive(true)
+                  HealthKit --> Player :
+
+                else Weapon
+                  Player->Player : PickupWeapon
+
+                else Ammo
+                  Player->Player : PickupAmmo
+
+                end
+              end
+
+            else Strike
+              expandable− 
+                Player->Player : Strike(x, y, directionX, directionY)
+                alt PlayerHasWeapon()
+                  loop x+directionX, y+directionY
+                    Player->Level : GetGameOject(x+directionX, y+directionY)
+                    Level-->Player : GameObject
+                    alt Enemy
+                      Player->Enemy : TakeDamage (directionX, directionY, damage)
+                      Enemy-->Player : 
+                    end
+                  end
+                end
+              end
+
+            else Drop key
+              expandable−
+                alt PlayerHasKey()
+                  Player->Player : DropKey()
+                  Player->Key : Place(x, y)
+                  Key->Key : SetActive(true)
+                  Key-->Player : 
+                end
+              end
+            end
+
+            Player --> Level :
+          end
+
+          loop Level GameObjects
+            Level->GameObject : Update(processInput, pLevel)
+            GameObject-->Level : 
+          end
+        end 
+        Level --> GameplayState :
+        GameplayState-->GameStateMachine :
+      end
+      
+    else Lose
+      expandable+ Lose
+        GameStateMachine -> LoseState : Update(processInput):bool
+        LoseState-->GameStateMachine : 
+      end
+      
+    else Win
+      expandable+ Win
+        GameStateMachine -> WinState : Update(processInput):bool
+        WinState-->GameStateMachine : 
+      end
+      
+    else HighScore
+      expandable+ HighScore
+        GameStateMachine -> HighScoreState : Update(processInput):bool
+        HighScoreState-->GameStateMachine : 
+      end
+    end
+    
+     
+    GameStateMachine-->Game : 
+  end
+  # update
+
+  expandable− Draw
+    Game->Game : Draw()
+    Game -> GameStateMachine : Draw()
+	alt MainMenu
+      expandable+ MainMenu
+      	GameStateMachine -> MainMenuState : Draw()
+        MainMenuState-->GameStateMachine : 
+      end
+    else Settings
+      expandable+ Settings
+      	GameStateMachine -> SettingsState : Draw()
+        SettingsState-->GameStateMachine : 
+      end
+    else Gameplay
+      expandable+ Gameplay
+        GameStateMachine -> GameplayState : Draw()
+
+        GameplayState -> Level : Draw()
+
+        Level -> Player : Draw()
+        Player --> Level :
+        loop Level GameObjects
+          Level->GameObject : Draw()
+          GameObject-->Level : 
+        end
+        Player --> Level :
+
+        Level -->GameplayState : 
+        GameplayState --> GameStateMachine : 
+      end
+    else Lose
+      expandable+ Lose
+      	GameStateMachine -> LoseState : Draw()
+        LoseState-->GameStateMachine : 
+      end
+    else Win
+      expandable+ Win
+      	GameStateMachine -> WinState : Draw()
+        WinState-->GameStateMachine : 
+      end
+    else HighScore
+      expandable+ HighScore
+      	GameStateMachine -> HighScoreState : Draw()
+        HighScoreState-->GameStateMachine : 
+      end
+    end
+    GameStateMachine-->Game : 
+  end
+  # draw
+  
+end
+# loop
+
+Game --> Main :

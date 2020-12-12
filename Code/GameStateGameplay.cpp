@@ -5,6 +5,8 @@
 
 GameStateGameplay::GameStateGameplay(GameStateMachine* pGameStateMachine)
     : GameState{ pGameStateMachine }
+    , m_pLevel{new Level}
+    , m_pCurrentState{nullptr}
 {
     StateChange(GameplayStateName::LOADING);
 }
