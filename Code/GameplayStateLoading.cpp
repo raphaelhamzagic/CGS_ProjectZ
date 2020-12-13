@@ -9,6 +9,7 @@ GameplayStateLoading::GameplayStateLoading(GameStateGameplay* pGameStateGameplay
     : GameplayState{ pGameStateGameplay }
 {
     m_pGameStateGameplay->GetLevel()->Load("Map/1.txt");
+    pGameStateGameplay->
 }
 
 void GameplayStateLoading::Draw()
@@ -19,6 +20,5 @@ void GameplayStateLoading::Draw()
 
 bool GameplayStateLoading::Update(bool processInput)
 {
-    system("pause");
     return false;
 }

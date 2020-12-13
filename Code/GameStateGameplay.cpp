@@ -34,6 +34,10 @@ void GameStateGameplay::StateChange(const GameplayStateName stateName)
         case GameplayStateName::LOADING:
             m_pCurrentState = new GameplayStateLoading{ this };
             break;
+        case GameplayStateName::PLAYING:
+            // TODO
+            m_pCurrentState = new GameplayStateLoading{ this };
+            break;
     }
     m_pCurrentState->Enter();
 }
