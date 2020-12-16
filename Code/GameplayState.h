@@ -9,6 +9,7 @@ protected:
     GameStateGameplay* m_pGameStateGameplay;
 
 public:
-    GameplayState(GameStateGameplay* pGameStateGameplay);    
+    GameplayState(GameStateGameplay* pGameStateGameplay);
+    virtual bool Update(bool processInput);
 };
 

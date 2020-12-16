@@ -22,8 +22,8 @@ bool Level::Load(std::string fileName)
     levelFile.open(fileName);
     if (levelFile)
     {
-        constexpr int bufferSize{ 100 };
-        char buffer[bufferSize]{};
+        constexpr int bufferSize{ 10 };
+        char buffer[bufferSize]{ };
 
         levelFile.getline(buffer, bufferSize, '\n');
         m_width = std::atoi(buffer);
@@ -33,46 +33,46 @@ bool Level::Load(std::string fileName)
 
         if (m_width != 0 && m_height != 0)
         {
-            char* pBlueprintLayer = new char[m_height * m_width]{};            
+            int bufferSize = m_width + 1;
+            char* pBuffer = new char[bufferSize] {};
+
+            std::vector<char> blueprintLayer{};
             for (int i = 0; i < m_height; i++)
             {
-                levelFile.getline(buffer, bufferSize+1, '\n');
-                CharCopy(buffer, pBlueprintLayer, 0, bufferSize, (bufferSize * i));
+                levelFile.getline(pBuffer, bufferSize, '\n');
+                for (int c = 0; c < bufferSize; c++)
+                {
+                    blueprintLayer.push_back(*(pBuffer+c));
+                }
             }
 
-            char* pGameplayLayer = new char[m_height * m_width]{};
+            std::vector<char> gameplayLayer{};
             for (int i = 0; i < m_height; i++)
             {
-                levelFile.getline(buffer, bufferSize + 1, '\n');
-                CharCopy(buffer, pGameplayLayer, 0, bufferSize, (bufferSize * i));
+                levelFile.getline(pBuffer, bufferSize, '\n');
+                for (int c = 0; c < bufferSize; c++)
+                {
+                    gameplayLayer.push_back(*(pBuffer + c));
+                }
             }
 
-            Build(pBlueprintLayer, pGameplayLayer);
+            delete[] pBuffer;
+            Build(blueprintLayer, gameplayLayer);
         }
-
-        levelFile.close();
     }
+    levelFile.close();
 
     return success;
 }
 
-void Level::CharCopy(char* pOrigin, char* pDestination, int originIndex, int count, int destinationIndex)
-{
-    int limit = (originIndex + count) - originIndex;
-    for (int i = originIndex; i < limit; i++)
-    {
-        pDestination[i + destinationIndex] = pOrigin[i + originIndex];
-    }
-}
-
-void Level::Build(char* pBlueprintLayer, char* pGameplayLayer)
+void Level::Build(const std::vector<char> &blueprintLayer, const std::vector<char> &gameplayLayer)
 {
     for (int y = 0; y < m_height; y++)
     {
         for (int x = 0; x < m_width; x++)
         {
             int mapIndex = MapIndexGet(x, y);
-            switch (pBlueprintLayer[mapIndex])
+            switch (blueprintLayer[mapIndex])
             {
                 case '+':
                 case '-':

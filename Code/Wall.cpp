@@ -1,14 +1,6 @@
-#include <iostream>
 #include "Wall.h"
 
-
-
 Wall::Wall(int x, int y)
-    : GameObject{x, y}
+    : GameObject{x, y, Wall::kMainSymbol, GameObjectType::WALL}
 {
-}
-
-void Wall::Draw()
-{
-    std::cout << (char)219;
 }

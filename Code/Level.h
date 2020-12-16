@@ -16,8 +16,7 @@ public:
     void Draw();
 
 private:
-    void Build(char* blueprintLayer, char* gameplayLayer);
-    void CharCopy(char* pOrigin, char* pDestination, int originIndex, int count, int destinationIndex);
+    void Build(const std::vector<char> &blueprintLayer, const std::vector<char> &gameplayLayer);
     int MapIndexGet(int x, int y);
 };
 

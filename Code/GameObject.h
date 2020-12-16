@@ -13,14 +13,39 @@ public:
         KEY,
         AMMO
     };
+    enum class GameObjectColor
+    {
+        Blue = 1,
+        Green = 2,
+        Cyan = 3,
+        Red = 4,
+        Magenta = 5,
+        Brown = 6,
+        LightGray = 7,
+        DarkGray = 8,
+        LightBlue = 9,
+        LightGreen = 10,
+        LightCyan = 11,
+        LightRed = 12,
+        LightMagenta = 13,
+        Yellow = 14,
+        White = 15,
+        SolidGreen = 34,
+        SolidRed = 68,
+        SolidBlue = 153,
+        Default = 7
+    };
 
-    GameObject(int x, int y);
+    GameObject(int x, int y, char mainSymbol, GameObjectType type, GameObjectColor mainColor = GameObjectColor::LightGray);
     virtual void Draw();
-    virtual void Update(bool processInput, Level* pLevel);
+    virtual void Update(bool processInput);
 
 private:
     GameObjectType m_type;
+    GameObjectColor m_mainColor;
+
     int m_x;
     int m_y;
+    char m_mainSymbol;
 };
 

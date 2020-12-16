@@ -6,6 +6,7 @@ class Wall : public GameObject
 {
 public:
     Wall(int x, int y);
-    virtual void Draw() override;
+private:
+    static char constexpr kMainSymbol = (char)219;
 };
 

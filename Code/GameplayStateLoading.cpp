@@ -8,17 +8,12 @@
 GameplayStateLoading::GameplayStateLoading(GameStateGameplay* pGameStateGameplay)
     : GameplayState{ pGameStateGameplay }
 {
-    m_pGameStateGameplay->GetLevel()->Load("Map/1.txt");
-    pGameStateGameplay->
+    m_pGameStateGameplay->LevelGet()->Load("Map/1.txt");
+    m_pGameStateGameplay->StateChange(GameStateGameplay::GameplayStateName::PLAYING);
 }
 
 void GameplayStateLoading::Draw()
 {
     system("cls");
     std::cout << "Loading..." << std::endl;
-}
-
-bool GameplayStateLoading::Update(bool processInput)
-{
-    return false;
 }

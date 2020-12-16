@@ -1,52 +1,52 @@
 #include "GameStateGameplay.h"
 #include "GameplayState.h"
 #include "GameplayStateLoading.h"
+#include "GameplayStatePlaying.h"
 #include "Level.h"
 
 GameStateGameplay::GameStateGameplay(GameStateMachine* pGameStateMachine)
     : GameState{ pGameStateMachine }
     , m_pLevel{new Level}
-    , m_pCurrentState{nullptr}
+    , m_pState{nullptr}
 {
     StateChange(GameplayStateName::LOADING);
 }
 
-Level* GameStateGameplay::GetLevel()
+Level* GameStateGameplay::LevelGet()
 {
     return m_pLevel;
 }
 
 void GameStateGameplay::Draw()
 {
-    m_pCurrentState->Draw();
+    m_pState->Draw();
 }
 
 bool GameStateGameplay::Update(bool processInput)
 {
-    return m_pCurrentState->Update(processInput);
+    return m_pState->Update(processInput);
 }
 
 void GameStateGameplay::StateChange(const GameplayStateName stateName)
 {
-    CurrentStateExit();
+    StateExit();
     switch (stateName)
     {
         case GameplayStateName::LOADING:
-            m_pCurrentState = new GameplayStateLoading{ this };
+            m_pState = new GameplayStateLoading{ this };
             break;
         case GameplayStateName::PLAYING:
-            // TODO
-            m_pCurrentState = new GameplayStateLoading{ this };
+            m_pState = new GameplayStatePlaying{ this };
             break;
     }
-    m_pCurrentState->Enter();
+    m_pState->Enter();
 }
 
-void GameStateGameplay::CurrentStateExit()
+void GameStateGameplay::StateExit()
 {
-    if (m_pCurrentState != nullptr)
+    if (m_pState != nullptr)
     {
-        m_pCurrentState->Exit();
-        delete m_pCurrentState;
+        m_pState->Exit();
+        delete m_pState;
     }
 }

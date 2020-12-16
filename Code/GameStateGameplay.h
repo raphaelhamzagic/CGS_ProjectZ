@@ -7,7 +7,7 @@ class Level;
 
 class GameStateGameplay : public GameState
 {  
-    GameplayState* m_pCurrentState;
+    GameplayState* m_pState;
     Level* m_pLevel;
 
 public:
@@ -25,9 +25,9 @@ public:
     virtual bool Update(bool processInput) override;
     void StateChange(const GameplayStateName stateName);
     
-    Level* GetLevel();
+    Level* LevelGet();
 
 private:
-    void CurrentStateExit();
+    void StateExit();
 };
 

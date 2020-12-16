@@ -16,4 +16,3 @@ public:
     };
     void ChangeState(const GameStateName stateName);    
 };
-
