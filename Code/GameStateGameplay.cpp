@@ -7,9 +7,8 @@
 GameStateGameplay::GameStateGameplay(GameStateMachine* pGameStateMachine)
     : GameState{ pGameStateMachine }
     , m_pLevel{new Level}
-    , m_pState{nullptr}
+    , m_state{GameplayState::LOADING}
 {
-    StateChange(GameplayStateName::LOADING);
 }
 
 Level* GameStateGameplay::LevelGet()
@@ -17,36 +16,46 @@ Level* GameStateGameplay::LevelGet()
     return m_pLevel;
 }
 
+bool GameStateGameplay::PlayingStateUpdate(bool processInput)
+{
+    return m_pLevel->Update(processInput);
+}
+
+void GameStateGameplay::PlayingStateDraw()
+{
+    system("cls");
+    m_pLevel->Draw();
+}
+
 void GameStateGameplay::Draw()
 {
-    m_pState->Draw();
+    switch (m_state)
+    {
+        case GameplayState::LOADING:
+            system("cls");
+            std::cout << "Loading..." << std::endl;
+            break;
+
+        case GameplayState::PLAYING:
+            PlayingStateDraw();
+            break;
+    }
 }
 
 bool GameStateGameplay::Update(bool processInput)
 {
-    return m_pState->Update(processInput);
-}
-
-void GameStateGameplay::StateChange(const GameplayStateName stateName)
-{
-    StateExit();
-    switch (stateName)
+    bool leaveMainGameLoop { false };
+    switch (m_state)
     {
-        case GameplayStateName::LOADING:
-            m_pState = new GameplayStateLoading{ this };
+        case GameplayState::LOADING:
+        {
+            m_pLevel->Load("Map/1.txt");
+            m_state = GameplayState::PLAYING;
             break;
-        case GameplayStateName::PLAYING:
-            m_pState = new GameplayStatePlaying{ this };
+        }
+        case GameplayState::PLAYING:
+            leaveMainGameLoop = PlayingStateUpdate(processInput);
             break;
     }
-    m_pState->Enter();
-}
-
-void GameStateGameplay::StateExit()
-{
-    if (m_pState != nullptr)
-    {
-        m_pState->Exit();
-        delete m_pState;
-    }
+    return leaveMainGameLoop;
 }

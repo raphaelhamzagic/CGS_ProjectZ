@@ -13,7 +13,7 @@ GameObject::GameObject(int x, int y, char mainSymbol, GameObjectType type, GameO
 
 void GameObject::Draw()
 {
-    HANDLE console{};
+    HANDLE console{ GetStdHandle(STD_OUTPUT_HANDLE) };
     COORD cursorPosition{ m_x, m_y };
     SetConsoleCursorPosition(console, cursorPosition);
     int color = static_cast<int>(m_mainColor);

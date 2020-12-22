@@ -13,10 +13,12 @@ class Level
 public:
     Level();
     bool Load(std::string levelFileName);
+    bool Update(bool processInput);
     void Draw();
 
 private:
     void Build(const std::vector<char> &blueprintLayer, const std::vector<char> &gameplayLayer);
     int MapIndexGet(int x, int y);
+    void ProcessInput();
 };
 

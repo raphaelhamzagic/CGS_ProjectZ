@@ -1,6 +1,8 @@
 #include <fstream>
+// #include <iostream>
 #include <string>
 #include <vector>
+#include <conio.h>
 
 #include "Level.h"
 #include "Wall.h"
@@ -40,7 +42,7 @@ bool Level::Load(std::string fileName)
             for (int i = 0; i < m_height; i++)
             {
                 levelFile.getline(pBuffer, bufferSize, '\n');
-                for (int c = 0; c < bufferSize; c++)
+                for (int c = 0; c < m_width; c++)
                 {
                     blueprintLayer.push_back(*(pBuffer+c));
                 }
@@ -50,7 +52,7 @@ bool Level::Load(std::string fileName)
             for (int i = 0; i < m_height; i++)
             {
                 levelFile.getline(pBuffer, bufferSize, '\n');
-                for (int c = 0; c < bufferSize; c++)
+                for (int c = 0; c < m_width; c++)
                 {
                     gameplayLayer.push_back(*(pBuffer + c));
                 }
@@ -63,6 +65,20 @@ bool Level::Load(std::string fileName)
     levelFile.close();
 
     return success;
+}
+
+bool Level::Update(bool processInput)
+{
+    if (processInput)
+    {
+        ProcessInput();
+    }
+    return false;
+}
+
+void Level::ProcessInput()
+{
+    int input = _getch();
 }
 
 void Level::Build(const std::vector<char> &blueprintLayer, const std::vector<char> &gameplayLayer)

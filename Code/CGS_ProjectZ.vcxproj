@@ -75,9 +75,6 @@
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameplayState.cpp" />
-    <ClCompile Include="GameplayStateLoading.cpp" />
-    <ClCompile Include="GameplayStatePlaying.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateGameplay.cpp" />
     <ClCompile Include="GameStateMachine.cpp" />
@@ -91,9 +88,6 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameplayState.h" />
-    <ClInclude Include="GameplayStateLoading.h" />
-    <ClInclude Include="GameplayStatePlaying.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateGameplay.h" />
     <ClInclude Include="GameStateMachine.h" />
