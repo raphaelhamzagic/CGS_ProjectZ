@@ -12,7 +12,6 @@ class Level
     std::vector<GameObject*>* m_pGameObjects;
     Player* m_pPlayer;
 
-
 public:
     Level();
     bool Load(std::string levelFileName);

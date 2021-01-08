@@ -69,12 +69,6 @@ bool Level::Load(std::string fileName)
     return success;
 }
 
-bool Level::Update(bool processInput)
-{
-    m_pPlayer->Update(processInput, this);
-    return false;
-}
-
 void Level::Build(const std::vector<char> &blueprintLayer, const std::vector<char> &gameplayLayer)
 {
     for (int y = 0; y < m_height; y++)
@@ -110,6 +104,16 @@ void Level::Build(const std::vector<char> &blueprintLayer, const std::vector<cha
 int Level::MapIndexGet(int x, int y)
 {
     return (y * m_width) + x;
+}
+
+bool Level::Update(bool processInput)
+{
+    m_pPlayer->Update(processInput, this);
+    for (auto pGameObject = m_pGameObjects->begin(); pGameObject != m_pGameObjects->end(); ++pGameObject)
+    {
+        (*pGameObject)->Update(processInput, this);
+    }
+    return false;
 }
 
 void Level::Draw()

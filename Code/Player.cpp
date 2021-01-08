@@ -19,30 +19,32 @@ void Player::Update(bool processInput, Level* pLevel)
         int y = m_y;
 
         int input = _getch();
+        int arrowInput{};
 
         if (input == Keyboard::Arrow)
         {
-            input = _getch();
-            if (input == Keyboard::ArrowUp || (char)input == 'W' || (char)input == 'w')
-            {
-                --y;
-                m_mainSymbol = kGoingUpSymbol;
-            }
-            else if (input == Keyboard::ArrowDown || (char)input == 'S' || (char)input == 's')
-            {
-                ++y;
-                m_mainSymbol = kGoingDownSymbol;
-            }
-            else if (input == Keyboard::ArrowRight || (char)input == 'A' || (char)input == 'a')
-            {
-                ++x;
-                m_mainSymbol = kGoingRightSymbol;
-            }
-            else
-            {
-                --x;
-                m_mainSymbol = kGoingLeftSymbol;
-            }
+            arrowInput = _getch();
+        }
+
+        if ((input == Keyboard::Arrow && arrowInput == Keyboard::ArrowUp) || ((char)input == 'W' || (char)input == 'w'))
+        {
+            --y;
+            m_mainSymbol = kGoingUpSymbol;
+        }
+        else if ((input == Keyboard::Arrow && arrowInput == Keyboard::ArrowDown) || ((char)input == 'S' || (char)input == 's'))
+        {
+            ++y;
+            m_mainSymbol = kGoingDownSymbol;
+        }
+        else if ((input == Keyboard::Arrow && arrowInput == Keyboard::ArrowRight) || ((char)input == 'D' || (char)input == 'd'))
+        {
+            ++x;
+            m_mainSymbol = kGoingRightSymbol;
+        }
+        else if ((input == Keyboard::Arrow && arrowInput == Keyboard::ArrowLeft) || ((char)input == 'A' || (char)input == 'a'))
+        {
+            --x;
+            m_mainSymbol = kGoingLeftSymbol;
         }
 
         GameObject* gameObject = pLevel->GameObjectGet(x, y);
