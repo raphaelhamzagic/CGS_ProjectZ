@@ -79,8 +79,10 @@
     <ClCompile Include="GameStateGameplay.cpp" />
     <ClCompile Include="GameStateMachine.cpp" />
     <ClCompile Include="GameStateMainMenu.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -92,7 +94,9 @@
     <ClInclude Include="GameStateGameplay.h" />
     <ClInclude Include="GameStateMachine.h" />
     <ClInclude Include="GameStateMainMenu.h" />
+    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Wall.h" />

@@ -23,6 +23,16 @@ void GameObject::Draw()
     SetConsoleTextAttribute(console, color);
 }
 
-void GameObject::Update(bool processInput)
+void GameObject::Update(bool processInput, Level* pLevel)
 {
+}
+
+int GameObject::GetX()
+{
+    return m_x;
+}
+
+int GameObject::GetY()
+{
+    return m_y;
 }

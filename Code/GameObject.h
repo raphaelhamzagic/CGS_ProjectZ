@@ -11,7 +11,8 @@ public:
         DOOR,
         ZOMBIE,
         KEY,
-        AMMO
+        AMMO,
+        PLAYER
     };
     enum class GameObjectColor
     {
@@ -38,12 +39,13 @@ public:
 
     GameObject(int x, int y, char mainSymbol, GameObjectType type, GameObjectColor mainColor = GameObjectColor::LightGray);
     virtual void Draw();
-    virtual void Update(bool processInput);
+    virtual void Update(bool processInput, Level* pLevel);
+    int GetX();
+    int GetY();
 
-private:
+protected:
     GameObjectType m_type;
     GameObjectColor m_mainColor;
-
     int m_x;
     int m_y;
     char m_mainSymbol;

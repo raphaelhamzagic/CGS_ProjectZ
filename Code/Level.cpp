@@ -2,17 +2,19 @@
 // #include <iostream>
 #include <string>
 #include <vector>
-#include <conio.h>
+
 
 #include "Level.h"
 #include "Wall.h"
 #include "GameObject.h"
+#include "Player.h"
 
 
 Level::Level()
     : m_height{0}
     , m_width{0}
     , m_pGameObjects{ new std::vector<GameObject*>{} }
+    , m_pPlayer{ nullptr }
 {
 }
 
@@ -69,16 +71,8 @@ bool Level::Load(std::string fileName)
 
 bool Level::Update(bool processInput)
 {
-    if (processInput)
-    {
-        ProcessInput();
-    }
+    m_pPlayer->Update(processInput, this);
     return false;
-}
-
-void Level::ProcessInput()
-{
-    int input = _getch();
 }
 
 void Level::Build(const std::vector<char> &blueprintLayer, const std::vector<char> &gameplayLayer)
@@ -96,6 +90,19 @@ void Level::Build(const std::vector<char> &blueprintLayer, const std::vector<cha
                     m_pGameObjects->push_back(new Wall{ x, y});
                     break;
             }
+
+            switch (gameplayLayer[mapIndex])
+            {
+                case '+':
+                case '-':
+                case '|':
+                case ' ':
+                    break;
+
+                case '@':
+                    m_pPlayer = new Player{x, y};
+                    break;
+            }
         }
     }
 }
@@ -107,8 +114,21 @@ int Level::MapIndexGet(int x, int y)
 
 void Level::Draw()
 {
+    m_pPlayer->Draw();
     for (auto pGameObject = m_pGameObjects->begin(); pGameObject != m_pGameObjects->end(); ++pGameObject)
     {
         (*pGameObject)->Draw();
     }
+}
+
+GameObject* Level::GameObjectGet(int x, int y)
+{
+    for (auto pGameObject = m_pGameObjects->begin(); pGameObject != m_pGameObjects->end(); ++pGameObject)
+    {
+        if ((*pGameObject)->GetX() == x && (*pGameObject)->GetY() == y)
+        {
+            return (*pGameObject);
+        }
+    }
+    return nullptr;
 }
