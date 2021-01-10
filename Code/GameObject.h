@@ -37,17 +37,19 @@ public:
         Default = 7
     };
 
-    GameObject(int x, int y, char mainSymbol, GameObjectType type, GameObjectColor mainColor = GameObjectColor::LightGray);
+    GameObject(int x, int y, char mainSymbol, GameObjectType type, Level* pLevel, GameObjectColor color = GameObjectColor::LightGray);
     virtual void Draw();
-    virtual void Update(bool processInput, Level* pLevel);
+    virtual void Update(bool processInput);
     int GetX();
     int GetY();
 
 protected:
     GameObjectType m_type;
-    GameObjectColor m_mainColor;
+    GameObjectColor m_color;
+    bool m_active;
     int m_x;
     int m_y;
-    char m_mainSymbol;
+    char m_symbol;
+    Level* m_pLevel;
 };
 

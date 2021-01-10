@@ -4,14 +4,14 @@
 class Level;
 class Player : public GameObject
 {
-    static char constexpr kGoingRightSymbol = '>';
-    static char constexpr kGoingLeftSymbol = '<';
-    static char constexpr kGoingUpSymbol = '^';
-    static char constexpr kGoingDownSymbol = 'v';
-    static char constexpr kDeadSymbol = 'X';
+    static constexpr char kGoingRightSymbol = '>';
+    static constexpr char kGoingLeftSymbol = '<';
+    static constexpr char kGoingUpSymbol = '^';
+    static constexpr char kGoingDownSymbol = 'v';
+    static constexpr char kDeadSymbol = 'X';
 
 public:
-    Player(int x, int y);
-    virtual void Update(bool processInput, Level* pLevel) override;
+    Player(int x, int y, Level* pLevel);
+    virtual void Update(bool processInput) override;
 };
 

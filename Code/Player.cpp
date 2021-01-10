@@ -6,12 +6,12 @@
 #include "Level.h"
 
 
-Player::Player(int x, int y)
-    : GameObject{ x, y, Player::kGoingRightSymbol, GameObjectType::PLAYER }
+Player::Player(int x, int y, Level* pLevel)
+    : GameObject{ x, y, Player::kGoingRightSymbol, GameObjectType::PLAYER, pLevel }
 {
 }
 
-void Player::Update(bool processInput, Level* pLevel)
+void Player::Update(bool processInput)
 {
     if (processInput)
     {
@@ -29,25 +29,25 @@ void Player::Update(bool processInput, Level* pLevel)
         if ((input == Keyboard::Arrow && arrowInput == Keyboard::ArrowUp) || ((char)input == 'W' || (char)input == 'w'))
         {
             --y;
-            m_mainSymbol = kGoingUpSymbol;
+            m_symbol = kGoingUpSymbol;
         }
         else if ((input == Keyboard::Arrow && arrowInput == Keyboard::ArrowDown) || ((char)input == 'S' || (char)input == 's'))
         {
             ++y;
-            m_mainSymbol = kGoingDownSymbol;
+            m_symbol = kGoingDownSymbol;
         }
         else if ((input == Keyboard::Arrow && arrowInput == Keyboard::ArrowRight) || ((char)input == 'D' || (char)input == 'd'))
         {
             ++x;
-            m_mainSymbol = kGoingRightSymbol;
+            m_symbol = kGoingRightSymbol;
         }
         else if ((input == Keyboard::Arrow && arrowInput == Keyboard::ArrowLeft) || ((char)input == 'A' || (char)input == 'a'))
         {
             --x;
-            m_mainSymbol = kGoingLeftSymbol;
+            m_symbol = kGoingLeftSymbol;
         }
 
-        GameObject* gameObject = pLevel->GameObjectGet(x, y);
+        GameObject* gameObject = m_pLevel->GameObjectGet(x, y);
         if (gameObject != nullptr)
         {
 

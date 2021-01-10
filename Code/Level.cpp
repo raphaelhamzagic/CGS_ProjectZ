@@ -8,6 +8,7 @@
 #include "Wall.h"
 #include "GameObject.h"
 #include "Player.h"
+#include "Zombie.h"
 
 
 Level::Level()
@@ -81,7 +82,7 @@ void Level::Build(const std::vector<char> &blueprintLayer, const std::vector<cha
                 case '+':
                 case '-':
                 case '|':
-                    m_pGameObjects->push_back(new Wall{ x, y});
+                    m_pGameObjects->push_back(new Wall{ x, y, this});
                     break;
             }
 
@@ -94,7 +95,11 @@ void Level::Build(const std::vector<char> &blueprintLayer, const std::vector<cha
                     break;
 
                 case '@':
-                    m_pPlayer = new Player{x, y};
+                    m_pPlayer = new Player{x, y, this};
+                    break;
+
+                case 'z':
+                    m_pGameObjects->push_back(new Zombie{ x, y, this });
                     break;
             }
         }
@@ -108,10 +113,10 @@ int Level::MapIndexGet(int x, int y)
 
 bool Level::Update(bool processInput)
 {
-    m_pPlayer->Update(processInput, this);
+    m_pPlayer->Update(processInput);
     for (auto pGameObject = m_pGameObjects->begin(); pGameObject != m_pGameObjects->end(); ++pGameObject)
     {
-        (*pGameObject)->Update(processInput, this);
+        (*pGameObject)->Update(processInput);
     }
     return false;
 }
