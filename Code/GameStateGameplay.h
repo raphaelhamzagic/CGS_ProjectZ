@@ -21,7 +21,7 @@ public:
 
     virtual void Draw() override;
     virtual bool Update(bool processInput) override;
-
+    void Lose();
     Level* LevelGet();
 
 private:

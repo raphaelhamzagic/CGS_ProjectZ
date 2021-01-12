@@ -7,8 +7,9 @@
 
 
 Player::Player(int x, int y, Level* pLevel)
-    : GameObject{ x, y, Player::kGoingRightSymbol, GameObjectType::PLAYER, pLevel }
+    : GameObject{ x, y, Player::kGoingRightSymbol, GameObjectType::PLAYER, pLevel, GameObject::GameObjectColor::LightGreen }
 {
+    m_health = kInitialHealth;
 }
 
 void Player::Update(bool processInput)
@@ -58,4 +59,28 @@ void Player::Update(bool processInput)
             m_y = y;
         }
     }
+}
+
+void Player::TakeDamage(int directionX, int directionY, int damage)
+{
+    GameObject::TakeDamage(directionX, directionY, damage);
+    switch (m_health)
+    {
+        case 2:
+            m_color = GameObject::GameObjectColor::Yellow;
+            break;
+        case 1:
+            m_color = GameObject::GameObjectColor::Brown;
+            break;
+        case 0:
+            m_color = GameObject::GameObjectColor::Red;
+            m_symbol = kDeadSymbol;
+            m_active = true;
+            break;
+    }
+}
+
+bool Player::IsAlive()
+{
+    return m_health > 0;
 }

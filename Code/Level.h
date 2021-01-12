@@ -17,7 +17,9 @@ public:
     bool Load(std::string levelFileName);
     bool Update(bool processInput);
     void Draw();
+
     GameObject* GameObjectGet(int x, int y);
+    Player* PlayerGet();
 
 private:
     void Build(const std::vector<char> &blueprintLayer, const std::vector<char> &gameplayLayer);

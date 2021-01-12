@@ -1,7 +1,6 @@
 #include "GameStateGameplay.h"
 #include "GameplayState.h"
-#include "GameplayStateLoading.h"
-#include "GameplayStatePlaying.h"
+
 #include "Level.h"
 
 GameStateGameplay::GameStateGameplay(GameStateMachine* pGameStateMachine)
@@ -49,7 +48,7 @@ bool GameStateGameplay::Update(bool processInput)
     {
         case GameplayState::LOADING:
         {
-            m_pLevel->Load("Map/1.txt");
+            m_pLevel->Load("Map/2.txt");
             m_state = GameplayState::PLAYING;
             break;
         }
@@ -58,4 +57,9 @@ bool GameStateGameplay::Update(bool processInput)
             break;
     }
     return leaveMainGameLoop;
+}
+
+void GameStateGameplay::Lose()
+{
+    m_state = GameplayState::LOADING;
 }

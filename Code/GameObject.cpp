@@ -4,6 +4,7 @@
 
 GameObject::GameObject(int x, int y, char symbol, GameObjectType type, Level* pLevel, GameObjectColor color)
     : m_active{ true }
+    , m_health{1}
     , m_x {x}
     , m_y{y}
     , m_symbol{symbol}
@@ -30,6 +31,23 @@ void GameObject::Draw()
 
 void GameObject::Update(bool processInput)
 {
+}
+
+void GameObject::TakeDamage(int directionX, int directionY, int damage)
+{
+    if (m_active)
+    {
+        --m_health;
+        if (m_health <= 0)
+        {
+            m_active = false;
+        }
+    }    
+}
+
+GameObject::GameObjectType GameObject::TypeGet()
+{
+    return m_type;
 }
 
 int GameObject::GetX()

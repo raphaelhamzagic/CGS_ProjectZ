@@ -141,3 +141,8 @@ GameObject* Level::GameObjectGet(int x, int y)
     }
     return nullptr;
 }
+
+Player* Level::PlayerGet()
+{
+    return m_pPlayer;
+}

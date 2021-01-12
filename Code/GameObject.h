@@ -40,6 +40,8 @@ public:
     GameObject(int x, int y, char mainSymbol, GameObjectType type, Level* pLevel, GameObjectColor color = GameObjectColor::LightGray);
     virtual void Draw();
     virtual void Update(bool processInput);
+    virtual void TakeDamage(int directionX, int directionY, int damage);
+    GameObjectType TypeGet();
     int GetX();
     int GetY();
 
@@ -47,6 +49,7 @@ protected:
     GameObjectType m_type;
     GameObjectColor m_color;
     bool m_active;
+    int m_health;
     int m_x;
     int m_y;
     char m_symbol;
